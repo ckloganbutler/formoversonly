@@ -59,7 +59,7 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findDocuments = mysql_query("SELECT document_id FROM fmo_users_employee_documents WHERE document_user_token='".mysql_real_escape_string($_GET['uuid'])."'");
+    $findDocuments = mysql_query("SELECT document_id, document_link, document_type, document_desc, document_by_user_token FROM fmo_users_employee_documents WHERE document_user_token='".mysql_real_escape_string($_GET['uuid'])."'");
     $iTotalRecords = mysql_num_rows($findDocuments);
 
     $records = array();
@@ -67,9 +67,9 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
 
     while($doc = mysql_fetch_assoc($findDocuments)) {
         $records["data"][] = array(
-            ''.$doc['document_id'].'',
-            '',
-            '',
+            '<img height="150" width="100%" src="'.$doc['document_link'].'"/><br/><center>'.$doc['document_type'].'</center>',
+            'File Type: <strong>'.$doc['document_type'].'</strong><br/> File Description: <strong>'.$doc['document_desc'].'</strong>',
+            ''.name($doc['document_by_user_token']).'',
         );
     }
 

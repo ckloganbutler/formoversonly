@@ -9,6 +9,34 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'document'){
+        $token = $_GET['uuid'];
+        $type  = $_POST['file_type'];
+        $desc  = $_POST['file_desc'];
+        $by    = $_SESSION['uuid'];
+        $fileName  = struuid();
+        $file_ext = substr($_FILES['file']['name'], strripos($_FILES['file']['name'], '.'));
+        $uploaddir = '../upload/documents/';
+        $uploadfile = $uploaddir . $fileName;
+
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile . $file_ext);
+        $link = "//www.formoversonly.com/dashboard/assets/upload/documents/". $fileName . $file_ext;
+
+        $check   = mysql_query("SELECT document_id FROM fmo_users_employee_documents WHERE document_user_token='".mysql_real_escape_string($token)."' AND document_type='".mysql_real_escape_string($type)."'");
+        $checked = mysql_num_rows($check);
+
+        if($checked > 0){
+            $id = mysql_fetch_array($check);
+            mysql_query("UPDATE fmo_users_employee_documents SET document_link='".mysql_real_escape_string($link)."', document_desc='".mysql_real_escape_string($desc)."', document_by_user_token='".mysql_real_escape_string($by)."' WHERE document_id='".mysql_real_escape_string($id['document_id'])."'");
+        } else {
+            mysql_query("INSERT INTO fmo_users_employee_documents (document_user_token, document_type, document_desc, document_link, document_by_user_token) VALUES (
+            '".mysql_real_escape_string($token)."',
+            '".mysql_real_escape_string($type)."',
+            '".mysql_real_escape_string($desc)."',
+            '".mysql_real_escape_string($link)."',
+            '".mysql_real_escape_string($by)."')") or die(mysql_error());
+        }
+    }
     if($_GET['setting'] == 'childsupport'){
         $token          = $_GET['uuid'];
         $case_name      = $_POST['case_name'];
@@ -126,7 +154,7 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($comment)."',
         '".mysql_real_escape_string($by)."')");
-        timeline_log($token, $by, "Comment", name($by)." left a comment on ".name($token)."'s profile: <strong>".$comment."</strong>");
+        timeline_log($token, $by, "Comment", "Comment created: <strong>".$comment."</strong>");
     }
     if($_GET['setting'] == 'service_rates'){
         $location_token = $_GET['luid'];

@@ -606,7 +606,7 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                             <div class="portlet-body">
                                                                 <div class="table-container">
-                                                                    <form role="form" id="add_service_rate">
+                                                                    <form role="form" id="add_documents">
                                                                         <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=documents&uuid=<?php echo $profile['user_token']; ?>">
                                                                             <thead>
                                                                             <tr role="row" class="heading">
@@ -621,12 +621,32 @@ if(isset($_SESSION['logged'])){
                                                                                 </th>
                                                                             </tr>
                                                                             <tr role="row" class="filter" style="display: none;" id="add_document">
-                                                                                <td><input type="text" class="form-control form-filter input-sm" name="item"></td>
-                                                                                <td></td>
+                                                                                <td><input type="file" class="form-control form-filter input-sm" name="file"></td>
                                                                                 <td>
-                                                                                    <div class="margin-bottom-5">
-                                                                                        <button type="button" class="btn btn-sm red margin-bottom add_service_rate"><i class="fa fa-download"></i> Save</button>
+                                                                                    <div class="form-group">
+                                                                                        <div class="col-md-3">
+                                                                                            <select class="form-control input-sm" name="file_type">
+                                                                                                <option disabled selected value="">Select one..</option>
+                                                                                                <option value="Copy of ID">Copy of ID</option>
+                                                                                                <option value="Handbook">Handbook</option>
+                                                                                                <option value="I9">I9</option>
+                                                                                                <option value="State Tax Form">State Tax Form</option>
+                                                                                                <option value="Federal Tax Form">Federal Tax Form</option>
+                                                                                                <option value="Application">Application</option>
+                                                                                                <option value="Driver Questionare">Driver Questionare</option>
+                                                                                                <option value="Previous Employer Check Authorization">Previous Employer Check Authorization</option>
+                                                                                                <option value="Manager Road Test">Manager Road Test</option>
+                                                                                                <option value="5 Years MVR">5 Years MVR</option>
+                                                                                                <option value="Scan of DOT Physical">Scan of DOT Physical</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                        <div class="col-md-9">
+                                                                                            <input type="text" class="form-control form-filter input-sm" name="file_desc">
+                                                                                        </div>
                                                                                     </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
                                                                                 </td>
                                                                             </tr>
                                                                             </thead>
@@ -1277,6 +1297,21 @@ if(isset($_SESSION['logged'])){
 
                 $(show).show();
             });
+            $("#add_documents").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'font-red', // default input error message class
+                rules: {
+                    file: {
+                        required: true
+                    },
+                    file_type: {
+                        required: true
+                    },
+                    file_desc: {
+                        required: true
+                    }
+                }
+            });
             $("#add_comt").validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'font-red', // default input error message class
@@ -1378,6 +1413,23 @@ if(isset($_SESSION['logged'])){
                         },
                         error: function() {
                             toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                }
+            });
+            $('.add_document').on('click', function(){
+                if($("#add_documents").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=document&uuid=<?php echo $profile['user_token']; ?>",
+                        type: "POST",
+                        data: new FormData($('#add_documents')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>Document has been added to users documents table.');
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
