@@ -11,6 +11,18 @@ function mysql_loop($field, $value, $db, $where, $token) {
     mysql_query("UPDATE " . mysql_real_escape_string($db) . " SET `" . mysql_real_escape_string($field) . "`='" . mysql_real_escape_string($value) . "' WHERE $where='" . mysql_real_escape_string($token) . "'") or die(mysql_error());
 }
 
+if($_GET['update'] == 'assets'){
+    $field = $_POST['name'];
+    $value = $_POST['value'];
+    $pk    = $_POST['pk'];
+    mysql_query("UPDATE fmo_locations_assets SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE asset_id='".mysql_real_escape_string($pk)."'");
+}
+if($_GET['update'] == 'usr_cs'){
+    $field = $_POST['name'];
+    $value = $_POST['value'];
+    $pk    = $_POST['pk'];
+    mysql_query("UPDATE fmo_users_employee_childsupports SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE childsupport_id='".mysql_real_escape_string($pk)."'");
+}
 if($_GET['update'] == 'time_clock'){
     $field = $_POST['name'];
     $value = $_POST['value'];

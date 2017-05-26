@@ -9,6 +9,42 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'asset'){
+        $token          = $_GET['luid'];
+        $type           = $_POST['type'];
+        $desc           = $_POST['desc'];
+        $vin            = $_POST['vin'];
+        $year           = $_POST['year'];
+        $make           = $_POST['make'];
+        $model          = $_POST['model'];
+        $color          = $_POST['color'];
+        $dop            = $_POST['date_of_purchase'];
+        $price          = $_POST['price'];
+        $tire_size      = $_POST['tire_size'];
+        $agent          = $_POST['agent'];
+        $plate          = $_POST['plate'];
+        $comments       = $_POST['comments'];
+        $last_dot_inspec= $_POST['last_dot_inspec'];
+        $by             = $_SESSION['uuid'];
+
+        mysql_query("INSERT INTO fmo_locations_assets (asset_location_token, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_comments, asset_last_dot_inspec, asset_by_user_token) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($type)."',
+        '".mysql_real_escape_string($desc)."',
+        '".mysql_real_escape_string($vin)."',
+        '".mysql_real_escape_string($year)."',
+        '".mysql_real_escape_string($make)."',
+        '".mysql_real_escape_string($model)."',
+        '".mysql_real_escape_string($color)."',
+        '".mysql_real_escape_string($dop)."',
+        '".mysql_real_escape_string($price)."',
+        '".mysql_real_escape_string($tire_size)."',
+        '".mysql_real_escape_string($agent)."',
+        '".mysql_real_escape_string($plate)."',
+        '".mysql_real_escape_string($comments)."',
+        '".mysql_real_escape_string($last_dot_inspec)."',
+        '".mysql_real_escape_string($by)."')") or die(mysql_error());
+    }
     if($_GET['setting'] == 'document'){
         $token = $_GET['uuid'];
         $type  = $_POST['file_type'];

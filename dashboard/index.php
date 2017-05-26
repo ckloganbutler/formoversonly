@@ -882,7 +882,6 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 success: function() {
                     if(reload.length > 0){
                         $('.datatable').DataTable().ajax.reload();
-                        console.log(reload.length);
                     }
                 }
             });
