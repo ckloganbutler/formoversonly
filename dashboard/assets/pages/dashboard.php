@@ -41,7 +41,7 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div id="chart_2" class="chart">
+                                <div id="stats" class="chart">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -52,8 +52,8 @@ if(isset($_SESSION['logged'])){
                                                 <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="64x64" data-src="holder.js/64x64" style="width: 150px; height: 150px;">
                                             </a>
                                             <div class="media-body">
-                                                <h4 class="media-heading">Location Manager</h4>
-                                                <textarea style="height: 74px;" class="form-control"></textarea> <br/>
+                                                <h4 class="media-heading">Location Manager: <strong>John Fries</strong></h4>
+                                                <textarea style="height: 74px;" class="form-control" placeholder="Send john a message.."></textarea> <br/>
                                                 <button type="button" class="btn red">Send message</button>
                                             </div>
                                         </li>
@@ -341,7 +341,7 @@ if(isset($_SESSION['logged'])){
                 [30, 31 + randValue()]
             ];
 
-            var plot = $.plot($("#chart_2"), [{
+            var plot = $.plot($("#stats"), [{
                 data: pageviews,
                 label: "Unique Visits",
                 lines: {
@@ -414,7 +414,7 @@ if(isset($_SESSION['logged'])){
             }
 
             var previousPoint = null;
-            $("#chart_2").bind("plothover", function(event, pos, item) {
+            $("#stats").bind("plothover", function(event, pos, item) {
                 $("#x").text(pos.x.toFixed(2));
                 $("#y").text(pos.y.toFixed(2));
 
