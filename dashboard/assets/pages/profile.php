@@ -1006,10 +1006,113 @@ if(isset($_SESSION['logged'])){
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <strong>No cases have been recorded. Please use the form below to add a case if necessary.</strong>
+                                    <?php
+                                    $childsupport = mysql_query("SELECT childsupport_id, childsupport_case_name, childsupport_case_number, childsupport_amount, childsupport_address, childsupport_address2, childsupport_city, childsupport_state, childsupport_zip, childsupport_pay_allowed, childsupport_pay_period, childsupport_comments, childsupport_by_user_token FROM fmo_users_employee_childsupports WHERE childsupport_user_token='".mysql_real_escape_string($profile['user_token'])."'");
+                                    if(mysql_num_rows($childsupport) > 0){
+                                        $pk = 0;
+                                        while($cs = mysql_fetch_assoc($childsupport)){
+                                            $pk++
+                                            ?>
+                                            <div id="childsupport_h_<?php echo $pk; ?>" class="panel-group">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
+                                                            <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="cs_<?php echo $cs['childsupport_id']; ?>">
+                                                                <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
+                                                        </div>
+                                                        <div class="caption">
+                                                            <h4 class="panel-title">
+                                                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#childsupport_h_<?php echo $pk; ?>" href="#childsupport_<?php echo $pk; ?>" aria-expanded="false"><strong><?php echo $cs['childsupport_case_name']; ?></strong></a>
+                                                            </h4>
+                                                        </div>
+                                                    </div>
+                                                    <div id="childsupport_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
+                                                        <div class="panel-body">
+                                                            <address>
+                                                                Case Name:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_case_name" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="text" data-placement="right" data-title="Enter new case name.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                         <?php echo $cs['childsupport_case_name']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Case Number:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_case_number" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="text" data-placement="right" data-title="Enter new case number.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                         <?php echo $cs['childsupport_case_number']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Garnishment Amount:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_amount" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="number" data-placement="right" data-title="Enter new amount.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_amount']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Address:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_address" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="text" data-placement="right" data-title="Enter new address line.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_address']; ?>
+                                                                    </a>,
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_city" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="text" data-placement="right" data-title="Enter new city.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_city']; ?>
+                                                                    </a>,
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_state" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="select" data-source="[{value: 'AL', text: 'Alabama'},{value: 'AK', text: 'Alaska'},{value: 'AZ', text: 'Arizona'},{value: 'AR', text: 'Arkansas'},{value: 'CA', text: 'California'},{value: 'CO', text: 'Colorado'},{value: 'CT', text: 'Connecticut'},{value: 'DE', text: 'Delaware'},{value: 'DC', text: 'District Of Columbia'},{value: 'FL', text: 'Florida'},{value: 'GA', text: 'Georgia'},{value: 'HI', text: 'Hawaii'},{value: 'ID', text: 'Idaho'},{value: 'IL', text: 'Illinois'},{value: 'IN', text: 'Indiana'},{value: 'IA', text: 'Iowa'},{value: 'KS', text: 'Kansas'},{value: 'KY', text: 'Kentucky'},{value: 'LA', text: 'Louisiana'},{value: 'ME', text: 'Maine'},{value: 'MD', text: 'Maryland'},{value: 'MA', text: 'Massachusetts'},{value: 'MI', text: 'Michigan'},{value: 'MN', text: 'Minnesota'},{value: 'MS', text: 'Mississippi'},{value: 'MO', text: 'Missouri'},{value: 'MT', text: 'Montana'},{value: 'NE', text: 'Nebraska'},{value: 'NV', text: 'Nevada'},{value: 'NH', text: 'New Hampshire'},{value: 'NJ', text: 'New Jersey'},{value: 'NM', text: 'New Mexico'},{value: 'NY', text: 'New York'},{value: 'NC', text: 'North Carolina'},{value: 'ND', text: 'North Dakota'},{value: 'OH', text: 'Ohio'},{value: 'OK', text: 'Oklahoma'},{value: 'OR', text: 'Oregon'},{value: 'PW', text: 'Palau'},{value: 'PA', text: 'Pennsylvania'},{value: 'RI', text: 'Rhode Island'},{value: 'SC', text: 'South Carolina'},{value: 'SD', text: 'South Dakota'},{value: 'TN', text: 'Tennessee'},{value: 'TX', text: 'Texas'},{value: 'UT', text: 'Utah'},{value: 'VT', text: 'Vermont'},{value: 'VA', text: 'Virginia'},{value: 'WA', text: 'Washington'},{value: 'WV', text: 'West Virginia'},{value: 'WI', text: 'Wisconsin'},{value: 'WY', text: 'Wyoming'}]" data-inputclass="form-control" data-placement="right" data-title="Select new state.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_state']; ?>
+                                                                    </a>,
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_zip" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="number" data-placement="right" data-title="Enter new zip code.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_zip']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Pay Allowed:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_pay_allowed" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="number" data-placement="right" data-title="Enter new pay allowed.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_pay_allowed']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Pay Period:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_pay_period" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="date" data-format="mm/dd/yyy" data-placement="right" data-title="Select new pay period.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_pay_period']; ?>
+                                                                    </a><br/>
+                                                                </strong>
+
+                                                                Comments:
+                                                                <strong>
+                                                                    <a class="cs_<?php echo $cs['childsupport_id']; ?>" style="color:#333333" data-name="childsupport_comments" data-pk="<?php echo $cs['childsupport_id']; ?>" data-type="text" data-placement="right" data-title="Enter new comments.." data-url="assets/app/update_settings.php?update=usr_cs">
+                                                                        <?php echo $cs['childsupport_comments']; ?>
+                                                                    </a>
+                                                                </strong>
+                                                            </address>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <div class="alert alert-warning alert-dismissable">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                            <strong>No child support cases!</strong> Add new cases below to see them appear here.
+                                        </div>
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
                             </div>
                             <hr/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Case Name</label>
+                                        <input type="text" class="form-control" name="case_name" placeholder="Child # x or Parent Name">
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -1256,7 +1359,7 @@ if(isset($_SESSION['logged'])){
 
                 submitHandler: function(form) {
                     $.ajax({
-                        url: 'assets/app/add_setting.php?setting=new_case&uuid=<?php echo $profile['user_token']; ?>',
+                        url: 'assets/app/add_setting.php?setting=childsupport&uuid=<?php echo $profile['user_token']; ?>',
                         type: "POST",
                         data: $('#new_case').serialize(),
                         success: function(data) {

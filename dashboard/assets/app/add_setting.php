@@ -9,6 +9,37 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'childsupport'){
+        $token          = $_GET['uuid'];
+        $case_name      = $_POST['case_name'];
+        $case_number    = $_POST['case_number'];
+        $amount         = $_POST['amount'];
+        $address        = $_POST['address'];
+        $address2       = $_POST['address2'];
+        $city           = $_POST['city'];
+        $state          = $_POST['state'];
+        $zip            = $_POST['zip'];
+        $pay_allowed    = $_POST['pay_allowed'];
+        $pay_period     = $_POST['pay_period'];
+        $comments       = $_POST['comments'];
+        $by             = $_SESSION['uuid'];
+
+        mysql_query("INSERT INTO fmo_users_employee_childsupports (childsupport_user_token, childsupport_case_name, childsupport_case_number, childsupport_amount, childsupport_address, childsupport_address2, childsupport_city, childsupport_state, childsupport_zip, childsupport_pay_allowed, childsupport_pay_period, childsupport_comments, childsupport_by_user_token) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($case_name)."',
+        '".mysql_real_escape_string($case_number)."',
+        '".mysql_real_escape_string($amount)."',
+        '".mysql_real_escape_string($address)."',
+        '".mysql_real_escape_string($address2)."',
+        '".mysql_real_escape_string($city)."',
+        '".mysql_real_escape_string($state)."',
+        '".mysql_real_escape_string($zip)."',
+        '".mysql_real_escape_string($pay_allowed)."',
+        '".mysql_real_escape_string($pay_period)."',
+        '".mysql_real_escape_string($comments)."',
+        '".mysql_real_escape_string($by)."')") or die(mysql_error());
+        timeline_log($token, $by, "Child Support Case", "Case <strong>$case_name</strong> created. Comments: <strong>$comments</strong>");
+    }
     if($_GET['setting'] == 'usr_advance'){
         $token      = $_GET['uuid'];
         $advance    = $_POST['requested'];
