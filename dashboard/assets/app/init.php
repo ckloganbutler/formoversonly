@@ -29,3 +29,11 @@ function decimalHours($time){
     $hms = explode(":", $time);
     return number_format(($hms[0] + ($hms[1]/60) + ($hms[2]/3600)), 2);
 }
+
+function hasPermission($action){
+    $permissions = explode("|", $_SESSION['permissions']);
+
+    if(array_search($action, $permissions)){
+        return true;
+    } else { return false; }
+}

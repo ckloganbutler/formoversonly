@@ -41,7 +41,7 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <div id="stats" class="chart">
+                                <div id="stats" class="chart" style="height: 170px;">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -87,7 +87,6 @@ if(isset($_SESSION['logged'])){
                                 ?>
                         </div>
                         <div class="row">
-                            <!--
                             <div class="col-md-9 col-sm-12">
                                 <div id="calendar" class="has-toolbar">
                                 </div>
@@ -108,7 +107,6 @@ if(isset($_SESSION['logged'])){
                                     <hr class="visible-xs"/>
                                 </div>
                             </div>
-                            -->
                         </div>
                     </div>
                 </div>
@@ -272,78 +270,74 @@ if(isset($_SESSION['logged'])){
                     url: 'http://google.com/',
                 }]
             });
-
-            function randValue() {
-                return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
-            }
             var pageviews = [
-                [1, randValue()],
-                [2, randValue()],
-                [3, 2 + randValue()],
-                [4, 3 + randValue()],
-                [5, 5 + randValue()],
-                [6, 10 + randValue()],
-                [7, 15 + randValue()],
-                [8, 20 + randValue()],
-                [9, 25 + randValue()],
-                [10, 30 + randValue()],
-                [11, 35 + randValue()],
-                [12, 25 + randValue()],
-                [13, 15 + randValue()],
-                [14, 20 + randValue()],
-                [15, 45 + randValue()],
-                [16, 50 + randValue()],
-                [17, 65 + randValue()],
-                [18, 70 + randValue()],
-                [19, 85 + randValue()],
-                [20, 80 + randValue()],
-                [21, 75 + randValue()],
-                [22, 80 + randValue()],
-                [23, 75 + randValue()],
-                [24, 70 + randValue()],
-                [25, 65 + randValue()],
-                [26, 75 + randValue()],
-                [27, 80 + randValue()],
-                [28, 85 + randValue()],
-                [29, 90 + randValue()],
-                [30, 95 + randValue()]
+                [1, 2],
+                [2, 2],
+                [3, 2],
+                [4, 3],
+                [5, 5],
+                [6, 10],
+                [7, 15],
+                [8, 20],
+                [9, 25],
+                [10, 30],
+                [11, 35],
+                [12, 25],
+                [13, 15],
+                [14, 20],
+                [15, 45],
+                [16, 50],
+                [17, 65],
+                [18, 70],
+                [19, 85],
+                [20, 80],
+                [21, 75],
+                [22, 80],
+                [23, 75],
+                [24, 70],
+                [25, 65],
+                [26, 75],
+                [27, 80],
+                [28, 85],
+                [29, 90],
+                [30, 95]
             ];
             var visitors = [
-                [1, randValue() - 5],
-                [2, randValue() - 5],
-                [3, randValue() - 5],
-                [4, 6 + randValue()],
-                [5, 5 + randValue()],
-                [6, 20 + randValue()],
-                [7, 25 + randValue()],
-                [8, 36 + randValue()],
-                [9, 26 + randValue()],
-                [10, 38 + randValue()],
-                [11, 39 + randValue()],
-                [12, 50 + randValue()],
-                [13, 51 + randValue()],
-                [14, 12 + randValue()],
-                [15, 13 + randValue()],
-                [16, 14 + randValue()],
-                [17, 15 + randValue()],
-                [18, 15 + randValue()],
-                [19, 16 + randValue()],
-                [20, 17 + randValue()],
-                [21, 18 + randValue()],
-                [22, 19 + randValue()],
-                [23, 20 + randValue()],
-                [24, 21 + randValue()],
-                [25, 14 + randValue()],
-                [26, 24 + randValue()],
-                [27, 25 + randValue()],
-                [28, 26 + randValue()],
-                [29, 27 + randValue()],
-                [30, 31 + randValue()]
+                [1, 2],
+                [2, 2],
+                [3, 2],
+                [4, 6],
+                [5, 5],
+                [6, 20],
+                [7, 25],
+                [8, 36],
+                [9, 26],
+                [10, 38],
+                [11, 39],
+                [12, 50],
+                [13, 51],
+                [14, 12],
+                [15, 13],
+                [16, 14],
+                [17, 15],
+                [18, 15],
+                [19, 16],
+                [20, 17],
+                [21, 18],
+                [22, 19],
+                [23, 20],
+                [24, 21],
+                [25, 14],
+                [26, 24],
+                [27, 25],
+                [28, 26],
+                [29, 27],
+                [30, 31]
             ];
 
             var plot = $.plot($("#stats"), [{
                 data: pageviews,
-                label: "Unique Visits",
+                label: "New Bookings",
                 lines: {
                     lineWidth: 1,
                 },
@@ -351,7 +345,7 @@ if(isset($_SESSION['logged'])){
 
             }, {
                 data: visitors,
-                label: "Page Views",
+                label: "New Customers",
                 lines: {
                     lineWidth: 1,
                 },

@@ -23,6 +23,7 @@ if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
                 $_SESSION['group']  = $checkInfo['user_group'];
                 $_SESSION['fname']  = $checkInfo['user_fname'];
                 $_SESSION['lname']  = $checkInfo['user_lname'];
+                $_SESSION['permissions'] = $checkInfo['user_permissions'];
                 if(!empty($checkInfo['user_employer']) && !empty($checkInfo['user_employer_location'])){
                     $_SESSION['cuid']   = $checkInfo['user_employer'];
                     $location           = $checkInfo['user_employer_location'];
