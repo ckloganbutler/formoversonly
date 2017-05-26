@@ -12,7 +12,6 @@ if(isset($_GET['setting'])){
     if($_GET['setting'] == 'asset'){
         $token          = $_GET['luid'];
         $type           = $_POST['type'];
-        $desc           = $_POST['desc'];
         $vin            = $_POST['vin'];
         $year           = $_POST['year'];
         $make           = $_POST['make'];
@@ -27,10 +26,23 @@ if(isset($_GET['setting'])){
         $last_dot_inspec= $_POST['last_dot_inspec'];
         $by             = $_SESSION['uuid'];
 
+        $type_query   = mysql_query("SELECT asset_id FROM fmo_locations_assets WHERE asset_location_token='".mysql_real_escape_string($token)."' AND asset_type='".mysql_real_escape_string($type)."'");
+        $unit_id      = mysql_num_rows($type_query) + 1;
+        if($type == 'Moving Truck'){
+            $unit_name = 'MT';
+        }elseif($type == 'Office Car'){
+            $unit_name = 'OV';
+        }elseif($type == 'Trailer'){
+            $unit_name = 'T';
+        }elseif($type == 'Other'){
+            $unit_name = 'O';
+        }
+        $unit_number = $unit_name.$unit_id;
+
         mysql_query("INSERT INTO fmo_locations_assets (asset_location_token, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_comments, asset_last_dot_inspec, asset_by_user_token) VALUES (
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($type)."',
-        '".mysql_real_escape_string($desc)."',
+        '".mysql_real_escape_string($unit_number)."',
         '".mysql_real_escape_string($vin)."',
         '".mysql_real_escape_string($year)."',
         '".mysql_real_escape_string($make)."',

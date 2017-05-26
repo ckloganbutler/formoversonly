@@ -63,7 +63,7 @@ if(isset($_SESSION['logged'])){
                                     </div>
                                     <div class="portlet-body">
                                         <?php
-                                        $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."'");
+                                        $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."'");
                                         if(mysql_num_rows($assets) > 0){
                                             $pk = 0;
                                             while($asset = mysql_fetch_assoc($assets)){
@@ -94,18 +94,52 @@ if(isset($_SESSION['logged'])){
                                                                                         <?php echo $asset['asset_type']; ?>
                                                                                     </a><br/>
                                                                                 </strong>
-                                                                                Asset Description:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_desc" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_desc']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
+                                                                                Asset Unit Number:
+                                                                                <?php
+                                                                                if($_SESSION['group'] == 1){
+                                                                                    ?>
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_desc" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_desc']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    <?php
+                                                                                } else {
+                                                                                    ?>
+                                                                                    <?php echo $asset['asset_desc']; ?><br/>
+                                                                                    <?php
+                                                                                }
+                                                                                ?>
+
                                                                                 Asset VIN Number:
                                                                                 <strong>
                                                                                     <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_vin" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vin.." data-url="assets/app/update_settings.php?update=assets">
                                                                                         <?php echo $asset['asset_vin']; ?>
                                                                                     </a><br/>
                                                                                 </strong>
+                                                                                <?php
+                                                                                if($_SESSION['group'] == 1){
+                                                                                    ?>
+                                                                                    Asset Location:
+                                                                                    <strong>
+                                                                                        <?php
+                                                                                        $location      = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($asset['asset_location_token'])."'"));
+                                                                                        $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_company_token='".$_SESSION['cuid']."' ORDER BY location_name ASC");
+                                                                                        if(mysql_num_rows($findLocations) > 0){
+                                                                                            $selectData = NULL;
+                                                                                            while($loc = mysql_fetch_assoc($findLocations)){
+                                                                                                $selectData .= "{value: '".$loc['location_token']."', text: '".$loc['location_name']." (".$loc['location_state'].")'},";
+                                                                                            }
+                                                                                        }
+                                                                                        ?>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_location_token" data-pk="<?php echo $asset['asset_id']; ?>" data-type="select" data-source="[<?php echo $selectData; ?>]" data-inputclass="form-control" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $location['location_name']." (".$location['location_state'].")"; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    <?php
+                                                                                }
+                                                                                ?>
+
 
                                                                                 <br/>
 
@@ -255,14 +289,15 @@ if(isset($_SESSION['logged'])){
                                         <option disabled selected value="">Select one..</option>
                                         <option value="Moving Truck">Moving Truck</option>
                                         <option value="Office Car">Office Car</option>
+                                        <option value="Trailer">Trailer</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Asset Description</label>
-                                    <input type="text" class="form-control" name="desc">
+                                    <label>Asset Unit Number</label>
+                                    <input type="text" class="form-control" readonly value="This will be automatically generated when you are finished.">
                                 </div>
                             </div>
                         </div>
