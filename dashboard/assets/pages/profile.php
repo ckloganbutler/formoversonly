@@ -995,22 +995,152 @@ if(isset($_SESSION['logged'])){
                 </div>
             </div>
         </div>
-        <div class="modal fade bs-modal-lg" id="child_support_only" tabindex="-1" role="basic" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content box red">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h3 class="modal-title font-bold">Child Support for <?php echo $profile['user_fname']; ?></h3>
-                    </div>
-                    <div class="modal-body">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+        <form method="POST" action="" role="form" id="new_case">
+            <div class="modal fade bs-modal-lg" id="child_support_only" tabindex="-1" role="basic" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content box red">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h3 class="modal-title font-bold">Child Support for <?php echo $profile['user_fname']; ?></h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong>No cases have been recorded. Please use the form below to add a case if necessary.</strong>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Case Number</label>
+                                        <input type="text" class="form-control" name="case_number" placeholder="93432-19-123">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Garnishment Amount</label>
+                                        <input type="text" class="form-control" name="amount" placeholder="100">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street Address</label>
+                                        <input type="text" class="form-control" name="address" placeholder="123 Example Rd">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Street Address 2 (Optional)</label>
+                                        <input type="text" class="form-control" name="address2" placeholder="Complex Name / Second Address">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>City</label>
+                                        <input type="text" class="form-control" name="city" placeholder="Sincity">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>State</label>
+                                        <select name="state" class="form-control">
+                                            <option value="" selected disabled>Select one..</option>
+                                            <option value="AL">Alabama</option>
+                                            <option value="AK">Alaska</option>
+                                            <option value="AZ">Arizona</option>
+                                            <option value="AR">Arkansas</option>
+                                            <option value="CA">California</option>
+                                            <option value="CO">Colorado</option>
+                                            <option value="CT">Connecticut</option>
+                                            <option value="DE">Delaware</option>
+                                            <option value="DC">District Of Columbia</option>
+                                            <option value="FL">Florida</option>
+                                            <option value="GA">Georgia</option>
+                                            <option value="HI">Hawaii</option>
+                                            <option value="ID">Idaho</option>
+                                            <option value="IL">Illinois</option>
+                                            <option value="IN">Indiana</option>
+                                            <option value="IA">Iowa</option>
+                                            <option value="KS">Kansas</option>
+                                            <option value="KY">Kentucky</option>
+                                            <option value="LA">Louisiana</option>
+                                            <option value="ME">Maine</option>
+                                            <option value="MD">Maryland</option>
+                                            <option value="MA">Massachusetts</option>
+                                            <option value="MI">Michigan</option>
+                                            <option value="MN">Minnesota</option>
+                                            <option value="MS">Mississippi</option>
+                                            <option value="MO">Missouri</option>
+                                            <option value="MT">Montana</option>
+                                            <option value="NE">Nebraska</option>
+                                            <option value="NV">Nevada</option>
+                                            <option value="NH">New Hampshire</option>
+                                            <option value="NJ">New Jersey</option>
+                                            <option value="NM">New Mexico</option>
+                                            <option value="NY">New York</option>
+                                            <option value="NC">North Carolina</option>
+                                            <option value="ND">North Dakota</option>
+                                            <option value="OH">Ohio</option>
+                                            <option value="OK">Oklahoma</option>
+                                            <option value="OR">Oregon</option>
+                                            <option value="PA">Pennsylvania</option>
+                                            <option value="RI">Rhode Island</option>
+                                            <option value="SC">South Carolina</option>
+                                            <option value="SD">South Dakota</option>
+                                            <option value="TN">Tennessee</option>
+                                            <option value="TX">Texas</option>
+                                            <option value="UT">Utah</option>
+                                            <option value="VT">Vermont</option>
+                                            <option value="VA">Virginia</option>
+                                            <option value="WA">Washington</option>
+                                            <option value="WV">West Virginia</option>
+                                            <option value="WI">Wisconsin</option>
+                                            <option value="WY">Wyoming</option>
+                                        </select></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Zip Code</label>
+                                        <input type="text" class="form-control" name="zip" placeholder="46219">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Pay Allowed</label>
+                                        <input type="text" class="form-control" name="pay_allowed" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Pay Period</label>
+                                        <input type="text" class="form-control" name="pay_period" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Comments</label>
+                                        <input type="text" class="form-control" name="comments" placeholder="nice feller, has beautiful kids..too many probably">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn red">Save child support case</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
         <?php
     }
     ?>
@@ -1081,6 +1211,72 @@ if(isset($_SESSION['logged'])){
                     requested: {
                         remote: 'Limit exceeded <i class="fa fa-arrow-right"></i>'
                     }
+                }
+            });
+            $("#new_case").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'font-red', // default input error message class
+                rules: {
+                    case_name: {
+                        required: true
+                    },
+                    case_number: {
+                        required: true
+                    },
+                    amount: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    state: {
+                        required: true
+                    },
+                    zip: {
+                        required: true
+                    }
+                },
+                invalidHandler: function(event, validator) { //display error alert on form submit
+
+                },
+
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function(label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: 'assets/app/add_setting.php?setting=new_case&uuid=<?php echo $profile['user_token']; ?>',
+                        type: "POST",
+                        data: $('#new_case').serialize(),
+                        success: function(data) {
+                            $('#childsupport').modal('hide');
+                            $('#new_case')[0].reset();
+                            toastr.success("<strong>Logan says</strong>:<br/>That case has been added to this users records. I had to refresh the page for you, so you can see the new record.");
+                            $.ajax({
+                                url: 'assets/pages/profile.php?uuid=<?php echo $profile['user_token']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                                success: function(data) {
+                                    $('#page_content').html(data);
+                                },
+                                error: function() {
+                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                }
+                            });
+                        },
+                        error: function() {
+                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
                 }
             });
             $('.add_comment').on('click', function(){
