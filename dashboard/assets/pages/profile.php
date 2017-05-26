@@ -936,7 +936,7 @@ if(isset($_SESSION['logged'])){
                                             $pay['loans'] += $loans['advance_requested'];
                                         }
                                     } else {$pay['loans'] = 0;}
-                                    $pay['available'] = ($pay['earned'] - $pay['loans']) * .25;
+                                    $pay['available'] = ($pay['earned'] * .25) - $pay['loans'];
                                 } else {
                                     $pay['available'] = 0;
                                     $pay['hours']     = 0;
@@ -1005,7 +1005,7 @@ if(isset($_SESSION['logged'])){
                             </div>
                             <div class="portlet-footer">
                                 <strong><?php echo $profile['user_fname']; ?>'s advance information for this period (<?php echo $start." - ".$end; ?>): </strong><br/>
-                                <strong id="ad_hrs"><?php echo $pay['hours']; ?></strong> hours @ $<strong><?php echo $user_pay['user_employer_rate']; ?></strong>/hour, with $<strong id="ad_earned"><?php echo number_format($pay['earned'], 2); ?></strong> earned (<span class="text-danger">-$<strong id="ad_loans"><?php echo number_format($pay['loans'], 2); ?></strong></span> from previous loans), making $<strong id="ad_avail"><?php echo number_format($pay['available'], 2); ?></strong> available.
+                                <strong id="ad_hrs"><?php echo $pay['hours']; ?></strong> hours @ $<strong><?php echo $user_pay['user_employer_rate']; ?></strong>/hour, with $<strong id="ad_earned"><?php echo number_format($pay['earned'], 2); ?></strong> earned, with <span class="text-danger">-$<strong id="ad_loans"><?php echo number_format($pay['loans'], 2); ?></strong></span> from previous loans, making $<strong id="ad_avail"><?php echo number_format($pay['available'], 2); ?></strong> available.
                             </div>
                         </div>
                     </div>

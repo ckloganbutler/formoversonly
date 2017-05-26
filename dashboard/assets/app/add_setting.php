@@ -114,7 +114,7 @@ if(isset($_GET['setting'])){
                             $pay['loans'] += $loans['advance_requested'];
                         }
                     } else {$pay['loans'] = 0;}
-                    $pay['available'] = ($pay['earned'] - $pay['loans']) * .25;
+                    $pay['available'] = ($pay['earned'] * .25) - $pay['loans'];
                 } else {
                     $pay['available'] = 0;
                     $pay['hours']     = 0;
