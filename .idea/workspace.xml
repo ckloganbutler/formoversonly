@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ebcac215-d3f7-4626-8a71-11159055a813" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dashboard/assets/pages/profile.php" afterPath="$PROJECT_DIR$/dashboard/assets/pages/profile.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dashboard/assets/pages/assets.php" afterPath="$PROJECT_DIR$/dashboard/assets/pages/assets.php" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,15 +25,13 @@
     <favorites_list name="formoversonly" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="login.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dashboard/assets/app/login.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="425">
-              <caret line="25" column="74" lean-forward="true" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
-              <folding>
-                <marker date="1495801044000" expanded="true" signature="302:765" ph="SELECT user_... fmo_users" />
-              </folding>
+              <caret line="25" column="74" lean-forward="false" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -43,31 +41,96 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="profile.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/profile.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="564">
+              <caret line="1267" column="5" lean-forward="false" selection-start-line="1267" selection-start-column="5" selection-end-line="1267" selection-end-column="5" />
               <folding>
-                <marker date="1495801044000" expanded="true" signature="746:846" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601853" expanded="true" signature="257:455" ph="UPDATE fmo_u... " />
+                <marker date="1495843601853" expanded="true" signature="505:1051" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601853" expanded="true" signature="1223:1366" ph="SELECT locat... fmo_locations" />
+                <marker date="1495843601853" expanded="true" signature="1444:1566" ph="SELECT locat... fmo_locations" />
+                <marker date="1495843601853" expanded="true" signature="10115:10208" ph="SELECT locat... fmo_locations" />
+                <marker date="1495843601853" expanded="true" signature="10295:10381" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601853" expanded="true" signature="10468:10570" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601853" expanded="true" signature="40901:41058" ph="SELECT locat... fmo_locations" />
+                <marker date="1495843601853" expanded="true" signature="50832:51012" ph="SELECT event... fmo_locations_events" />
+                <marker date="1495843601853" expanded="true" signature="79932:80044" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601853" expanded="true" signature="81030:81318" ph="SELECT advan... fmo_users_employee_advances" />
+                <marker date="1495843601853" expanded="true" signature="81401:81703" ph="SELECT timec... fmo_users_employee_timeclock" />
+                <marker date="1495843601853" expanded="true" signature="88852:89272" ph="SELECT child... fmo_users_employee_childsupports" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="profile.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/profile.php">
+      <file leaf-file-name="add_setting.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dashboard/assets/app/add_setting.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="564">
-              <caret line="1267" column="57" lean-forward="true" selection-start-line="1267" selection-start-column="57" selection-end-line="1267" selection-end-column="57" />
+            <state relative-caret-position="187">
+              <caret line="17" column="42" lean-forward="true" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
               <folding>
-                <marker date="1495803890000" expanded="true" signature="257:455" ph="UPDATE fmo_u... " />
-                <marker date="1495803890000" expanded="true" signature="505:1051" ph="SELECT user_... fmo_users" />
-                <marker date="1495803890000" expanded="true" signature="1223:1366" ph="SELECT locat... fmo_locations" />
-                <marker date="1495803890000" expanded="true" signature="1444:1566" ph="SELECT locat... fmo_locations" />
-                <marker date="1495803890000" expanded="true" signature="10115:10208" ph="SELECT locat... fmo_locations" />
-                <marker date="1495803890000" expanded="true" signature="10295:10381" ph="SELECT user_... fmo_users" />
-                <marker date="1495803890000" expanded="true" signature="10468:10570" ph="SELECT user_... fmo_users" />
-                <marker date="1495803890000" expanded="true" signature="40901:41058" ph="SELECT locat... fmo_locations" />
-                <marker date="1495803890000" expanded="true" signature="50832:51012" ph="SELECT event... fmo_locations_events" />
-                <marker date="1495803890000" expanded="true" signature="77200:77312" ph="SELECT user_... fmo_users" />
-                <marker date="1495803890000" expanded="true" signature="78298:78586" ph="SELECT advan... fmo_users_employee_advances" />
-                <marker date="1495803890000" expanded="true" signature="78669:78971" ph="SELECT timec... fmo_users_employee_timeclock" />
+                <marker date="1495843601791" expanded="true" signature="900:1060" ph="SELECT asset... fmo_locations_assets" />
+                <marker date="1495843601791" expanded="true" signature="1468:2525" ph="INSERT INTO fmo_locations_assets... " />
+                <marker date="1495843601791" expanded="true" signature="3174:3347" ph="SELECT docum... fmo_users_employee_documents" />
+                <marker date="1495843601791" expanded="true" signature="3491:3764" ph="UPDATE fmo_u... " />
+                <marker date="1495843601791" expanded="true" signature="3810:4204" ph="INSERT INTO fmo_users_employee_documents... " />
+                <marker date="1495843601791" expanded="true" signature="4898:5900" ph="INSERT INTO fmo_users_employee_childsupports... " />
+                <marker date="1495843601791" expanded="true" signature="6937:7033" ph="SELECT user_... fmo_users" />
+                <marker date="1495843601791" expanded="true" signature="7827:8099" ph="SELECT advan... fmo_users_employee_advances" />
+                <marker date="1495843601791" expanded="true" signature="8166:8452" ph="SELECT timec... fmo_users_employee_timeclock" />
+                <marker date="1495843601791" expanded="true" signature="9953:10272" ph="INSERT INTO fmo_users_employee_writeups... " />
+                <marker date="1495843601791" expanded="true" signature="10625:10877" ph="INSERT INTO fmo_users_employee_comments... " />
+                <marker date="1495843601791" expanded="true" signature="11376:11900" ph="INSERT INTO fmo_services... " />
+                <marker date="1495843601791" expanded="true" signature="13215:13547" ph="INSERT INTO fmo_locations_storages... " />
+                <marker date="1495843601791" expanded="true" signature="13745:13929" ph="INSERT INTO fmo_locations_counties... " />
+                <marker date="1495843601791" expanded="true" signature="14153:14388" ph="INSERT INTO fmo_locations_times... " />
+                <marker date="1495843601791" expanded="true" signature="14597:14789" ph="INSERT INTO fmo_locations_eventtypes... " />
+                <marker date="1495843601791" expanded="true" signature="14981:15167" ph="INSERT INTO fmo_locations_subtypes... " />
+                <marker date="1495843601791" expanded="true" signature="15356:15542" ph="INSERT INTO fmo_locations_howhears... " />
+                <marker date="1495843601791" expanded="true" signature="15724:15910" ph="INSERT INTO fmo_locations_zipcodes... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="assets.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/assets.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="76" column="157" lean-forward="false" selection-start-line="76" selection-start-column="157" selection-end-line="76" selection-end-column="157" />
+              <folding>
+                <marker date="1495844668221" expanded="true" signature="184:382" ph="UPDATE fmo_u... " />
+                <marker date="1495844668221" expanded="true" signature="433:539" ph="SELECT locat... fmo_locations" />
+                <marker date="1495844668221" expanded="true" signature="3301:3664" ph="SELECT asset... fmo_locations_assets" />
+                <marker date="1495844668221" expanded="true" signature="5748:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="5833:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="5915:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="6026:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="6117:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="6203:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="6384:6500" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="7684:7804" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="9197:9313" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="10557:10696" ph="SELECT locat... fmo_locations" />
+                <marker date="1495844668221" expanded="true" signature="10819:10976" ph="SELECT locat... fmo_locations" />
+                <marker date="1495844668221" expanded="true" signature="13172:13288" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="14013:14129" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="14853:14969" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="15696:15812" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="16635:16751" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="17512:17628" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="18441:18557" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="19298:19414" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="20140:20256" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="20996:21112" ph="..." />
+                <marker date="1495844668221" expanded="true" signature="21958:22074" ph="..." />
               </folding>
             </state>
           </provider>
@@ -76,13 +139,9 @@
       <file leaf-file-name="employees.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dashboard/assets/app/api/employees.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="61" column="99" lean-forward="true" selection-start-line="61" selection-start-column="99" selection-end-line="61" selection-end-column="167" />
-              <folding>
-                <marker date="1495801042000" expanded="true" signature="336:678" ph="SELECT user_... fmo_users" />
-                <marker date="1495801042000" expanded="true" signature="968:1065" ph="SELECT locat... fmo_locations" />
-                <marker date="1495801042000" expanded="true" signature="4158:4266" ph="UPDATE fmo_u... " />
-              </folding>
+            <state relative-caret-position="1037">
+              <caret line="61" column="99" lean-forward="false" selection-start-line="61" selection-start-column="99" selection-end-line="61" selection-end-column="167" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -90,18 +149,9 @@
       <file leaf-file-name="event.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/event.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="536">
-              <caret line="1206" column="17" lean-forward="true" selection-start-line="1206" selection-start-column="16" selection-end-line="1244" selection-end-column="17" />
-              <folding>
-                <marker date="1495801046000" expanded="true" signature="184:382" ph="UPDATE fmo_u... " />
-                <marker date="1495801046000" expanded="true" signature="433:714" ph="SELECT event... fmo_locations_events" />
-                <marker date="1495801046000" expanded="true" signature="766:889" ph="SELECT locat... fmo_locations" />
-                <marker date="1495801046000" expanded="true" signature="941:1106" ph="SELECT user_... fmo_users" />
-                <marker date="1495801046000" expanded="true" signature="4916:5061" ph="SELECT event... fmo_locations_eventtypes" />
-                <marker date="1495801046000" expanded="true" signature="6399:6550" ph="SELECT subty... fmo_locations_subtypes" />
-                <marker date="1495801046000" expanded="true" signature="11105:11504" ph="SELECT addre... fmo_locations_events_addresses" />
-                <marker date="1495801046000" expanded="true" signature="25252:25639" ph="SELECT addre... fmo_locations_events_addresses" />
-              </folding>
+            <state relative-caret-position="20502">
+              <caret line="1206" column="17" lean-forward="false" selection-start-line="1206" selection-start-column="16" selection-end-line="1244" selection-end-column="17" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -115,6 +165,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/dashboard/assets/pages/profile.php" />
+        <option value="$PROJECT_DIR$/dashboard/assets/pages/assets.php" />
       </list>
     </option>
   </component>
@@ -126,9 +177,10 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
   <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
-    <option name="width" value="1924" />
-    <option name="height" value="1057" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1066" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -147,6 +199,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -263,7 +316,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -323,6 +375,12 @@
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
+      <node-interpreter>project</node-interpreter>
+      <node-options />
+      <gulpfile />
+      <tasks />
+      <arguments />
+      <envs />
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.npm" factoryName="npm">
@@ -357,11 +415,12 @@
       <option name="presentableId" value="Default" />
       <updated>1495802047133</updated>
       <workItem from="1495802048590" duration="1839000" />
+      <workItem from="1495843640904" duration="1298000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1839000" />
+    <option name="totallyTimeSpent" value="3137000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -373,25 +432,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1924" height="1057" extended-state="0" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13155137" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -410,9 +468,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="25" column="74" lean-forward="true" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
-          <folding>
-            <marker date="1495801044000" expanded="true" signature="302:765" ph="SELECT user_... fmo_users" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -420,58 +476,160 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1495801044000" expanded="true" signature="746:846" ph="SELECT user_... fmo_users" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/event.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="1206" column="17" lean-forward="true" selection-start-line="1206" selection-start-column="16" selection-end-line="1244" selection-end-column="17" />
-          <folding>
-            <marker date="1495801046000" expanded="true" signature="184:382" ph="UPDATE fmo_u... " />
-            <marker date="1495801046000" expanded="true" signature="433:714" ph="SELECT event... fmo_locations_events" />
-            <marker date="1495801046000" expanded="true" signature="766:889" ph="SELECT locat... fmo_locations" />
-            <marker date="1495801046000" expanded="true" signature="941:1106" ph="SELECT user_... fmo_users" />
-            <marker date="1495801046000" expanded="true" signature="4916:5061" ph="SELECT event... fmo_locations_eventtypes" />
-            <marker date="1495801046000" expanded="true" signature="6399:6550" ph="SELECT subty... fmo_locations_subtypes" />
-            <marker date="1495801046000" expanded="true" signature="11105:11504" ph="SELECT addre... fmo_locations_events_addresses" />
-            <marker date="1495801046000" expanded="true" signature="25252:25639" ph="SELECT addre... fmo_locations_events_addresses" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dashboard/assets/app/api/employees.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
+        <state relative-caret-position="1037">
           <caret line="61" column="99" lean-forward="true" selection-start-line="61" selection-start-column="99" selection-end-line="61" selection-end-column="167" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/event.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20502">
+          <caret line="1206" column="17" lean-forward="true" selection-start-line="1206" selection-start-column="16" selection-end-line="1244" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/profile.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21539">
+          <caret line="1267" column="5" lean-forward="true" selection-start-line="1267" selection-start-column="5" selection-end-line="1267" selection-end-column="5" />
           <folding>
-            <marker date="1495801042000" expanded="true" signature="336:678" ph="SELECT user_... fmo_users" />
-            <marker date="1495801042000" expanded="true" signature="968:1065" ph="SELECT locat... fmo_locations" />
-            <marker date="1495801042000" expanded="true" signature="4158:4266" ph="UPDATE fmo_u... " />
+            <marker date="1495843601853" expanded="true" signature="257:455" ph="UPDATE fmo_u... " />
+            <marker date="1495843601853" expanded="true" signature="505:1051" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="1223:1366" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="1444:1566" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="10115:10208" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="10295:10381" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="10468:10570" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="40901:41058" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="50832:51012" ph="SELECT event... fmo_locations_events" />
+            <marker date="1495843601853" expanded="true" signature="79932:80044" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="81030:81318" ph="SELECT advan... fmo_users_employee_advances" />
+            <marker date="1495843601853" expanded="true" signature="81401:81703" ph="SELECT timec... fmo_users_employee_timeclock" />
+            <marker date="1495843601853" expanded="true" signature="88852:89272" ph="SELECT child... fmo_users_employee_childsupports" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/app/login.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="25" column="74" lean-forward="false" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/app/init.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/event.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20502">
+          <caret line="1206" column="17" lean-forward="false" selection-start-line="1206" selection-start-column="16" selection-end-line="1244" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/app/api/employees.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1037">
+          <caret line="61" column="99" lean-forward="false" selection-start-line="61" selection-start-column="99" selection-end-line="61" selection-end-column="167" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/profile.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="564">
-          <caret line="1267" column="57" lean-forward="true" selection-start-line="1267" selection-start-column="57" selection-end-line="1267" selection-end-column="57" />
+          <caret line="1267" column="5" lean-forward="false" selection-start-line="1267" selection-start-column="5" selection-end-line="1267" selection-end-column="5" />
           <folding>
-            <marker date="1495803890000" expanded="true" signature="257:455" ph="UPDATE fmo_u... " />
-            <marker date="1495803890000" expanded="true" signature="505:1051" ph="SELECT user_... fmo_users" />
-            <marker date="1495803890000" expanded="true" signature="1223:1366" ph="SELECT locat... fmo_locations" />
-            <marker date="1495803890000" expanded="true" signature="1444:1566" ph="SELECT locat... fmo_locations" />
-            <marker date="1495803890000" expanded="true" signature="10115:10208" ph="SELECT locat... fmo_locations" />
-            <marker date="1495803890000" expanded="true" signature="10295:10381" ph="SELECT user_... fmo_users" />
-            <marker date="1495803890000" expanded="true" signature="10468:10570" ph="SELECT user_... fmo_users" />
-            <marker date="1495803890000" expanded="true" signature="40901:41058" ph="SELECT locat... fmo_locations" />
-            <marker date="1495803890000" expanded="true" signature="50832:51012" ph="SELECT event... fmo_locations_events" />
-            <marker date="1495803890000" expanded="true" signature="77200:77312" ph="SELECT user_... fmo_users" />
-            <marker date="1495803890000" expanded="true" signature="78298:78586" ph="SELECT advan... fmo_users_employee_advances" />
-            <marker date="1495803890000" expanded="true" signature="78669:78971" ph="SELECT timec... fmo_users_employee_timeclock" />
+            <marker date="1495843601853" expanded="true" signature="257:455" ph="UPDATE fmo_u... " />
+            <marker date="1495843601853" expanded="true" signature="505:1051" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="1223:1366" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="1444:1566" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="10115:10208" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="10295:10381" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="10468:10570" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="40901:41058" ph="SELECT locat... fmo_locations" />
+            <marker date="1495843601853" expanded="true" signature="50832:51012" ph="SELECT event... fmo_locations_events" />
+            <marker date="1495843601853" expanded="true" signature="79932:80044" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601853" expanded="true" signature="81030:81318" ph="SELECT advan... fmo_users_employee_advances" />
+            <marker date="1495843601853" expanded="true" signature="81401:81703" ph="SELECT timec... fmo_users_employee_timeclock" />
+            <marker date="1495843601853" expanded="true" signature="88852:89272" ph="SELECT child... fmo_users_employee_childsupports" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/app/add_setting.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="17" column="42" lean-forward="true" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
+          <folding>
+            <marker date="1495843601791" expanded="true" signature="900:1060" ph="SELECT asset... fmo_locations_assets" />
+            <marker date="1495843601791" expanded="true" signature="1468:2525" ph="INSERT INTO fmo_locations_assets... " />
+            <marker date="1495843601791" expanded="true" signature="3174:3347" ph="SELECT docum... fmo_users_employee_documents" />
+            <marker date="1495843601791" expanded="true" signature="3491:3764" ph="UPDATE fmo_u... " />
+            <marker date="1495843601791" expanded="true" signature="3810:4204" ph="INSERT INTO fmo_users_employee_documents... " />
+            <marker date="1495843601791" expanded="true" signature="4898:5900" ph="INSERT INTO fmo_users_employee_childsupports... " />
+            <marker date="1495843601791" expanded="true" signature="6937:7033" ph="SELECT user_... fmo_users" />
+            <marker date="1495843601791" expanded="true" signature="7827:8099" ph="SELECT advan... fmo_users_employee_advances" />
+            <marker date="1495843601791" expanded="true" signature="8166:8452" ph="SELECT timec... fmo_users_employee_timeclock" />
+            <marker date="1495843601791" expanded="true" signature="9953:10272" ph="INSERT INTO fmo_users_employee_writeups... " />
+            <marker date="1495843601791" expanded="true" signature="10625:10877" ph="INSERT INTO fmo_users_employee_comments... " />
+            <marker date="1495843601791" expanded="true" signature="11376:11900" ph="INSERT INTO fmo_services... " />
+            <marker date="1495843601791" expanded="true" signature="13215:13547" ph="INSERT INTO fmo_locations_storages... " />
+            <marker date="1495843601791" expanded="true" signature="13745:13929" ph="INSERT INTO fmo_locations_counties... " />
+            <marker date="1495843601791" expanded="true" signature="14153:14388" ph="INSERT INTO fmo_locations_times... " />
+            <marker date="1495843601791" expanded="true" signature="14597:14789" ph="INSERT INTO fmo_locations_eventtypes... " />
+            <marker date="1495843601791" expanded="true" signature="14981:15167" ph="INSERT INTO fmo_locations_subtypes... " />
+            <marker date="1495843601791" expanded="true" signature="15356:15542" ph="INSERT INTO fmo_locations_howhears... " />
+            <marker date="1495843601791" expanded="true" signature="15724:15910" ph="INSERT INTO fmo_locations_zipcodes... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dashboard/assets/pages/assets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="76" column="157" lean-forward="false" selection-start-line="76" selection-start-column="157" selection-end-line="76" selection-end-column="157" />
+          <folding>
+            <marker date="1495844668221" expanded="true" signature="184:382" ph="UPDATE fmo_u... " />
+            <marker date="1495844668221" expanded="true" signature="433:539" ph="SELECT locat... fmo_locations" />
+            <marker date="1495844668221" expanded="true" signature="3301:3664" ph="SELECT asset... fmo_locations_assets" />
+            <marker date="1495844668221" expanded="true" signature="5748:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="5833:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="5915:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="6026:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="6117:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="6203:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="6384:6500" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="7684:7804" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="9197:9313" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="10557:10696" ph="SELECT locat... fmo_locations" />
+            <marker date="1495844668221" expanded="true" signature="10819:10976" ph="SELECT locat... fmo_locations" />
+            <marker date="1495844668221" expanded="true" signature="13172:13288" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="14013:14129" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="14853:14969" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="15696:15812" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="16635:16751" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="17512:17628" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="18441:18557" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="19298:19414" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="20140:20256" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="20996:21112" ph="..." />
+            <marker date="1495844668221" expanded="true" signature="21958:22074" ph="..." />
           </folding>
         </state>
       </provider>
