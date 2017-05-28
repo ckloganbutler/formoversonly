@@ -44,10 +44,16 @@ if(isset($_SESSION['logged'])){
                             <li class="active">
                                 <a href="#assets_tab" data-toggle="tab">Assets</a>
                             </li>
+                            <li class="">
+                                <a href="#accidents" data-toggle="tab">Accidents <i class="fa fa-frown-o"></i></a>
+                            </li>
                         </ul>
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">
+                            <div class="tab-pane" id="accidents">
+                                // todo: add accidents
+                            </div>
                             <div class="tab-pane active" id="assets_tab">
                                 <div class="portlet">
                                     <div class="portlet-title">
@@ -62,7 +68,6 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-<<<<<<< HEAD
                                         <div class="" style="">
                                             <?php
                                             $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
@@ -83,26 +88,6 @@ if(isset($_SESSION['logged'])){
                                                                         <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
                                                                     </h4>
                                                                 </div>
-=======
-                                        <?php
-                                        $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
-                                        if(mysql_num_rows($assets) > 0){
-                                            $pk = 0;
-                                            while($asset = mysql_fetch_assoc($assets)){
-                                                $pk++
-                                                ?>
-                                                <div id="asset_h_<?php echo $pk; ?>" class="panel-group">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
-                                                                <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="as_<?php echo $asset['asset_id']; ?>" data-reload="">
-                                                                    <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
-                                                            </div>
-                                                            <div class="caption">
-                                                                <h4 class="panel-title">
-                                                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
-                                                                </h4>
->>>>>>> 380240f2e9fc3ae61333445e6d953b32de7f558a
                                                             </div>
                                                             <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
                                                                 <div class="panel-body">

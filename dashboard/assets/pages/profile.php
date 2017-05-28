@@ -282,7 +282,7 @@ if(isset($_SESSION['logged'])){
                                             <h3>Personal Information</h3>
                                             <div class="row static-info" style="margin-top: 20px;">
                                                 <div class="col-md-5 name">
-                                                    Name:
+                                                    Name (ID):
                                                 </div>
                                                 <div class="col-md-7 value">
                                                     <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_fname" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new first name.." data-url="assets/app/update_settings.php?update=usr_prf">
