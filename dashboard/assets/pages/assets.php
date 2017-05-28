@@ -232,24 +232,25 @@ if(isset($_SESSION['logged'])){
                                                                             <div class="tabbable-line">
                                                                                 <ul class="nav nav-tabs ">
                                                                                     <li class="active">
-                                                                                        <a href="#documents" data-toggle="tab" aria-expanded="true">Images/Documents </a>
+                                                                                        <a href="#documents_<?php echo $asset['asset_id']; ?>" data-toggle="tab" aria-expanded="true">Images/Documents </a>
                                                                                     </li>
                                                                                     <li class="">
-                                                                                        <a href="#maintenance" data-toggle="tab" aria-expanded="false">Maintenance Records </a>
+                                                                                        <a href="#maintenance_<?php echo $asset['asset_id']; ?>" data-toggle="tab" aria-expanded="false">Maintenance Records </a>
                                                                                     </li>
                                                                                     <li class="">
-                                                                                        <a href="#location" data-toggle="tab" aria-expanded="false">Location </a>
+                                                                                        <a href="#location_<?php echo $asset['asset_id']; ?>" data-toggle="tab" aria-expanded="false">Location </a>
                                                                                     </li>
                                                                                 </ul>
                                                                                 <div class="tab-content">
-                                                                                    <div class="tab-pane active" id="documents">
+                                                                                    <div class="tab-pane active" id="documents_<?php echo $asset['asset_id']; ?>">
                                                                                         TODO: Add images/documents table
                                                                                     </div>
-                                                                                    <div class="tab-pane" id="maintenance">
+                                                                                    <div class="tab-pane" id="maintenance_<?php echo $asset['asset_id']; ?>">
                                                                                         TODO: Add maintenance table
                                                                                     </div>
-                                                                                    <div class="tab-pane" id="location">
-                                                                                        TODO: Add dynamic tracking map of asset (if available)
+                                                                                    <div class="tab-pane" id="location_<?php echo $asset['asset_id']; ?>">
+                                                                                        <div id="asset_map" class="gmaps asset_map" style="height: 350px;">
+                                                                                        </div>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -407,81 +408,102 @@ if(isset($_SESSION['logged'])){
                 orientation: "left",
                 autoclose: true
             });
-        });
-        $('#new_assets').validate({
-            errorElement: 'span', //default input error message container
-            errorClass: 'help-block', // default input error message class
-            focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
-            rules: {
-                type: {
-                    required: true
-                },
-                desc: {
-                    required: true
-                },
-                vin: {
-                    required: true
-                },
-                year: {
-                    required: true
-                },
-                make: {
-                    required: true
-                },
-                model: {
-                    required: true
-                },
-                color: {
-                    required: true
-                },
-                date_of_purchase: {
-                    required: true
-                },
-                price: {
-                    required: true
+            var address = '<?php echo $location['location_name']; ?>';
+
+            var map = new google.maps.Map($('.asset_map'), {
+                mapTypeId: google.maps.MapTypeId.TERRAIN,
+                zoom: 12
+            });
+
+            var geocoder = new google.maps.Geocoder();
+
+            geocoder.geocode({
+                'address': address
+            },
+            function(results, status) {
+                if(status == google.maps.GeocoderStatus.OK) {
+                    new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map
+                    });
+                    map.setCenter(results[0].geometry.location);
                 }
-            },
-
-            invalidHandler: function(event, validator) { //display error alert on form submit
-
-            },
-
-            highlight: function(element) { // hightlight error inputs
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // set error class to the control group
-            },
-
-            success: function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
-
-
-            submitHandler: function(form) {
-                $.ajax({
-                    url: 'assets/app/add_setting.php?setting=asset&luid=<?php echo $_GET['luid']; ?>',
-                    type: "POST",
-                    data: $('#new_assets').serialize(),
-                    success: function(data) {
-                        $('#new_asset').modal('hide')
-                        $('#new_assets')[0].reset();
-                        toastr.success("<strong>Logan says</strong>:<br/>That asset has been added to the companies record. I need to refresh the page to show you the new changes.");
-                        $.ajax({
-                            url: 'assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>',
-                            success: function(data) {
-                                $('#page_content').html(data);
-                            },
-                            error: function() {
-                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                            }
-                        });
+            });
+            $('#new_assets').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    type: {
+                        required: true
                     },
-                    error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    desc: {
+                        required: true
+                    },
+                    vin: {
+                        required: true
+                    },
+                    year: {
+                        required: true
+                    },
+                    make: {
+                        required: true
+                    },
+                    model: {
+                        required: true
+                    },
+                    color: {
+                        required: true
+                    },
+                    date_of_purchase: {
+                        required: true
+                    },
+                    price: {
+                        required: true
                     }
-                });
-            }
+                },
+
+                invalidHandler: function(event, validator) { //display error alert on form submit
+
+                },
+
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function(label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: 'assets/app/add_setting.php?setting=asset&luid=<?php echo $_GET['luid']; ?>',
+                        type: "POST",
+                        data: $('#new_assets').serialize(),
+                        success: function(data) {
+                            $('#new_asset').modal('hide')
+                            $('#new_assets')[0].reset();
+                            toastr.success("<strong>Logan says</strong>:<br/>That asset has been added to the companies record. I need to refresh the page to show you the new changes.");
+                            $.ajax({
+                                url: 'assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>',
+                                success: function(data) {
+                                    $('#page_content').html(data);
+                                },
+                                error: function() {
+                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                }
+                            });
+                        },
+                        error: function() {
+                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                }
+            });
         });
     </script>
     <?php

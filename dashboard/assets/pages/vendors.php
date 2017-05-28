@@ -111,8 +111,10 @@ if(isset($_SESSION['logged'])){
                                                 <option value="Mechanic">Mechanic</option>
                                                 <option value="Roadside">Roadside</option>
                                                 <option value="Trucks">Trucks</option>
+                                                <option value="Fuel">Fuel</option>
                                                 <option value="Rentals">Rentals</option>
                                                 <option value="Day">Day</option>
+                                                <option value="Furniture Repair"></option>
                                                 <option value="Labor">Labor</option>
                                                 <option value="Other">Other</option>
                                             </select>
@@ -266,6 +268,7 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_vendor_contact').serialize(),
                         success: function(data) {
+                            $('#add_vendor_contact')[0].reset();
                             toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of vendors for this location.');
                             vendors.getDataTable().ajax.reload();
                         },

@@ -132,6 +132,9 @@ if($_GET['update'] == 'location_vendor'){
     $field = $_POST['name'];
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
+    if($field == 'vendor_phone'){
+        $value = preg_replace('/[^A-Za-z0-9\-]/', '', $value);
+    }
     mysql_query("UPDATE fmo_locations_vendors SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE vendor_id='".mysql_real_escape_string($pk)."'");
 }
 if($_GET['update'] == 'location_settings' && isset($_POST)){
