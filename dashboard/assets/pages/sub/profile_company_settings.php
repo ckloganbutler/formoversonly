@@ -19,11 +19,7 @@ if(isset($_SESSION['logged'])){
         <div class="col-md-12">
             <div class="portlet light">
                 <div class="portlet-title tabbable-line">
-                    <div class="caption caption-md">
-                        <i class="icon-globe theme-font hide"></i>
-                        <span class="caption-subject font-red bold uppercase">Company Settings</span>
-                    </div>
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs nav-justified">
                         <li class="active">
                             <a href="#settings" data-toggle="tab">Company Information</a>
                         </li>
@@ -36,46 +32,105 @@ if(isset($_SESSION['logged'])){
                     <div class="tab-content">
                         <!-- PERSONAL INFO TAB -->
                         <div class="tab-pane active" id="settings">
-                            <?php
-                            if($view == 'infoOnly'){
-                                ?>
-
-                                <?php
-                            } elseif($view == 'editOnly'){
-                                ?>
-                                <form id="update_profile" role="form" action="">
-                                    <div class="form-group">
-                                        <label class="control-label">Address</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_address']; ?>" class="form-control" name="address"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">City</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_city']; ?>" class="form-control" name="city"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">State</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_state']; ?>" class="form-control" name="state"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Zip Code</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_zip']; ?>" class="form-control" name="zip"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Company Name</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_company_name']; ?>" class="form-control" name="company"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label">Website Url</label>
-                                        <input type="text" placeholder="<?php echo $profile['user_website']; ?>" class="form-control" name="website"  <?php if($editable == false){echo "readonly";} ?>/>
-                                    </div>
-                                </form>
-                                <div class="margiv-top-10">
-                                    <a class="update_settings btn red" data-form="assets/app/update_settings.php?update=personal" data-id="#update_profile" data-reload="assets/pages/profile.php">Save Changes </a>
-                                    <a href="javascript:;" class="btn default">Cancel </a>
+                            <h3>Company Information</h3>
+                            <div class="row static-info" style="margin-top: 20px;">
+                                <div class="col-md-5 name">
+                                    Name:
                                 </div>
-                                <?php
-                            }
-                            ?>
+                                <div class="col-md-7 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_company_name" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new company name.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_company_name']; ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row static-info">
+                                <div class="col-md-5 name">
+                                    Website URL:
+                                </div>
+                                <div class="col-md-7 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_website" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new website URL.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_website']; ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row static-info">
+                                <div class="col-md-5 name">
+                                    Address:
+                                </div>
+                                <div class="col-md-7 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_address" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new address.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_address']; ?>
+                                    </a>,
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_city" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new city.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_city']; ?>
+                                    </a>,
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_state" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Select new state.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_state']; ?>
+                                    </a>,
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_zip" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new zip code.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_zip']; ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <hr/>
+                            <a class="btn red edit" data-edit="cs_<?php echo $profile['user_token']; ?>" data-reload="">Edit </a>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="portlet">
+                                        <div class="portlet-title tabbable-line" style="border-bottom: none;">
+                                            <div class="caption caption-md">
+                                                <i class="icon-tag theme-font bold"></i>
+                                                Company Licenses
+                                            </div>
+                                            <div class="actions btn-set">
+                                                <a class="load_page btn default red-stripe" data-href="assets/pages/create_location.php" data-page-title="Create Location"><i class="fa fa-plus"></i> Add license</a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="table-container">
+                                                <form role="form" id="add_advances">
+                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=advances&uuid=<?php echo $profile['user_token']; ?>">
+                                                        <thead>
+                                                        <tr role="row" class="heading">
+                                                            <th width="12%">
+                                                                Advance Timestamp
+                                                            </th>
+                                                            <th>
+                                                                Advance Requested
+                                                            </th>
+                                                            <th>
+                                                                Advance Available
+                                                            </th>
+                                                            <th>
+                                                                Advance Reasoning
+                                                            </th>
+                                                            <th width="12%">
+                                                                Advance Authorization
+                                                            </th>
+                                                        </tr>
+                                                        <tr role="row" class="filter" style="display: none;" id="add_advance">
+                                                            <td></td>
+                                                            <td><input type="number" class="form-control form-filter input-sm" name="requested"></td>
+                                                            <td><input type="number" class="form-control form-filter input-sm" name="available" readonly value="<?php echo number_format($pay['available'], 2); ?>"></td>
+                                                            <td><input type="text" class="form-control form-filter input-sm" name="reasoning"></td>
+                                                            <td>
+                                                                <div class="margin-bottom-5">
+                                                                    <button type="button" class="btn btn-sm red margin-bottom add_advance"><i class="fa fa-download"></i> Save</button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- END PERSONAL INFO TAB -->
                         <!-- CHANGE AVATAR TAB -->

@@ -666,7 +666,7 @@ if(isset($_SESSION['logged'])){
                                                 Child Support
                                             </div>
                                             <div class="tab-pane" id="administration">
-                                                <div class="portlet light">
+                                                <div class="portlet">
                                                     <div class="portlet-title tabbable-line">
                                                         <div class="caption">
                                                             <i class="fa fa-file-o"></i>Administration <small><span class="font-red">|</span> These are special settings only for administration purposes.</small>
