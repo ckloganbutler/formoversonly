@@ -22,7 +22,6 @@ if(isset($_SESSION['uuid'])){
         if($emp['user_status'] != 1){
             continue;
         }
-        $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".$emp['user_employer_location']."'"));
         if($emp['user_fname'] == 'Logan'){
             $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
         } else {$warning = NULL;}
@@ -57,8 +56,6 @@ if(isset($_SESSION['uuid'])){
             ''.$emp['user_lname'].', '.$emp['user_fname'].' '.$num.' '.$warning.'',
             ''.clean_phone($emp['user_phone']).'',
             ''.secret_mail($emp['user_email']).'',
-            ''.$location['location_name'].'',
-            ''.$status.'',
             '<a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid='.$emp['user_token'].'&luid='.$emp['user_employer_location'].'" data-page-title="'.$emp["user_fname"].' '.$profile["user_lname"].'"><i class="fa fa-edit"></i> View profile</a>'
         );
     }

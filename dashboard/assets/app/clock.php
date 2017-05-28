@@ -11,15 +11,17 @@ include 'init.php';
 if(isset($_GET['clock'])){
     $user       = $_SESSION['uuid'];
     $company    = $_SESSION['cuid'];
+    $ip         = $_SERVER['REMOTE_ADDR'];
     $location   = $_GET['luid'];
     if($_GET['clock'] == 'in'){
         $in = mysql_query("SELECT timeclock_id FROM fmo_users_employee_timeclock WHERE timeclock_user='".mysql_real_escape_string($user)."' AND timeclock_complete=0");
         if(mysql_num_rows($in) == 0){
             $date_in = date('Y-m-d H:i:s');
-            mysql_query("INSERT INTO fmo_users_employee_timeclock (timeclock_user, timeclock_company_token, timeclock_location_token, timeclock_clockin, timeclock_complete) VALUES (
+            mysql_query("INSERT INTO fmo_users_employee_timeclock (timeclock_user, timeclock_company_token, timeclock_location_token, timeclock_ip, timeclock_clockin, timeclock_complete) VALUES (
             '".mysql_real_escape_string($user)."',
             '".mysql_real_escape_string($company)."',
             '".mysql_real_escape_string($location)."',
+            '".mysql_real_escape_string($ip)."',
             '".mysql_real_escape_string($date_in)."',
             '".mysql_real_escape_string(0)."')");
         } else {

@@ -53,23 +53,17 @@ if(isset($_SESSION['logged'])){
                                     <table class="table table-striped table-bordered table-hover" id="employees">
                                         <thead>
                                         <tr role="row" class="heading">
-                                            <th width="4.7%">
+                                            <th width="18%">
                                                 <input type="checkbox" class="group-checkable"> Employee Position
                                             </th>
-                                            <th width="9%">
+                                            <th>
                                                 Employee Name & ID
                                             </th>
-                                            <th width="9%">
+                                            <th>
                                                 Employee Phone
                                             </th>
-                                            <th width="18%">
+                                            <th>
                                                 Employee Email
-                                            </th>
-                                            <th width="9%">
-                                                Employee Location
-                                            </th>
-                                            <th width="10%">
-                                                Employee Status
                                             </th>
                                             <th width="2.5%">
                                                 View & edit
