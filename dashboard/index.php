@@ -218,7 +218,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         </li>
                         <li class="">
                             <a class="load_page" data-href="assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Assets">
-                                <i class="icon-wallet"></i>
+                                <i class="fa fa-truck"></i>
                                 <span class="title">Assets</span>
                                 <span class="selected"></span>
                                 <span class="arrow "></span>
@@ -226,7 +226,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         </li>
                         <li class="">
                             <a class="load_page" data-href="assets/pages/vendors.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Vendors">
-                                <i class="icon-call-out"></i>
+                                <i class="icon-tag"></i>
                                 <span class="title">Vendors</span>
                                 <span class="selected"></span>
                                 <span class="arrow "></span>

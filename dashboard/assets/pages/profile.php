@@ -382,7 +382,7 @@ if(isset($_SESSION['logged'])){
                                                     Password:
                                                 </div>
                                                 <div class="col-md-7 value">
-                                                    <a>Send password reset to <?php echo clean_phone($profile['user_phone']); ?></a>
+                                                    <a class="upr">Send password reset to <?php echo clean_phone($profile['user_phone']); ?></a>
                                                 </div>
                                             </div>
                                             <?php
@@ -538,7 +538,7 @@ if(isset($_SESSION['logged'])){
                                             <hr/>
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                                                    <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1296,6 +1296,21 @@ if(isset($_SESSION['logged'])){
                 var show = $(this).attr('data-show');
 
                 $(show).show();
+            });
+            $('.upr').on('click', function() {
+               $.ajax({
+                   url: 'assets/app/texting.php?txt=upr',
+                   type: 'POST',
+                   data: {
+                       p: <?php echo $profile['user_phone']; ?>
+                   },
+                   success: function() {
+                       toastr.success("<strong>Logan says:</strong><br/>Password reset was sent to <?php echo clean_phone($profile['user_phone']); ?>, they should recieve it momentarily.");
+                   },
+                   error: function() {
+                        toastr.error("<strong>Logan says:</strong><br/>Oops..that didnt work properly. Try again?");
+                   }
+               })
             });
             $("#add_documents").validate({
                 errorElement: 'span', //default input error message container

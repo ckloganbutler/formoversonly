@@ -100,28 +100,26 @@ if(isset($_SESSION['logged'])){
                                                 while($loc = mysql_fetch_assoc($locations)){
                                                     ?>
                                                     <div class="portfolio-block">
-                                                        <div class="col-md-2" style="padding-left: 0;">
+                                                        <div class="col-md-5" style="padding-left: 0;">
                                                             <div class="portfolio-text">
                                                                 <img src="assets/admin/pages/media/gallery/image3.jpg" alt="" height="81px" width="81px">
                                                                 <div class="portfolio-text-info">
                                                                     <h4><?php echo $loc['location_name']; ?></h4>
+                                                                    <p>
+                                                                        <?php echo $loc['location_address'].", ".$loc['location_city'].", ".$loc['location_state']." - ".$loc['location_zip']; ?>
+                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
-                                                            <div class="sparkline-chart">
-                                                                <div class="number sparkline_line"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-4 portfolio-stat" style="margin-top: 8px;">
+                                                        <div class="col-md-5 portfolio-stat" style="margin-top: 8px;">
                                                             <div class="portfolio-info">
-                                                                Employees <span>0 </span>
+                                                                Hot Leads <span>0 </span>
                                                             </div>
                                                             <div class="portfolio-info">
-                                                                Customers <span>0 </span>
+                                                                New Customers <span>0 </span>
                                                             </div>
                                                             <div class="portfolio-info">
-                                                                Moves <span>0 </span>
+                                                                New Bookings <span>0 </span>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2" style="padding-right: 0;">

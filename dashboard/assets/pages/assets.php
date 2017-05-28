@@ -62,187 +62,189 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <?php
-                                        $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."'");
-                                        if(mysql_num_rows($assets) > 0){
-                                            $pk = 0;
-                                            while($asset = mysql_fetch_assoc($assets)){
-                                                $pk++
-                                                ?>
-                                                <div id="asset_h_<?php echo $pk; ?>" class="panel-group">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
-                                                                <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="as_<?php echo $asset['asset_id']; ?>" data-reload="">
-                                                                    <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
+                                        <div class="" style="">
+                                            <?php
+                                            $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
+                                            if(mysql_num_rows($assets) > 0){
+                                                $pk = 0;
+                                                while($asset = mysql_fetch_assoc($assets)){
+                                                    $pk++
+                                                    ?>
+                                                    <div id="asset_h_<?php echo $pk; ?>" class="panel-group">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
+                                                                    <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="as_<?php echo $asset['asset_id']; ?>" data-reload="">
+                                                                        <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
+                                                                </div>
+                                                                <div class="caption">
+                                                                    <h4 class="panel-title">
+                                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
+                                                                    </h4>
+                                                                </div>
                                                             </div>
-                                                            <div class="caption">
-                                                                <h4 class="panel-title">
-                                                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
-                                                                </h4>
-                                                            </div>
-                                                        </div>
-                                                        <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
-                                                            <div class="panel-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 col-sm-12 col-xs-12">
-                                                                        <div class="well">
-                                                                            <address>
-                                                                                Asset Type:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_type" data-pk="<?php echo $asset['asset_id']; ?>" data-type="select" data-source="[{value: 'Moving Truck', text: 'Moving Truck'},{value: 'Office Car', text: 'Office Car'},{value: 'Other', text: 'Other'}]" data-inputclass="form-control" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_type']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Asset Unit Number:
-                                                                                <?php
-                                                                                if($_SESSION['group'] == 1){
-                                                                                    ?>
+                                                            <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
+                                                                <div class="panel-body">
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                            <div class="well">
+                                                                                <address>
+                                                                                    Asset Type:
                                                                                     <strong>
-                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_desc" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                            <?php echo $asset['asset_desc']; ?>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_type" data-pk="<?php echo $asset['asset_id']; ?>" data-type="select" data-source="[{value: 'Moving Truck', text: 'Moving Truck'},{value: 'Office Car', text: 'Office Car'},{value: 'Other', text: 'Other'}]" data-inputclass="form-control" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_type']; ?>
                                                                                         </a><br/>
                                                                                     </strong>
+                                                                                    Asset Unit Number:
                                                                                     <?php
-                                                                                } else {
-                                                                                    ?>
-                                                                                    <?php echo $asset['asset_desc']; ?><br/>
-                                                                                    <?php
-                                                                                }
-                                                                                ?>
-
-                                                                                Asset VIN Number:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_vin" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vin.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_vin']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                <?php
-                                                                                if($_SESSION['group'] == 1){
-                                                                                    ?>
-                                                                                    Asset Location:
-                                                                                    <strong>
-                                                                                        <?php
-                                                                                        $location      = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($asset['asset_location_token'])."'"));
-                                                                                        $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_company_token='".$_SESSION['cuid']."' ORDER BY location_name ASC");
-                                                                                        if(mysql_num_rows($findLocations) > 0){
-                                                                                            $selectData = NULL;
-                                                                                            while($loc = mysql_fetch_assoc($findLocations)){
-                                                                                                $selectData .= "{value: '".$loc['location_token']."', text: '".$loc['location_name']." (".$loc['location_state'].")'},";
-                                                                                            }
-                                                                                        }
+                                                                                    if($_SESSION['group'] == 1){
                                                                                         ?>
-                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_location_token" data-pk="<?php echo $asset['asset_id']; ?>" data-type="select" data-source="[<?php echo $selectData; ?>]" data-inputclass="form-control" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                            <?php echo $location['location_name']." (".$location['location_state'].")"; ?>
+                                                                                        <strong>
+                                                                                            <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_desc" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                                <?php echo $asset['asset_desc']; ?>
+                                                                                            </a><br/>
+                                                                                        </strong>
+                                                                                        <?php
+                                                                                    } else {
+                                                                                        ?>
+                                                                                        <?php echo $asset['asset_desc']; ?><br/>
+                                                                                        <?php
+                                                                                    }
+                                                                                    ?>
+
+                                                                                    Asset VIN Number:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_vin" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vin.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_vin']; ?>
                                                                                         </a><br/>
                                                                                     </strong>
                                                                                     <?php
-                                                                                }
-                                                                                ?>
+                                                                                    if($_SESSION['group'] == 1){
+                                                                                        ?>
+                                                                                        Asset Location:
+                                                                                        <strong>
+                                                                                            <?php
+                                                                                            $location      = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($asset['asset_location_token'])."'"));
+                                                                                            $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_company_token='".$_SESSION['cuid']."' ORDER BY location_name ASC");
+                                                                                            if(mysql_num_rows($findLocations) > 0){
+                                                                                                $selectData = NULL;
+                                                                                                while($loc = mysql_fetch_assoc($findLocations)){
+                                                                                                    $selectData .= "{value: '".$loc['location_token']."', text: '".$loc['location_name']." (".$loc['location_state'].")'},";
+                                                                                                }
+                                                                                            }
+                                                                                            ?>
+                                                                                            <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_location_token" data-pk="<?php echo $asset['asset_id']; ?>" data-type="select" data-source="[<?php echo $selectData; ?>]" data-inputclass="form-control" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                                <?php echo $location['location_name']." (".$location['location_state'].")"; ?>
+                                                                                            </a><br/>
+                                                                                        </strong>
+                                                                                        <?php
+                                                                                    }
+                                                                                    ?>
 
 
-                                                                                <br/>
+                                                                                    <br/>
 
-                                                                                Year:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_year" data-pk="<?php echo $asset['asset_id']; ?>" data-type="number" data-placement="right" data-title="Enter new vehicle year.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_year']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Make:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_make" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle make.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_make']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Model:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_model" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle model.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_model']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Color:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_color" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle color.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_color']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
+                                                                                    Year:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_year" data-pk="<?php echo $asset['asset_id']; ?>" data-type="number" data-placement="right" data-title="Enter new vehicle year.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_year']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Make:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_make" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle make.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_make']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Model:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_model" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle model.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_model']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Color:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_color" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new vehicle color.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_color']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
 
-                                                                                <br/>
+                                                                                    <br/>
 
-                                                                                Purchase Date:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_dop" data-pk="<?php echo $asset['asset_id']; ?>" data-type="date" data-format="mm/dd/yyyy" data-placement="right" data-title="Select new date of purchase.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_dop']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Purchase Price:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_price" data-pk="<?php echo $asset['asset_id']; ?>" data-type="number" data-placement="right" data-title="Enter new price.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_price']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
+                                                                                    Purchase Date:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_dop" data-pk="<?php echo $asset['asset_id']; ?>" data-type="date" data-format="mm/dd/yyyy" data-placement="right" data-title="Select new date of purchase.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_dop']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Purchase Price:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_price" data-pk="<?php echo $asset['asset_id']; ?>" data-type="number" data-placement="right" data-title="Enter new price.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_price']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
 
-                                                                                <br/>
+                                                                                    <br/>
 
-                                                                                Tire Size:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_tire_size" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new tire size.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_tire_size']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Insurance Agent:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_agent" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new agent.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_agent']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Plate Number:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_plate" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new plate number.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_plate']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                                Last DOT Inspection:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_last_dot_inspec" data-pk="<?php echo $asset['asset_id']; ?>" data-type="date" data-placement="right" data-title="Select last DOT inspection date.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_last_dot_inspec']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
+                                                                                    Tire Size:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_tire_size" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new tire size.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_tire_size']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Insurance Agent:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_agent" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new agent.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_agent']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Plate Number:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_plate" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new plate number.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_plate']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                    Last DOT Inspection:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_last_dot_inspec" data-pk="<?php echo $asset['asset_id']; ?>" data-type="date" data-placement="right" data-title="Select last DOT inspection date.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_last_dot_inspec']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
 
-                                                                                <br/>
+                                                                                    <br/>
 
-                                                                                Comments:
-                                                                                <strong>
-                                                                                    <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_comments" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new comments.." data-url="assets/app/update_settings.php?update=assets">
-                                                                                        <?php echo $asset['asset_comments']; ?>
-                                                                                    </a><br/>
-                                                                                </strong>
-                                                                            </address>
+                                                                                    Comments:
+                                                                                    <strong>
+                                                                                        <a class="as_<?php echo $asset['asset_id']; ?>" style="color:#333333" data-name="asset_comments" data-pk="<?php echo $asset['asset_id']; ?>" data-type="text" data-placement="right" data-title="Enter new comments.." data-url="assets/app/update_settings.php?update=assets">
+                                                                                            <?php echo $asset['asset_comments']; ?>
+                                                                                        </a><br/>
+                                                                                    </strong>
+                                                                                </address>
+                                                                            </div>
                                                                         </div>
-                                                                    </div>
-                                                                    <div class="col-md-6 col-sm-12 col-xs-12">
-                                                                        <div class="tabbable-line">
-                                                                            <ul class="nav nav-tabs ">
-                                                                                <li class="active">
-                                                                                    <a href="#documents" data-toggle="tab" aria-expanded="true">Images/Documents </a>
-                                                                                </li>
-                                                                                <li class="">
-                                                                                    <a href="#maintenance" data-toggle="tab" aria-expanded="false">Maintenance Records </a>
-                                                                                </li>
-                                                                                <li class="">
-                                                                                    <a href="#location" data-toggle="tab" aria-expanded="false">Location </a>
-                                                                                </li>
-                                                                            </ul>
-                                                                            <div class="tab-content">
-                                                                                <div class="tab-pane active" id="documents">
-                                                                                    TODO: Add images/documents table
-                                                                                </div>
-                                                                                <div class="tab-pane" id="maintenance">
-                                                                                    TODO: Add maintenance table
-                                                                                </div>
-                                                                                <div class="tab-pane" id="location">
-                                                                                    TODO: Add dynamic tracking map of asset (if available)
+                                                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                            <div class="tabbable-line">
+                                                                                <ul class="nav nav-tabs ">
+                                                                                    <li class="active">
+                                                                                        <a href="#documents" data-toggle="tab" aria-expanded="true">Images/Documents </a>
+                                                                                    </li>
+                                                                                    <li class="">
+                                                                                        <a href="#maintenance" data-toggle="tab" aria-expanded="false">Maintenance Records </a>
+                                                                                    </li>
+                                                                                    <li class="">
+                                                                                        <a href="#location" data-toggle="tab" aria-expanded="false">Location </a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <div class="tab-content">
+                                                                                    <div class="tab-pane active" id="documents">
+                                                                                        TODO: Add images/documents table
+                                                                                    </div>
+                                                                                    <div class="tab-pane" id="maintenance">
+                                                                                        TODO: Add maintenance table
+                                                                                    </div>
+                                                                                    <div class="tab-pane" id="location">
+                                                                                        TODO: Add dynamic tracking map of asset (if available)
+                                                                                    </div>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -251,18 +253,18 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <div class="alert alert-warning alert-dismissable">
+                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                    <strong>No assets added yet!</strong> Add new assets to see them appear here.
                                                 </div>
                                                 <?php
                                             }
-                                        } else {
                                             ?>
-                                            <div class="alert alert-warning alert-dismissable">
-                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                                                <strong>No assets added yet!</strong> Add new assets to see them appear here.
-                                            </div>
-                                            <?php
-                                        }
-                                        ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -21,7 +21,7 @@ if(isset($_GET['admin']) && $_GET['admin'] == 'trl'){
     while($emp = mysql_fetch_assoc($findEmployees)) {
         $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".$emp['user_employer_location']."'"));
         if($emp['timeclock_clockout'] == '0000-00-00 00:00:00'){
-            $emp['timeclock_clockout'] = 'N/A (Clocked in still)';
+            $emp['timeclock_clockout'] = 'N/A (Clocked in)';
         }
         $records["data"][] = array(
             ''.date('M, d, Y', strtotime($emp['timeclock_timestamp'])).'',
@@ -50,7 +50,7 @@ if(isset($_GET['admin']) && $_GET['admin'] == 'trl'){
     while($emp = mysql_fetch_assoc($findEmployees)) {
         $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".$emp['user_employer_location']."'"));
         if($emp['timeclock_clockout'] == '0000-00-00 00:00:00'){
-            $emp['timeclock_clockout'] = 'N/A (Clocked in still)';
+            $emp['timeclock_clockout'] = 'N/A (Clocked in)';
         }
         $records["data"][] = array(
             ''.date('M, d, Y', strtotime($emp['timeclock_timestamp'])).'',
