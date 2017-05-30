@@ -11,7 +11,7 @@ include 'init.php';
 if(isset($_GET['txt'])){
     if($_GET['txt'] == 'upr'){
         $who = $_POST['p'];
-        $msg = "Yo waddup bitch";
+        $msg = "Your new password on FMO is: ".struuid();
 
         _sendText($who, $msg);
     }
