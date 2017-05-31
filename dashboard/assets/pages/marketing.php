@@ -37,19 +37,44 @@ if(isset($_SESSION['logged'])){
                 <div class="portlet light">
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
-                            <i class="icon-graph theme-font bold"></i>
+                            <i class="icon-earphones-alt theme-font bold"></i>
                             <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span>  <small>Marketing</small>
                         </div>
-                        <ul class="nav nav-tabs">
-                            <li class="active">
-                                <a href="#tab" data-toggle="tab">Tab</a>
-                            </li>
-                        </ul>
+                        <div class="actions btn-set">
+                            <a class="btn default red-stripe load_page" data-href="assets/pages/create_marketer.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Add new marketer">
+                                <i class="fa fa-plus"></i> Add new marketer
+                            </a>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab">
+                            <div class="tab-pane active" id="employees_tab">
+                                <div class="table-container">
+                                    <table class="table table-striped table-bordered table-hover" id="employees">
+                                        <thead>
+                                        <tr role="row" class="heading">
+                                            <th width="18%">
+                                                <input type="checkbox" class="group-checkable"> Marketer Contacted
+                                            </th>
+                                            <th>
+                                                Marketer Name & ID
+                                            </th>
+                                            <th>
+                                                Marketer Phone
+                                            </th>
+                                            <th>
+                                                Marketer Email
+                                            </th>
+                                            <th width="10%">
+                                                Contact or Edit
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
