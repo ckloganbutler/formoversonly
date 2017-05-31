@@ -92,7 +92,7 @@ if(isset($_SESSION['logged'])){
                                                             <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
                                                                 <div class="panel-body">
                                                                     <div class="row">
-                                                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                        <div class="col-md-4 col-sm-12 col-xs-12">
                                                                             <div class="well">
                                                                                 <address>
                                                                                     Asset Type:
@@ -228,7 +228,7 @@ if(isset($_SESSION['logged'])){
                                                                                 </address>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-6 col-sm-12 col-xs-12">
+                                                                        <div class="col-md-8 col-sm-12 col-xs-12">
                                                                             <div class="tabbable-line">
                                                                                 <ul class="nav nav-tabs ">
                                                                                     <li class="active">
@@ -243,7 +243,63 @@ if(isset($_SESSION['logged'])){
                                                                                 </ul>
                                                                                 <div class="tab-content">
                                                                                     <div class="tab-pane active" id="documents_<?php echo $asset['asset_id']; ?>">
-                                                                                        TODO: Add images/documents table
+                                                                                        <div class="portlet">
+                                                                                            <div class="portlet-title">
+                                                                                                <div class="caption">
+                                                                                                    <i class="fa fa-file-o"></i> <small><span class="font-red">|</span> Missing files: <span class="font-red">Registration, Plate Copy</span>.</small>
+                                                                                                </div>
+                                                                                                <div class="actions">
+                                                                                                    <a class="btn default red-stripe show_form" data-show="#add_document">
+                                                                                                        <i class="fa fa-plus"></i>
+                                                                                                        <span class="hidden-480">Upload new document</span>
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="portlet-body">
+                                                                                                <div class="table-container">
+                                                                                                    <form role="form" id="add_documents">
+                                                                                                        <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/assets.php?type=documents&id=<?php echo $asset['asset_id']; ?>">
+                                                                                                            <thead>
+                                                                                                            <tr role="row" class="filter" style="display: none;" id="add_document">
+                                                                                                                <td><input type="file" class="form-control input-sm" name="file"></td>
+                                                                                                                <td>
+                                                                                                                    <div class="form-group">
+                                                                                                                        <div class="col-md-6">
+                                                                                                                            <select class="form-control input-sm" name="file_type">
+                                                                                                                                <option disabled selected value="">Select one..</option>
+                                                                                                                                <option value="IDK">Dunno what goes here!</option>
+                                                                                                                            </select>
+                                                                                                                        </div>
+                                                                                                                        <div class="col-md-6">
+                                                                                                                            <input type="text" class="form-control form-filter input-sm" name="file_desc">
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                            <tr role="row" class="heading">
+                                                                                                                <th width="40%">
+                                                                                                                    File Thumbnail
+                                                                                                                </th>
+                                                                                                                <th>
+                                                                                                                    File Type & Description
+                                                                                                                </th>
+                                                                                                                <th width="12%">
+                                                                                                                    Submitted by
+                                                                                                                </th>
+                                                                                                            </tr>
+
+                                                                                                            </thead>
+                                                                                                            <tbody>
+
+                                                                                                            </tbody>
+                                                                                                        </table>
+                                                                                                    </form>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
                                                                                     </div>
                                                                                     <div class="tab-pane" id="maintenance_<?php echo $asset['asset_id']; ?>">
                                                                                         TODO: Add maintenance table
@@ -404,29 +460,51 @@ if(isset($_SESSION['logged'])){
     </form>
     <script>
         $(document).ready(function() {
+            $('.datatable').each(function(){
+                var url = $(this).attr('data-src');
+                $(this).DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "info": false,
+                    "ajax": {
+                        "url": url, // ajax source
+                    },
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150, -1],
+                        [10, 20, 50, 100, 150, "All"] // change per page values here
+                    ],
+                    "pageLength": 10, // default record count per page
+                    "order": [
+                        [1, "asc"]
+                    ]// set first column as a default sort by asc
+                });
+            });
+            $('.show_form').on('click', function() {
+                var show = $(this).attr('data-show');
+
+                $(show).show();
+            });
             $('.date-picker').datepicker({
                 orientation: "left",
                 autoclose: true
             });
-            var address = '<?php echo $location['location_name']; ?>';
-
-            var map = new google.maps.Map($('.asset_map'), {
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                zoom: 12
-            });
-
-            var geocoder = new google.maps.Geocoder();
-
-            geocoder.geocode({
-                'address': address
-            },
-            function(results, status) {
-                if(status == google.maps.GeocoderStatus.OK) {
-                    new google.maps.Marker({
-                        position: results[0].geometry.location,
-                        map: map
-                    });
-                    map.setCenter(results[0].geometry.location);
+            $("#add_documents").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'font-red', // default input error message class
+                rules: {
+                    file: {
+                        required: true
+                    },
+                    file_type: {
+                        required: true
+                    },
+                    file_desc: {
+                        required: true
+                    }
                 }
             });
             $('#new_assets').validate({
@@ -500,6 +578,23 @@ if(isset($_SESSION['logged'])){
                         },
                         error: function() {
                             toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                }
+            });
+            $('.add_document').on('click', function(){
+                if($("#add_documents").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=asset_doc&id=<?php echo $asset['asset_id']; ?>",
+                        type: "POST",
+                        data: new FormData($('#add_documents')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>Document has been added to assets document table.');
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }

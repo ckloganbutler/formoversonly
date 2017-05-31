@@ -85,6 +85,34 @@ if(isset($_GET['setting'])){
             '".mysql_real_escape_string($by)."')") or die(mysql_error());
         }
     }
+    if($_GET['setting'] == 'asset_doc'){
+        $id    = $_GET['id'];
+        $type  = $_POST['file_type'];
+        $desc  = $_POST['file_desc'];
+        $by    = $_SESSION['uuid'];
+        $fileName  = struuid();
+        $file_ext = substr($_FILES['file']['name'], strripos($_FILES['file']['name'], '.'));
+        $uploaddir = '../upload/asset_docs/';
+        $uploadfile = $uploaddir . $fileName;
+
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile . $file_ext);
+        $link = "//www.formoversonly.com/dashboard/assets/upload/asset_docs/". $fileName . $file_ext;
+
+        $check   = mysql_query("SELECT document_id FROM fmo_locations_assets_documents WHERE document_asset_id='".mysql_real_escape_string($id)."' AND document_type='".mysql_real_escape_string($type)."'");
+        $checked = mysql_num_rows($check);
+
+        if($checked > 0){
+            $id = mysql_fetch_array($check);
+            mysql_query("UPDATE fmo_locations_assets_documents SET document_link='".mysql_real_escape_string($link)."', document_desc='".mysql_real_escape_string($desc)."', document_by_user_token='".mysql_real_escape_string($by)."' WHERE document_id='".mysql_real_escape_string($id['document_id'])."'");
+        } else {
+            mysql_query("INSERT INTO fmo_locations_assets_documents (document_asset_id, document_type, document_desc, document_link, document_by_user_token) VALUES (
+            '".mysql_real_escape_string($id)."',
+            '".mysql_real_escape_string($type)."',
+            '".mysql_real_escape_string($desc)."',
+            '".mysql_real_escape_string($link)."',
+            '".mysql_real_escape_string($by)."')") or die(mysql_error());
+        }
+    }
     if($_GET['setting'] == 'childsupport'){
         $token          = $_GET['uuid'];
         $case_name      = $_POST['case_name'];
