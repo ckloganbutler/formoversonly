@@ -67,14 +67,14 @@ if(isset($_SESSION['logged'])){
         </div>
         <?php
         $broadcast = getBroadcast($_SESSION['cuid']);
-        if(!empty($broadcast)){
+        if(!empty($broadcast['message']) && $broadcast['time'] <= strtotime('+ 2 days')){
             ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="alert alert-warning">
                         <marquee>
                             <strong class="text-danger" style="font-size: 16px;">
-                                <?php echo $broadcast; ?>
+                                <?php echo $broadcast['message']; ?>
                             </strong>
                         </marquee>
                     </div>

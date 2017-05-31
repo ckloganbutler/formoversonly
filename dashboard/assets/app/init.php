@@ -39,7 +39,11 @@ function hasPermission($action){
 }
 
 function getBroadcast($company) {
-    $broadcast = mysql_fetch_array(mysql_query("SELECT user_broadcast FROM fmo_users WHERE user_company_token='".$company."'"));
+    $cast = mysql_fetch_array(mysql_query("SELECT user_broadcast, user_broadcast_timestamp FROM fmo_users WHERE user_company_token='".$company."'"));
 
-    return $broadcast['user_broadcast'];
+    $broadcast = array();
+    $broadcast['message'] = $cast['user_broadcast'];
+    $broadcast['time']    = $cast['user_broadcast_time'];
+
+    return $broadcast;
 }

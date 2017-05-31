@@ -76,8 +76,8 @@ if(isset($_SESSION['logged'])){
                                 <div class="col-md-5 name">
                                     Broadcast Message:
                                 </div>
-                                <div class="col-md-7 value">
-                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_broadcast" data-pk="<?php echo $profile['user_token']; ?>" data-type="textarea" data-placement="right" data-title="Enter new broadcast message.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                <div class="col-md-5 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_broadcast" data-pk="<?php echo $profile['user_token']; ?>" data-type="textarea" data-placement="right" data-title="Enter new broadcast message.. This message will be displayed across all dashboards for your employees to see for the rest of today, and tomorrow." data-url="assets/app/update_settings.php?update=usr_prf">
                                         <?php echo $profile['user_broadcast']; ?>
                                     </a>
                                 </div>
