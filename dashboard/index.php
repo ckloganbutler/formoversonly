@@ -311,6 +311,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <div class="input-icon">
                                                 <i class="fa fa-user"></i>
                                                 <input type="text" class="form-control" placeholder="enter persons name.." id="catcher_name" name="catcher_name">
+                                                <span class="help-block text-danger" id="response_2"></span>
                                             </div>
                                         </div>
                                         <div class="form-group catcher-items-hide" id="zipcodeinput" style="display: none;">
@@ -575,208 +576,222 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         FormValidation.init();
         Index.init();
         $('#catcher_phone').focusout(function() {
-            $.ajax({
-                url: 'assets/app/api/catcher.php?luid=<?php echo $_GET['luid']; ?>&p=jre',
-                type: 'POST',
-                data: {
-                     phone: $(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
-                },
-                success: function(data) {
-                    $('.catcher-items-hide').hide();
-                    $('#response_1').html("Customer found. We're loading this customers profile for you, you can continue with them from there.").attr('class', 'help-block text-success');
-                    $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-                    $('#catcher')[0].reset();
-                    $.ajax({
-                        url: 'assets/pages/profile.php?uuid='+data,
-                        success: function(data) {
-                            $('#page_content').html(data);
-                        },
-                        error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                        }
-                    });
-                },
-                error: function() {
-                    $('#response_1').html("Nobody found with that number.").attr('class', 'help-block text-danger');
-                    $('#nameinput').show(function() {
-                        $('#catcher_name').focusout(function(){
-                            $('#zipcodeinput').show(function() {
-                                $('#catcher_zipcode').focusout(function(){
-                                    $.ajax({
-                                        url: 'assets/app/api/catcher.php?luid=<?php echo $_GET['luid']; ?>&p=jdk',
-                                        type: 'POST',
-                                        data: {
-                                            zipcode: $(this).val()
-                                        },
-                                        success: function(data){
-                                            $('#locationinput').show(function(){
-                                                var luid = data;
-                                                $('option[id=' + luid + ']').attr('selected', true);
-                                            });
-                                            $('#calenderinput').show(function(){
-                                                var date = new Date();
-                                                date.setDate(date.getDate()-1);
-                                                $('.date-picker').datepicker({
-                                                    startDate: date
-                                                }).on("changeDate", function (e) {
-                                                    var luid = $('select[name=catcher_location]').val();
-                                                    var date = $(this).datepicker('getDate');
-                                                    $.ajax({
-                                                        url: 'assets/pages/dashboard.php?luid='+luid,
-                                                        type: 'POST',
-                                                        data: {
-                                                            date: date
-                                                        },
-                                                        success: function(data) {
-                                                            $('.doMath').on('change', function() {
-                                                                var a = $(this).attr('data-a');
-                                                                var b = $(this).attr('data-b');
-                                                                var c = $(this).attr('data-c');
+            if($(this).val().length > 0){
+                $.ajax({
+                    url: 'assets/app/api/catcher.php?luid=<?php echo $_GET['luid']; ?>&p=jre',
+                    type: 'POST',
+                    data: {
+                        phone: $(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
+                    },
+                    success: function(data) {
+                        $('.catcher-items-hide').hide();
+                        $('#response_1').html("Customer found. We're loading this customers profile for you, you can continue with them from there.").attr('class', 'help-block text-success');
+                        $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
+                        $('#catcher')[0].reset();
+                        $.ajax({
+                            url: 'assets/pages/profile.php?uuid='+data,
+                            success: function(data) {
+                                $('#page_content').html(data);
+                            },
+                            error: function() {
+                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            }
+                        });
+                    },
+                    error: function() {
+                        $('#response_1').html("Nobody found with that number.").attr('class', 'help-block text-danger');
+                        $('#nameinput').show(function() {
+                            $('#catcher_name').get(0).focus();
+                            $('#catcher_name').focusout(function(){
+                                if($(this).val().length > 0){
+                                    $('#response_2').html("").attr('class', 'help-block text-danger');
+                                    $('#zipcodeinput').show(function() {
+                                        $('#catcher_zipcode').get(0).focus();
+                                        $('#catcher_zipcode').focusout(function(){
+                                            if($(this).val().length > 0){
+                                                $.ajax({
+                                                    url: 'assets/app/api/catcher.php?luid=<?php echo $_GET['luid']; ?>&p=jdk',
+                                                    type: 'POST',
+                                                    data: {
+                                                        zipcode: $(this).val()
+                                                    },
+                                                    success: function(data){
+                                                        $('#locationinput').show(function(){
+                                                            var luid = data;
+                                                            $('option[id=' + luid + ']').attr('selected', true);
+                                                        });
+                                                        $('#calenderinput').show(function(){
+                                                            var date = new Date();
+                                                            date.setDate(date.getDate()-1);
+                                                            $('.date-picker').datepicker({
+                                                                startDate: date
+                                                            }).on("changeDate", function (e) {
+                                                                var luid = $('select[name=catcher_location]').val();
+                                                                var date = $(this).datepicker('getDate');
                                                                 $.ajax({
-                                                                    url: 'assets/app/api/catcher.php?luid='+luid+'&p=doMath',
+                                                                    url: 'assets/pages/dashboard.php?luid='+luid,
                                                                     type: 'POST',
                                                                     data: {
-                                                                        day: date.getDay(),
-                                                                        a: $(a).val(),
-                                                                        b: $(b).val(),
-                                                                        c: $(c).val()
+                                                                        date: date
                                                                     },
-                                                                    success: function(d){
-                                                                        var e = JSON.parse(d);
-                                                                        $("#TR > span").html(e.truck_fee);
-                                                                        $("#TR").val(e.truck_fee);
-                                                                        $("#LR > span").html(e.total_labor_rate);
-                                                                        $("#LR").val(e.total_labor_rate);
-                                                                        $("#CR > span").html(e.county_fee);
-                                                                    },
-                                                                    error: function(e){
+                                                                    success: function(data) {
+                                                                        $('.doMath').on('change', function() {
+                                                                            var a = $(this).attr('data-a');
+                                                                            var b = $(this).attr('data-b');
+                                                                            var c = $(this).attr('data-c');
+                                                                            $.ajax({
+                                                                                url: 'assets/app/api/catcher.php?luid='+luid+'&p=doMath',
+                                                                                type: 'POST',
+                                                                                data: {
+                                                                                    day: date.getDay(),
+                                                                                    a: $(a).val(),
+                                                                                    b: $(b).val(),
+                                                                                    c: $(c).val()
+                                                                                },
+                                                                                success: function(d){
+                                                                                    var e = JSON.parse(d);
+                                                                                    $("#TR > span").html(e.truck_fee);
+                                                                                    $("#TR").val(e.truck_fee);
+                                                                                    $("#LR > span").html(e.total_labor_rate);
+                                                                                    $("#LR").val(e.total_labor_rate);
+                                                                                    $("#CR > span").html(e.county_fee);
+                                                                                },
+                                                                                error: function(e){
 
-                                                                    }
-                                                                })
-                                                            });
-                                                            $('#page_content').html(data);
-                                                            $('#jobtypeinput').show(function(){
-                                                                $('#catcher_jobtype').on('change', function(){
-                                                                    $.ajax({
-                                                                        url: 'assets/app/api/catcher.php?luid='+luid+'&p=jkv',
-                                                                        type: 'POST',
-                                                                        data: {
-                                                                            day: date.getDay()
-                                                                        },
-                                                                        success: function(e){
-                                                                            var inf = JSON.parse(e);
-                                                                            $('#catcher_truckfee').val(1).inputmask("mask", {
-                                                                                "mask": "99"
-                                                                            });
-                                                                            $('#catcher_laborrate').val(2).inputmask("mask", {
-                                                                                "mask": "99"
-                                                                            });
-                                                                            $('#catcher_countyfee').val(0).inputmask("mask", {
-                                                                                "mask": "99"
-                                                                            });
-                                                                            $('#TR > span').html(inf.truck_fee);
-                                                                            $('#TR').val(inf.truck_fee);
-                                                                            $('#LR > span').html(inf.total_labor_rate);
-                                                                            $('#LR').val(inf.total_labor_rate);
-                                                                            $('#CR > span').html(inf.county_fee);
-                                                                            $('#CR').val(inf.county_fee);
-                                                                            $('#fees').show();
-                                                                            $('#email').show(function(){
-                                                                                $('#catcher_email').focusout(function(){
-                                                                                    $('#other_options').show(function(){
-                                                                                        $(".img-check").click(function(){
-                                                                                            $(this).toggleClass("check");
-                                                                                            $(this).parent().toggleClass("red");
+                                                                                }
+                                                                            })
+                                                                        });
+                                                                        $('#page_content').html(data);
+                                                                        $('#jobtypeinput').show(function(){
+                                                                            $('#catcher_jobtype').on('change', function(){
+                                                                                $.ajax({
+                                                                                    url: 'assets/app/api/catcher.php?luid='+luid+'&p=jkv',
+                                                                                    type: 'POST',
+                                                                                    data: {
+                                                                                        day: date.getDay()
+                                                                                    },
+                                                                                    success: function(e){
+                                                                                        var inf = JSON.parse(e);
+                                                                                        $('#catcher_truckfee').val(1).inputmask("mask", {
+                                                                                            "mask": "99"
                                                                                         });
-                                                                                    });
-                                                                                    $('#storage').show();
-                                                                                    $('#referer').show(function(){
-                                                                                        $('#catcher_referer').on('change', function() {
-                                                                                            $('#comments').show(function() {
-                                                                                                $('#catcher_comments').focusout(function() {
-                                                                                                    $('#submit').show();
-                                                                                                    $('.create_event').on('click', function(){
-                                                                                                        var truckfee = $("#catcher_truckfee");
-                                                                                                        $.ajax({
-                                                                                                           url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
-                                                                                                            type: 'POST',
-                                                                                                            data: {
-                                                                                                               fullname: $('input[name="catcher_name"').val(),
-                                                                                                               phone: $('input[name="catcher_phone"]').val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
-                                                                                                               email: $('input[name="catcher_email"]').val(),
-                                                                                                               luid: luid
-                                                                                                            },
-                                                                                                            success: function(dat){
-                                                                                                               toastr.success("Customer has been added to our database, you can now further configure their booking.");
-                                                                                                                $.ajax({
-                                                                                                                    url: 'assets/pages/profile.php?uuid='+dat,
-                                                                                                                    success: function(vat) {
-                                                                                                                        $('#page_content').html(vat);
-                                                                                                                        $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-                                                                                                                        $.ajax({
-                                                                                                                            url: 'assets/pages/sub/profile_create_event.php?luid='+luid+'&uuid='+dat,
-                                                                                                                            success: function(data) {
-                                                                                                                                $('#profile-content').html(data);
-                                                                                                                                $('input[name="startdate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
-                                                                                                                                $('input[name="enddate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
-                                                                                                                                $('input[name="email"]').val($("#catcher_email").val());
-                                                                                                                                $('input[name="phone"]').val($("#catcher_phone").val());
-                                                                                                                                $('#ev_TR').val($("#TR").val()); $('input[name="event_truckfee"]').val($("#catcher_truckfee").val()); $('#ev_TR > span').html($("#TR").val());
-                                                                                                                                $('#ev_LR').val($("#LR").val()); $('input[name="event_laborrate"]').val($("#catcher_laborrate").val()); $('#ev_LR > span').html($("#LR").val());
-                                                                                                                                $('#ev_CR').val($("#CR").val()); $('input[name="event_countyfee"]').val($("#catcher_countyfee").val()); $('#ev_CR > span').html($("#CR").val());
-                                                                                                                            },
-                                                                                                                            error: function() {
-                                                                                                                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                                    },
-                                                                                                                    error: function() {
-                                                                                                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                                                                                                                    }
-                                                                                                                });
-                                                                                                            }
-                                                                                                        });
+                                                                                        $('#catcher_laborrate').val(2).inputmask("mask", {
+                                                                                            "mask": "99"
+                                                                                        });
+                                                                                        $('#catcher_countyfee').val(0).inputmask("mask", {
+                                                                                            "mask": "99"
+                                                                                        });
+                                                                                        $('#TR > span').html(inf.truck_fee);
+                                                                                        $('#TR').val(inf.truck_fee);
+                                                                                        $('#LR > span').html(inf.total_labor_rate);
+                                                                                        $('#LR').val(inf.total_labor_rate);
+                                                                                        $('#CR > span').html(inf.county_fee);
+                                                                                        $('#CR').val(inf.county_fee);
+                                                                                        $('#fees').show();
+                                                                                        $('#email').show(function(){
+                                                                                            $('#catcher_email').focusout(function(){
+                                                                                                $('#other_options').show(function(){
+                                                                                                    $(".img-check").click(function(){
+                                                                                                        $(this).toggleClass("check");
+                                                                                                        $(this).parent().toggleClass("red");
                                                                                                     });
-                                                                                                    $('.hot_lead').on('click', function(){
-                                                                                                        $('#catcher')[0].reset();
-                                                                                                        $('.catcher-items-hide').hide();
-                                                                                                        $('#response_1').html("An action has taken place that resulted in this form being reset. I think that means the last button you clicked, <strong>worked!</strong>").attr('class', 'help-block text-success');
-                                                                                                        $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-                                                                                                    })
                                                                                                 });
-                                                                                            })
+                                                                                                $('#storage').show();
+                                                                                                $('#referer').show(function(){
+                                                                                                    $('#catcher_referer').on('change', function() {
+                                                                                                        $('#comments').show(function() {
+                                                                                                            $('#catcher_comments').focusout(function() {
+                                                                                                                $('#submit').show();
+                                                                                                                $('.create_event').on('click', function(){
+                                                                                                                    var truckfee = $("#catcher_truckfee");
+                                                                                                                    $.ajax({
+                                                                                                                        url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
+                                                                                                                        type: 'POST',
+                                                                                                                        data: {
+                                                                                                                            fullname: $('input[name="catcher_name"').val(),
+                                                                                                                            phone: $('input[name="catcher_phone"]').val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
+                                                                                                                            email: $('input[name="catcher_email"]').val(),
+                                                                                                                            luid: luid
+                                                                                                                        },
+                                                                                                                        success: function(dat){
+                                                                                                                            toastr.success("Customer has been added to our database, you can now further configure their booking.");
+                                                                                                                            $.ajax({
+                                                                                                                                url: 'assets/pages/profile.php?uuid='+dat,
+                                                                                                                                success: function(vat) {
+                                                                                                                                    $('#page_content').html(vat);
+                                                                                                                                    $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
+                                                                                                                                    $.ajax({
+                                                                                                                                        url: 'assets/pages/sub/profile_create_event.php?luid='+luid+'&uuid='+dat,
+                                                                                                                                        success: function(data) {
+                                                                                                                                            $('#profile-content').html(data);
+                                                                                                                                            $('input[name="startdate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
+                                                                                                                                            $('input[name="enddate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
+                                                                                                                                            $('input[name="email"]').val($("#catcher_email").val());
+                                                                                                                                            $('input[name="phone"]').val($("#catcher_phone").val());
+                                                                                                                                            $('#ev_TR').val($("#TR").val()); $('input[name="event_truckfee"]').val($("#catcher_truckfee").val()); $('#ev_TR > span').html($("#TR").val());
+                                                                                                                                            $('#ev_LR').val($("#LR").val()); $('input[name="event_laborrate"]').val($("#catcher_laborrate").val()); $('#ev_LR > span').html($("#LR").val());
+                                                                                                                                            $('#ev_CR').val($("#CR").val()); $('input[name="event_countyfee"]').val($("#catcher_countyfee").val()); $('#ev_CR > span').html($("#CR").val());
+                                                                                                                                        },
+                                                                                                                                        error: function() {
+                                                                                                                                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                        }
+                                                                                                                                    });
+                                                                                                                                },
+                                                                                                                                error: function() {
+                                                                                                                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                });
+                                                                                                                $('.hot_lead').on('click', function(){
+                                                                                                                    $('#catcher')[0].reset();
+                                                                                                                    $('.catcher-items-hide').hide();
+                                                                                                                    $('#response_1').html("An action has taken place that resulted in this form being reset. I think that means the last button you clicked, <strong>worked!</strong>").attr('class', 'help-block text-success');
+                                                                                                                    $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
+                                                                                                                })
+                                                                                                            });
+                                                                                                        })
+                                                                                                    });
+                                                                                                });
+                                                                                            });
                                                                                         });
-                                                                                    });
+                                                                                    },
+                                                                                    error: function(e){
+
+                                                                                    }
                                                                                 });
-                                                                            });
-                                                                        },
-                                                                        error: function(e){
-
-                                                                        }
-                                                                    });
-                                                                })
+                                                                            })
+                                                                        });
+                                                                    },
+                                                                    error: function() {
+                                                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                    }
+                                                                });
                                                             });
-                                                        },
-                                                        error: function() {
-                                                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                                                        }
-                                                    });
-                                                });
-                                            });
-                                        },
-                                        error: function(data){
+                                                        });
+                                                    },
+                                                    error: function(data){
 
-                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                $('#response_3').html("").attr('class', 'help-block text-danger');
+                                            }
+                                        }).inputmask("mask", {
+                                            "mask": "99999"
+                                        });
                                     });
-                                }).inputmask("mask", {
-                                    "mask": "99999"
-                                });
+                                } else {
+                                    $('#response_2').html("Please enter a name.").attr('class', 'help-block text-danger');
+                                }
                             });
                         });
-                    });
-                }
-            });
-
+                    }
+                });
+            } else {
+                $('#response_1').html("Please enter a complete phone number to continue.").attr('class', 'help-block text-danger');
+            }
         }).inputmask("mask", {
             "mask": "(999) 999-9999"
         });
