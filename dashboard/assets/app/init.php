@@ -37,3 +37,9 @@ function hasPermission($action){
         return true;
     } else { return false; }
 }
+
+function getBroadcast($company) {
+    $broadcast = mysql_fetch_array(mysql_query("SELECT user_broadcast FROM fmo_users WHERE user_company_token='".$company."'"));
+
+    return $broadcast['user_broadcast'];
+}

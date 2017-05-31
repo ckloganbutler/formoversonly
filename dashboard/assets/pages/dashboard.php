@@ -61,30 +61,78 @@ if(isset($_SESSION['logged'])){
                                 </div>
                             </div>
                         </div>
-                        <hr/>
-                        <h3>All events</h3> <br/>
-                        <div class="todo-tasklist">
-                                <?php
-                                $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
-                                if(mysql_num_rows($events) > 0){
-                                    while($event = mysql_fetch_assoc($events)){
-                                        ?>
-                                        <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-6 col-xs-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
-                                            <div class="todo-tasklist-item-title">
-                                                <?php echo $event['event_name']; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+        $broadcast = getBroadcast($_SESSION['cuid']);
+        if(!empty($broadcast)){
+            ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning">
+                        <marquee>
+                            <strong class="text-danger" style="font-size: 16px;">
+                                <?php echo $broadcast; ?>
+                            </strong>
+                        </marquee>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light">
+                    <div class="portlet-title tabbable-line">
+                        <div class="caption caption-md">
+                            <i class="icon-home theme-font bold"></i>
+                            <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span> <small>All Events</small>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="todo-tasklist">
+                                    <?php
+                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+                                    if(mysql_num_rows($events) > 0){
+                                        while($event = mysql_fetch_assoc($events)){
+                                            if($event['event_status'] == 0){
+                                                continue;
+                                            }
+                                            ?>
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-6 col-xs-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                                <div class="todo-tasklist-item-title">
+                                                    <?php echo $event['event_name']; ?>
+                                                </div>
+                                                <div class="todo-tasklist-item-text">
+                                                    <strong>Start:</strong> Indianapolis <i class="fa fa-map"></i> <strong>End:</strong> Fishers
+                                                </div>
+                                                <div class="todo-tasklist-controls pull-left">
+                                                    <span class="todo-tasklist-date"><i class="fa fa-calendar"></i> <?php echo date('d M Y', strtotime($event['event_date_start'])); ?> - <?php echo date('d M Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?></span>
+                                                    <?php
+                                                    if(!empty($event['event_type'])){
+                                                        ?>
+                                                        <span class="todo-tasklist-badge badge badge-roundless"><?php echo $event['event_type']; ?></span>
+                                                        <?php
+                                                    }
+                                                    if(!empty($event['event_subtype'])){
+                                                        ?>
+                                                        <span class="todo-tasklist-badge badge badge-roundless"><?php echo $event['event_subtype']; ?></span>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </div>
                                             </div>
-                                            <div class="todo-tasklist-item-text">
-                                                Lorem ipsum dolor sit amet, consectetuer dolore dolor sit amet.
-                                            </div>
-                                            <div class="todo-tasklist-controls pull-left">
-                                                <span class="todo-tasklist-date"><i class="fa fa-calendar"></i> <?php echo date('d M Y', strtotime($event['event_date_start'])); ?> - <?php echo date('d M Y', strtotime($event['event_date_end'])); ?> </span>
-                                                <span class="todo-tasklist-badge badge badge-roundless">Local Move</span>
-                                            </div>
-                                        </div>
-                                        <?php
+                                            <?php
+                                        }
                                     }
-                                }
-                                ?>
+                                    ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -279,6 +279,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 	<a href="javascript:;" class="page-quick-sidebar-toggler"><i class="icon-call-in"></i></a>
 	<div class="page-quick-sidebar-wrapper" style="overflow-y: scroll;">
 		<div class="page-quick-sidebar">
+            <?php
+            $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_phone, event_email FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND event_status=0");
+            ?>
 			<div class="nav-justified">
 				<ul class="nav nav-tabs nav-justified">
 					<li class="active">
@@ -288,7 +291,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 					</li>
 					<li>
 						<a href="#quick_sidebar_tab_2" data-toggle="tab">
-							HOT LEADS <span class="badge badge-danger pull-left">0</span>
+							HOT LEADS <span class="badge badge-danger pull-left"><?php echo mysql_num_rows($events); ?></span>
 						</a>
 					</li>
 				</ul>
@@ -302,7 +305,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>First, provide phone #:</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-phone"></i>
-                                                <input type="text" min="1" max="10" class="form-control" placeholder="enter phone number.." id="catcher_phone" name="catcher_phone">
+                                                <input type="text" min="1" max="10" class="form-control" placeholder="enter phone number.." id="catcher_phone" name="phone">
                                                 <span class="help-block text-danger" id="response_1"></span>
                                             </div>
                                         </div>
@@ -310,7 +313,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>Now, we need their name:</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-user"></i>
-                                                <input type="text" class="form-control" placeholder="enter persons name.." id="catcher_name" name="catcher_name">
+                                                <input type="text" class="form-control" placeholder="enter persons name.." id="catcher_name" name="name">
                                                 <span class="help-block text-danger" id="response_2"></span>
                                             </div>
                                         </div>
@@ -325,7 +328,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>And select serviceable location:</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-compass"></i>
-                                                <select class="form-control" name="catcher_location">
+                                                <select class="form-control" name="location">
                                                     <?php
                                                     $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_token='".$user['user_token']."' ORDER BY location_name ASC");
                                                     if(mysql_num_rows($findLocations) > 0){
@@ -350,7 +353,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>Now, select the job type..</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-tags"></i>
-                                                <select class="form-control" name="catcher_jobtype" id="catcher_jobtype">
+                                                <select class="form-control" name="type" id="catcher_jobtype">
                                                     <option disabled selected value="">Select one..</option>
                                                     <option>Local Move</option>
                                                     <option disabled>Out Of State Move</option>
@@ -360,7 +363,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                         <div class="form-group catcher-items-hide" id="fees" style="display: none">
                                             <label># of trucks needed</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control doMath" name="catcher_truckfee" id="catcher_truckfee" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
+                                                <input type="text" class="form-control doMath" name="truckfee" id="catcher_truckfee" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
                                                 <span class="input-group-btn">
                                                     <button class="btn red" type="button" id="TR" value="">$<span></span></button>
                                                 </span>
@@ -368,7 +371,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <br/>
                                             <label># of crewmen needed</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control doMath" name="catcher_laborrate" id="catcher_laborrate" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
+                                                <input type="text" class="form-control doMath" name="laborrate" id="catcher_laborrate" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
                                                 <span class="input-group-btn">
                                                     <button class="btn red" type="button" id="LR" value="">$<span></span></button>
                                                 </span>
@@ -376,7 +379,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <br/>
                                             <label># of counties</label>
                                             <div class="input-group">
-                                                <input type="text" class="form-control doMath" name="catcher_countyfee" id="catcher_countyfee" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
+                                                <input type="text" class="form-control doMath" name="countyfee" id="catcher_countyfee" data-a="#catcher_truckfee" data-b="#catcher_laborrate" data-c="#catcher_countyfee">
                                                 <div class="input-group-btn open">
                                                     <button class="btn red" type="button" id="CR" value="">$<span></span></button>
                                                 </div>
@@ -386,7 +389,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>Customer's email</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-envelope"></i>
-                                                <input type="text" class="form-control" placeholder="enter customers email.." id="catcher_email" name="catcher_email">
+                                                <input type="text" class="form-control" placeholder="enter customers email.." id="catcher_email" name="email">
                                             </div>
                                         </div>
                                         <div class="form-group catcher-items-hide" id="other_options" style="display: none;">
@@ -397,31 +400,31 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label class="btn btn-block">
                                                 <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Hot Tub <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                <input type="checkbox" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+                                                <input type="checkbox" name="hot_tub" id="hot_tub" value="1" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
                                                 <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Piano <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                <input type="checkbox" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+                                                <input type="checkbox" name="piano" id="piano" value="1" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
                                                 <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Pool Table <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                <input type="checkbox" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+                                                <input type="checkbox" name="pool_table" id="play_set" value="1" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
                                                 <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Play Set <br/>$378<br/>$300 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                <input type="checkbox" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+                                                <input type="checkbox" name="play_set" id="play_set" value="val1" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
                                                 <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Safe <br/>$298<br/>$200 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                <input type="checkbox" name="chk1" id="item4" value="val1" class="hidden" autocomplete="off">
+                                                <input type="checkbox" name="safe" id="safe" value="1" class="hidden" autocomplete="off">
                                             </label>
                                         </div>
                                         <div class="pricing catcher-items-hide hover-effect" id="storage" style="display: none !important; border: none;">
@@ -459,7 +462,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>Who refererred the customer?</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-users"></i>
-                                                <select class="form-control" name="catcher_referer" id="catcher_referer">
+                                                <select class="form-control" name="referer" id="catcher_referer">
                                                     <option disabled selected value="">Select one..</option>
                                                     <?php
                                                     $findRefs = mysql_query("SELECT howhear_name FROM fmo_locations_howhears WHERE howhear_location_token='".$_GET['luid']."' ORDER BY howhear_name ASC");
@@ -478,12 +481,12 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             <label>Comments about this call..</label>
                                             <div class="input-icon">
                                                 <i class="fa fa-comments"></i>
-                                                <input type="text" class="form-control" placeholder="enter comments.." id="catcher_comments" name="catcher_comments">
+                                                <input type="text" class="form-control" placeholder="enter comments.." id="catcher_comments" name="comments">
                                             </div>
                                         </div>
                                         <div id="submit" class="form-group catcher-items-hide" style="display: none; padding-top: 15px;">
                                             <a href="javascript:;" class="btn default red-stripe pull-left create_event">Create Event </a>
-                                            <a href="javascript:;" class="btn default blue-stripe pull-right hot_lead">Hot Lead </a>
+                                            <a href="javascript:;" class="btn default blue-stripe pull-right create_event">Hot Lead </a>
                                         </div>
                                         <br/>
                                         <hr style="background-color: grey;"/>
@@ -495,7 +498,33 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         </div>
 					</div>
 					<div class="tab-pane page-quick-sidebar-alerts" id="quick_sidebar_tab_2">
-
+                        <div class="row" style="padding: 15px;">
+                            <div class="col-md-12">
+                                <div class="todo-tasklist">
+                                    <?php
+                                    if(mysql_num_rows($events) > 0){
+                                        while($event = mysql_fetch_assoc($events)){
+                                            if($event['event_status'] != 0){
+                                                continue;
+                                            }
+                                            ?>
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                                <div class="todo-tasklist-item-title">
+                                                    <?php echo $event['event_name']; ?> <span class="todo-tasklist-badge badge badge-roundless badge-danger">HOT LEAD</span>
+                                                </div>
+                                                <div class="todo-tasklist-item-text">
+                                                    <i class="fa fa-phone"></i> <?php echo $event['event_phone']; ?><br/>
+                                                    <i class="fa fa-envelope"></i> <?php echo $event['event_email']; ?><br/>
+                                                    <small><i class="fa fa-info"></i> click to book</small>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -720,8 +749,8 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                 success: function(vat) {
                                                                                                                                     $('#page_content').html(vat);
                                                                                                                                     $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-                                                                                                                                    $.ajax({
-                                                                                                                                        url: 'assets/pages/sub/profile_create_event.php?luid='+luid+'&uuid='+dat,
+                                                                                                                                    /*$.ajax({
+                                                                                                                                        url: 'assets/pages/sub/profile_create_event.php?luid='+luid+'&uuid='+dat+'&e=<?php echo struuid(true); ?>',
                                                                                                                                         success: function(data) {
                                                                                                                                             $('#profile-content').html(data);
                                                                                                                                             $('input[name="startdate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
@@ -736,6 +765,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                             toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                                                                                                                         }
                                                                                                                                     });
+                                                                                                                                    */
                                                                                                                                 },
                                                                                                                                 error: function() {
                                                                                                                                     toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
@@ -744,12 +774,33 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                         }
                                                                                                                     });
                                                                                                                 });
-                                                                                                                $('.hot_lead').on('click', function(){
-                                                                                                                    $('#catcher')[0].reset();
-                                                                                                                    $('.catcher-items-hide').hide();
-                                                                                                                    $('#response_1').html("An action has taken place that resulted in this form being reset. I think that means the last button you clicked, <strong>worked!</strong>").attr('class', 'help-block text-success');
-                                                                                                                    $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-                                                                                                                })
+                                                                                                                $('.hot_lead').on('click', function() {
+                                                                                                                    var truckfee = $("#catcher_truckfee");
+                                                                                                                    $.ajax({
+                                                                                                                        url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
+                                                                                                                        type: 'POST',
+                                                                                                                        data: {
+                                                                                                                            fullname: $('input[name="catcher_name"').val(),
+                                                                                                                            phone: $('input[name="catcher_phone"]').val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
+                                                                                                                            email: $('input[name="catcher_email"]').val(),
+                                                                                                                            luid: luid
+                                                                                                                        },
+                                                                                                                        success: function(dat){
+                                                                                                                            toastr.success("Customer has been added to our database, you can now further configure their booking.");
+                                                                                                                            $.ajax({
+                                                                                                                                url: 'assets/pages/profile.php?uuid='+dat,
+                                                                                                                                success: function(vat) {
+                                                                                                                                    $('#page_content').html(vat);
+                                                                                                                                    $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
+
+                                                                                                                                },
+                                                                                                                                error: function() {
+                                                                                                                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                }
                                                                                                             });
                                                                                                         })
                                                                                                     });

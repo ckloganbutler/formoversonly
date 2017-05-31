@@ -9,6 +9,20 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'usr_lic'){
+        $token          = $_GET['uuid'];
+        $type           = $_POST['type'];
+        $state          = $_POST['state'];
+        $prefix         = $_POST['prefix'];
+        $number         = $_POST['number'];
+
+        mysql_query("INSERT INTO fmo_users_licenses (license_user_token, license_type, license_state, license_prefix, license_number) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($type)."',
+        '".mysql_real_escape_string($state)."',
+        '".mysql_real_escape_string($prefix)."',
+        '".mysql_real_escape_string($number)."')");
+    }
     if($_GET['setting'] == 'asset'){
         $token          = $_GET['luid'];
         $type           = $_POST['type'];

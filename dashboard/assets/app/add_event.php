@@ -7,18 +7,23 @@
  */
 include 'init.php';
 if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
-    $token      = struuid(true);
+    $token      = $_GET['e'];
     $loc        = $_GET['luid'];
     $usr        = $_GET['uuid'];
+    $phone      = preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['phone']);
+    $email      = $_POST['email'];
     $name       = sentence_case($_POST['name']);
     $start      = date('Y-m-d', strtotime($_POST['startdate']));
     $end        = date('Y-m-d', strtotime($_POST['enddate']));
     $time       = $_POST['time'];
     $type       = $_POST['type'];
     $subtype    = $_POST['subtype'];
-    $status     = 1;
+    $status     = $_POST['status'];
+    $comments   = $_POST['comments'];
 
-    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_time, event_name, event_type, event_subtype, event_status) VALUES (
+    $additions  = array();
+
+    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_time, event_name, event_phone, event_email, event_type, event_subtype, event_status) VALUES (
     '".mysql_real_escape_string($token)."',
     '".mysql_real_escape_string($loc)."',
     '".mysql_real_escape_string($usr)."',
@@ -26,6 +31,8 @@ if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
     '".mysql_real_escape_string($end)."',
     '".mysql_real_escape_string($time)."',
     '".mysql_real_escape_string($name)."',
+    '".mysql_real_escape_string($phone)."',
+    '".mysql_real_escape_string($email)."',
     '".mysql_real_escape_string($type)."',
     '".mysql_real_escape_string($subtype)."',
     '".mysql_real_escape_string($status)."')");

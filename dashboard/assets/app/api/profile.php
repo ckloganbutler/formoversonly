@@ -188,3 +188,31 @@ if(isset($_GET) && $_GET['type'] == 'advances'){
 
     echo json_encode($records);
 }
+
+if(isset($_GET) && $_GET['type'] == 'licenses'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findLicenses = mysql_query("SELECT license_id, license_type, license_state, license_prefix, license_number, license_timestamp FROM fmo_users_licenses WHERE license_user_token='".mysql_real_escape_string($_GET['uuid'])."' ORDER BY license_timestamp DESC");
+    $iTotalRecords = mysql_num_rows($findLicenses);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($lc = mysql_fetch_assoc($findLicenses)) {
+        $records["data"][] = array(
+            ''.$lc['license_type'].'',
+            ''.$lc['license_state'].'',
+            ''.$lc['license_prefix'].'',
+            ''.$lc['license_number'].'',
+            ''.$lc['license_timestamp'].''
+        );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}

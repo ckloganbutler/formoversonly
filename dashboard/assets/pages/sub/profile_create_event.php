@@ -116,13 +116,27 @@ if(isset($_SESSION['logged'])){
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label class="control-label col-md-3">Move Type <span class="required">*</span></label>
+                                                                    <label class="control-label col-md-3">Type <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <select class="form-control" name="move_type">
+                                                                        <select class="form-control" name="type">
                                                                             <option selected value="Local Move">Local Move</option>
                                                                             <option value="Out of State Move">Out of State Move</option>
+                                                                        </select>
+                                                                        <span class="help-block">
+                                                                        Most cases will use the option, "Local Move". </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Sub-Type <span class="required">*</span></label>
+                                                                    <div class="col-md-9">
+                                                                        <select class="form-control" name="type">
+                                                                            <?php
+                                                                            ?>
+
                                                                         </select>
                                                                         <span class="help-block">
                                                                         Most cases will use the option, "Local Move". </span>
@@ -209,14 +223,17 @@ if(isset($_SESSION['logged'])){
                                             <div class="form-actions">
                                                 <div class="row">
                                                     <div class="col-md-offset-3 col-md-9">
-                                                        <a href="javascript:;" class="btn default button-previous">
-                                                            <i class="m-icon-swapleft"></i> Back </a>
-                                                        <a href="javascript:;" class="btn blue button-next">
+                                                        <button href="javascript:;" class="btn default button-previous">
+                                                            <i class="m-icon-swapleft"></i> Back </button>
+                                                        <button href="javascript:;" class="btn blue button-next">
                                                             Continue <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
-                                                        <a href="javascript:;" class="btn green button-submit">
+                                                        </button>
+                                                        <button href="javascript:;" class="btn yellow button-submit" name="status" value="0">
+                                                            Save as hot lead <i class="fa fa-download"></i>
+                                                        </button>
+                                                        <button href="javascript:;" class="btn green button-submit" name="status" value="1">
                                                             Submit <i class="m-icon-swapright m-icon-white"></i>
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -489,7 +506,7 @@ if(isset($_SESSION['logged'])){
             $('#form_wizard_1 .button-submit').click(function () {
                 Pace.track(function(){
                     $.ajax({
-                        url: 'assets/app/add_event.php?ev=plk&uuid=<?php echo $_GET['uuid']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                        url: 'assets/app/add_event.php?ev=plk&uuid=<?php echo $_GET['uuid']; ?>&luid=<?php echo $_GET['luid']; ?>&e=<?php if(isset($_GET['e'])){echo $_GET['e'];} else { echo struuid(true); }; ?>',
                         type: 'POST',
                         data: $('#submit_form').serialize(),
                         success: function(d) {
