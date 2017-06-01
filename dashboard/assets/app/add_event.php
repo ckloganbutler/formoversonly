@@ -8,22 +8,28 @@
 include 'init.php';
 if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
     $token      = $_GET['e'];
-    $loc        = $_GET['luid'];
+    $loc        = $_POST['location'];
     $usr        = $_GET['uuid'];
     $phone      = preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['phone']);
     $email      = $_POST['email'];
     $name       = sentence_case($_POST['name']);
-    $start      = date('Y-m-d', strtotime($_POST['startdate']));
-    $end        = date('Y-m-d', strtotime($_POST['enddate']));
+    $start      = date('Y-m-d', strtotime($_POST['date']));
+    $end        = date('Y-m-d', strtotime($_POST['date']));
     $time       = $_POST['time'];
+    $truckfee   = $_POST['truckfee'];
+    $laborrate  = $_POST['laborrate'];
+    $countyfee  = $_POST['countyfee'];
     $type       = $_POST['type'];
     $subtype    = $_POST['subtype'];
-    $status     = $_POST['status'];
+    $referer    = $_POST['referer'];
     $comments   = $_POST['comments'];
 
-    $additions  = array();
+    $additions  = $_POST['additions'];
+    foreach($additions as $addition){
+        $extras .= $addition."|";
+    }
 
-    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_time, event_name, event_phone, event_email, event_type, event_subtype, event_status) VALUES (
+    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_time, event_name, event_phone, event_email, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_referer, event_comments, event_additions, event_status) VALUES (
     '".mysql_real_escape_string($token)."',
     '".mysql_real_escape_string($loc)."',
     '".mysql_real_escape_string($usr)."',
@@ -35,8 +41,15 @@ if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
     '".mysql_real_escape_string($email)."',
     '".mysql_real_escape_string($type)."',
     '".mysql_real_escape_string($subtype)."',
-    '".mysql_real_escape_string($status)."')");
+    '".mysql_real_escape_string($truckfee)."',
+    '".mysql_real_escape_string($laborrate)."',
+    '".mysql_real_escape_string($countyfee)."',
+    '".mysql_real_escape_string($referer)."',
+    '".mysql_real_escape_string($comments)."',
+    '".mysql_real_escape_string($additions)."',
+    '".mysql_real_escape_string(0)."')") or die(mysql_error());
 
+    echo $token;
 }
 if(isset($_GET['ev']) && $_GET['ev'] == 'pmk'){
     $token     = $_GET['e'];

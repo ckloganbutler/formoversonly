@@ -9,6 +9,9 @@ session_start();
 include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
+    if(isset($_GET['conf'])){
+        $event = mysql_fetch_array(mysql_query("SELECT event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
+    }
     $profile = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname, user_email, user_phone, user_company_name, user_website, user_pic, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if($_GET['uuid'] == $profile['user_token']) {
         $editable = true;
@@ -42,19 +45,25 @@ if(isset($_SESSION['logged'])){
                                                     <li>
                                                         <a href="#tab1" data-toggle="tab" class="step">
                                                             <span class="number"> 1 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Basic Information </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Customer Information </span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="#tab2" data-toggle="tab" class="step">
-                                                            <span class="number">2 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Pickup Location </span>
+                                                            <span class="number"> 2 </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Services </span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="#tab3" data-toggle="tab" class="step">
+                                                            <span class="number">3 </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Locations </span>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#tab4" data-toggle="tab" class="step">
                                                             <span class="number">4 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Billing Setup </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Finalization </span>
                                                         </a>
                                                     </li>
                                                 </ul>
@@ -67,10 +76,6 @@ if(isset($_SESSION['logged'])){
                                                         <button class="close" data-dismiss="alert"></button>
                                                         You have some form errors. Please check below.
                                                     </div>
-                                                    <div class="alert alert-success display-none">
-                                                        <button class="close" data-dismiss="alert"></button>
-                                                        Your form validation is successful!
-                                                    </div>
                                                     <div class="tab-pane active" id="tab1">
                                                         <h3>Date & Time</h3> <br/>
                                                         <div class="row">
@@ -79,9 +84,9 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3">Start/end dates <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group input-md date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
-                                                                            <input type="text" class="form-control" name="startdate">
+                                                                            <input type="text" class="form-control" name="startdate" value="<?php echo $event['event_date_start']; ?>">
                                                                             <span class="input-group-addon"> to </span>
-                                                                            <input type="text" class="form-control" name="enddate">
+                                                                            <input type="text" class="form-control" name="enddate" value="<?php echo $event['event_date_end']; ?> ?>">
                                                                         </div>
                                                                         <!-- /input-group -->
                                                                         <span class="help-block" for="startdate enddate">Select date range of the event </span>
@@ -110,7 +115,7 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Event Name <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <input type="text" class="form-control" name="name" value="<?php echo $profile['user_fname']." ".$profile['user_lname']; ?>'s move">
+                                                                        <input type="text" class="form-control" name="name" value="<?php echo $event['event_name']; ?>'s move">
                                                                         <span class="help-block">
 																        This should something like the homeowner's name, or their business name (if applicable) </span>
                                                                     </div>
@@ -121,8 +126,16 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3">Type <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <select class="form-control" name="type">
-                                                                            <option selected value="Local Move">Local Move</option>
-                                                                            <option value="Out of State Move">Out of State Move</option>
+                                                                            <?php
+                                                                            $types = mysql_query("SELECT eventtype_name FROM fmo_locations_eventtypes WHERE eventtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                                                                            if(mysql_num_rows($types) > 0){
+                                                                                while($type = mysql_fetch_assoc($types)){
+                                                                                    ?>
+                                                                                    <option <?php if($type['eventtype_name'] == $event['event_type']){echo "selected";} ?> value="<?php echo $type['eventtype_name']; ?> ?>"><?php echo $type['eventtype_name']; ?></option>
+                                                                                    <?php
+                                                                                }
+                                                                            }
+                                                                            ?>
                                                                         </select>
                                                                         <span class="help-block">
                                                                         Most cases will use the option, "Local Move". </span>
@@ -135,11 +148,16 @@ if(isset($_SESSION['logged'])){
                                                                     <div class="col-md-9">
                                                                         <select class="form-control" name="type">
                                                                             <?php
+                                                                            $subtypes = mysql_query("SELECT subtype_id, subtype_name FROM fmo_locations_subtypes WHERE subtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                                                                            if(mysql_num_rows($types) > 0){
+                                                                                while($subtype = mysql_fetch_assoc($subtypes)){
+                                                                                    ?>
+                                                                                    <option <?php if($subtype['subtype_name'] == $event['event_subtype']){echo "selected";} ?> value="<?php echo $subtype['subtype_name']; ?> ?>"><?php echo $subtype['subtype_name']; ?></option>
+                                                                                    <?php
+                                                                                }
+                                                                            }
                                                                             ?>
-
                                                                         </select>
-                                                                        <span class="help-block">
-                                                                        Most cases will use the option, "Local Move". </span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -149,7 +167,7 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Contact Email <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <input type="text" class="form-control" name="email"/>
+                                                                        <input type="text" class="form-control" name="email" value="<?php echo $event['event_email']; ?>"/>
                                                                         <span class="help-block">
                                                                         example: something@somewhere.com </span>
                                                                     </div>
@@ -159,20 +177,22 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Contact Phone <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <input type="text" class="form-control" id="mask_phone" name="phone"/>
+                                                                        <input type="text" class="form-control" id="mask_phone" name="phone" value="<?php echo $event['event_phone']; ?>"/>
                                                                         <span class="help-block">
                                                                         example: (999) 999-9999 </span>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="tab-pane" id="tab2">
                                                         <div class="row">
                                                             <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3"># of trucks needed <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
-                                                                            <input type="text" class="form-control doMath" name="event_truckfee" id="event_truckfee" value="1" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
+                                                                            <input type="number" class="form-control doMath" name="event_truckfee" id="event_truckfee" value="<?php echo $event['event_truckfee']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
                                                                             <span class="input-group-btn">
                                                                                 <button class="btn red" type="button" id="ev_TR" value="">$<span></span></button>
                                                                             </span>
@@ -187,7 +207,7 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3"># of crewmen needed <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
-                                                                            <input type="text" class="form-control doMath" name="event_laborrate" id="event_laborrate" value="2" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
+                                                                            <input type="number" class="form-control doMath" name="event_laborrate" id="event_laborrate" value="<?php echo $event['event_laborrate']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
                                                                             <span class="input-group-btn">
                                                                                 <button class="btn red" type="button" id="ev_LR" value="">$<span></span></button>
                                                                             </span>
@@ -202,7 +222,7 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3"># of counties <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
-                                                                            <input type="text" class="form-control doMath" name="event_countyfee" id="event_countyfee" value="0" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
+                                                                            <input type="text" class="form-control doMath" name="event_countyfee" id="event_countyfee" value="<?php echo $event['event_countyfee']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
                                                                             <span class="input-group-btn">
                                                                                 <button class="btn red" type="button" id="ev_LR" value="">$<span></span></button>
                                                                             </span>
@@ -212,10 +232,10 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="tab-pane" id="tab2">
+                                                    <div class="tab-pane" id="tab3">
 
                                                     </div>
-                                                    <div class="tab-pane" id="tab3">
+                                                    <div class="tab-pane" id="tab4">
 
                                                     </div>
                                                 </div>
@@ -228,8 +248,8 @@ if(isset($_SESSION['logged'])){
                                                         <button href="javascript:;" class="btn blue button-next">
                                                             Continue <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
-                                                        <button href="javascript:;" class="btn yellow button-submit" name="status" value="0">
-                                                            Save as hot lead <i class="fa fa-download"></i>
+                                                        <button href="javascript:;" class="btn yellow button-save" name="status" value="0">
+                                                            Save for later <i class="fa fa-download"></i>
                                                         </button>
                                                         <button href="javascript:;" class="btn green button-submit" name="status" value="1">
                                                             Submit <i class="m-icon-swapright m-icon-white"></i>
@@ -269,24 +289,6 @@ if(isset($_SESSION['logged'])){
             $("#mask_phone").inputmask("mask", {
                 "mask": "(999) 999-9999"
             });
-
-            $("#event_truckfee").inputmask('999', {
-                numericInput: true,
-                rightAlignNumerics: false,
-                greedy: false
-            });
-            $("#event_laborrate").inputmask('999', {
-                numericInput: true,
-                rightAlignNumerics: false,
-                greedy: false
-            });
-            $("#event_countyfee").inputmask('999', {
-                numericInput: true,
-                rightAlignNumerics: false,
-                greedy: false
-            });
-
-
 
             $('.date-picker').datepicker({
                 rtl: Metronic.isRTL(),
@@ -506,7 +508,7 @@ if(isset($_SESSION['logged'])){
             $('#form_wizard_1 .button-submit').click(function () {
                 Pace.track(function(){
                     $.ajax({
-                        url: 'assets/app/add_event.php?ev=plk&uuid=<?php echo $_GET['uuid']; ?>&luid=<?php echo $_GET['luid']; ?>&e=<?php if(isset($_GET['e'])){echo $_GET['e'];} else { echo struuid(true); }; ?>',
+                        url: 'assets/app/add_event.php?ev=pck&uuid=<?php echo $_GET['uuid']; ?>&luid=<?php echo $_GET['luid']; ?>&e=',
                         type: 'POST',
                         data: $('#submit_form').serialize(),
                         success: function(d) {

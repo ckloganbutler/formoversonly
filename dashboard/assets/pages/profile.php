@@ -126,7 +126,7 @@ if(isset($_SESSION['logged'])){
                                 if($profile['user_group'] == 3){
                                    ?>
                                     <li>
-                                        <a class="load_profile_tab" data-href="assets/pages/sub/profile_create_event.php?luid=<?php echo $_GET['luid']; ?>&uuid=<?php echo $profile['user_token']; ?>" data-page-title="Book new move"><i class="icon-plus"></i>Create event for <?php echo $profile['user_fname']; ?>  </a>
+                                        <a class="load_profile_tab" data-href="assets/pages/sub/profile_event_wizard.php?luid=<?php echo $profile['user_last_ext_location']; ?>&uuid=<?php echo $profile['user_token']; ?>" data-page-title="Book new move"><i class="icon-plus"></i>Create event for <?php echo $profile['user_fname']; ?>  </a>
                                     </li>
                                     <?php
                                 }
