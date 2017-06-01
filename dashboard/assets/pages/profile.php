@@ -550,13 +550,34 @@ if(isset($_SESSION['logged'])){
                                                     <div class="col-md-12">
                                                         <div class="todo-tasklist">
                                                             <?php
-                                                            $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token FROM fmo_locations_events WHERE event_user_token='".mysql_real_escape_string($profile['user_token'])."'");
+                                                            $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status FROM fmo_locations_events WHERE event_user_token='".mysql_real_escape_string($profile['user_token'])."'");
                                                             if(mysql_num_rows($events) > 0){
                                                                 while($event = mysql_fetch_assoc($events)){
                                                                     ?>
-                                                                    <div class="todo-tasklist-item todo-tasklist-item-border-red load_page" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                                                    <div class="todo-tasklist-item todo-tasklist-item-border-red <?php if($event['event_status'] != 0){echo "load_page";} else {echo "load_profile_tab";} ?>"
+                                                                         <?php
+                                                                         if($event['event_status'] == 0){
+                                                                             ?>
+                                                                             data-href="assets/pages/sub/profile_event_wizard.php?conf=<?php echo $event['event_token']; ?>"
+                                                                             data-page-title="Configure <?php echo $event['event_name']; ?>"
+                                                                             <?php
+                                                                         } else {
+                                                                             ?>
+                                                                             data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>"
+                                                                             data-page-title="<?php echo $event['event_name']; ?>"
+                                                                             <?php
+                                                                         }
+                                                                         ?>
+                                                                        >
                                                                         <div class="todo-tasklist-item-title">
                                                                             <?php echo $event['event_name']; ?>
+                                                                            <?php
+                                                                                if($event['event_status'] == 0){
+                                                                                    ?>
+                                                                                    <span class="todo-tasklist-badge badge badge-roundless badge-danger">HOT LEAD</span>
+                                                                                    <?php
+                                                                                }
+                                                                            ?>
                                                                         </div>
                                                                         <div class="todo-tasklist-item-text">
                                                                             Lorem ipsum dolor sit amet, consectetuer dolore dolor sit amet.

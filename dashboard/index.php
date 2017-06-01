@@ -848,8 +848,16 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                     $('#comments').show(function() {
                                                                                                         $('#catcher_comments').focusout(function() {
                                                                                                             $('#submit').show();
-                                                                                                            $('.create_event').click(function(){
-                                                                                                                $(this).attr('disabled', 'disabled');
+                                                                                                            $('.create_event').click(function(ee){
+                                                                                                                var me = $(this);
+                                                                                                                ee.preventDefault();
+
+                                                                                                                if ( me.data('requestRunning') ) {
+                                                                                                                    return;
+                                                                                                                }
+
+                                                                                                                me.data('requestRunning', true);
+
                                                                                                                 var truckfee = $("#catcher_truckfee");
                                                                                                                 $.ajax({
                                                                                                                     url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
@@ -861,6 +869,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                         luid: luid
                                                                                                                     },
                                                                                                                     success: function(dat){
+                                                                                                                        me.data('requestRunning', false);
                                                                                                                         toastr.success("Customer has been added to our database, you can now further configure their booking.");
                                                                                                                         $.ajax({
                                                                                                                             url: 'assets/app/add_event.php?ev=plk&uuid='+dat+'&luid='+luid+'&e=<?php echo struuid(true); ?>',
@@ -884,7 +893,6 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                                  $('#ev_LR').val($("#LR").val()); $('input[name="event_laborrate"]').val($("#catcher_laborrate").val()); $('#ev_LR > span').html($("#LR").val());
                                                                                                                                                  $('#ev_CR').val($("#CR").val()); $('input[name="event_countyfee"]').val($("#catcher_countyfee").val()); $('#ev_CR > span').html($("#CR").val());*/
                                                                                                                                                 $('#catcher')[0].reset();
-                                                                                                                                                $('.create_event').removeAttribute("disabled");
                                                                                                                                             },
                                                                                                                                             error: function() {
                                                                                                                                                 toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");

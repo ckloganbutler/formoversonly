@@ -28,11 +28,11 @@ if(isset($_SESSION['logged'])){
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/marketing.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">Marketing</a>
+                    <a class="load_page" data-href="assets/pages/marketing.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="marketers">Marketing</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/create_marketing.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Create Employee">Create Marketer</a>
+                    <a class="load_page" data-href="assets/pages/create_marketing.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Create marketer">Create Marketer</a>
                 </li>
             </ul>
         </div>
@@ -48,11 +48,11 @@ if(isset($_SESSION['logged'])){
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <form id="create_employee" action="" method="POST" role="form">
+                        <form id="create_marketer" action="" method="POST" role="form">
                             <div class="form-body">
                                 <div class="row">
                                     <div class="form-group col-md-3">
-                                        <label class="control-label visible-ie8 visible-ie9">Select Employee Role <span class="font-red">*</span></label>
+                                        <label class="control-label visible-ie8 visible-ie9">Select marketer Role <span class="font-red">*</span></label>
                                         <div class="input-icon">
                                             <i class="fa fa-tag"></i>
                                             <select class="form-control" name="role" id="role">
@@ -71,7 +71,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-user"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Full Name" name="fullname"/>
-                                            <span class="help-block">This will be used as reference for the employee.</span>
+                                            <span class="help-block">This will be used as reference for the marketer.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -82,7 +82,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-phone"></i>
                                             <input class="form-control placeholder-no-fix" type="number" autocomplete="off" placeholder="Phone Number" name="phone" value="<?php echo $_GET['p']; ?>"/>
-                                            <span class="help-block">This will be the employee's mobile phone number.</span>
+                                            <span class="help-block">This will be the marketer's mobile phone number.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -90,7 +90,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-envelope"></i>
                                             <input class="form-control placeholder-no-fix" type="email" autocomplete="off" placeholder="Email Address" name="email"/>
-                                            <span class="help-block">This will be unique, and cannot be taken by another employee.</span>
+                                            <span class="help-block">This will be unique, and cannot be taken by another marketer.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Street Address" name="address"/>
-                                            <span class="help-block">This will be the employee's street address.</span>
+                                            <span class="help-block">This will be the marketer's street address.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -116,7 +116,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Apt/Suite" name="apt"/>
-                                            <span class="help-block">This could be the employee's apartment number, or a business suite.</span>
+                                            <span class="help-block">This could be the marketer's apartment number, or a business suite.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -126,7 +126,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="City" name="city"/>
-                                            <span class="help-block">This will be the employee's billing city.</span>
+                                            <span class="help-block">This will be the marketer's billing city.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -187,7 +187,7 @@ if(isset($_SESSION['logged'])){
                                                 <option value="WI">Wisconsin</option>
                                                 <option value="WY">Wyoming</option>
                                             </select>
-                                            <span class="help-block">This will be the employee's billing state.</span>
+                                            <span class="help-block">This will be the marketer's billing state.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -195,7 +195,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="number" autocomplete="off" placeholder="Zip Code" name="zip"/>
-                                            <span class="help-block">This will be the employee's billing city.</span>
+                                            <span class="help-block">This will be the marketer's billing city.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -205,12 +205,12 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Company/Organization Name" name="company"/>
-                                            <span class="help-block">This will only be required if the employee has their own company, and you'd like to make record of it.</span>
+                                            <span class="help-block">This will only be required if the marketer has their own company, and you'd like to make record of it.</span>
                                         </div>
                                     </div>
                                 </div>
                                 <br/>
-                                <button type="submit" class="btn red">Create employee</button>
+                                <button type="submit" class="btn red">Create marketer</button>
                                 <a class="load_page btn default" data-href="assets/pages/dashboard.php" data-page-title="Dashboard">Cancel</a>
                             </div>
                         </form>
@@ -221,7 +221,7 @@ if(isset($_SESSION['logged'])){
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            $('#create_employee').validate({
+            $('#create_marketer').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
@@ -284,9 +284,9 @@ if(isset($_SESSION['logged'])){
                     $.ajax({
                         url: 'assets/app/register.php?gr='+group+'&c=<?php echo $_SESSION['cuid']; ?>&luid=<?php echo $_GET['luid']; ?>',
                         type: "POST",
-                        data: $('#create_employee').serialize(),
+                        data: $('#create_marketer').serialize(),
                         success: function(data) {
-                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your employee to the system, you will now be redirected to their profile.");
+                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to their profile.");
                             $.ajax({
                                 url: 'assets/pages/profile.php?uuid='+data,
                                 success: function(data) {
@@ -327,7 +327,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            Create Employee
+            Create Marketer
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -341,11 +341,11 @@ if(isset($_SESSION['logged'])){
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">Employees</a>
+                    <a class="load_page" data-href="assets/pages/marketing.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Marketing">Marketing</a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/create_employee.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Create Employee">Create Employee</a>
+                    <a class="load_page" data-href="assets/pages/create_marketer.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Create marketer">Create marketer</a>
                 </li>
             </ul>
         </div>
@@ -356,35 +356,38 @@ if(isset($_SESSION['logged'])){
                         <div class="caption">
                             <i class="fa fa-user-plus bold"></i>
                             <span class="caption-subject bold font-red uppercase">
-								Create Employee </span>
-                            <span class="caption-helper">let's get your new employee's information in the system. dont worry, once you've created this employee, you'll have access to more options for them. we just need the basics for now.</span>
+								Create marketer </span>
+                            <span class="caption-helper">let's get your new marketer's information in the system.</span>
                         </div>
                     </div>
                     <div class="portlet-body">
-                        <form id="create_employee" action="" method="POST" role="form">
+                        <form id="create_marketer" action="" method="POST" role="form">
                             <div class="form-body">
                                 <div class="row">
                                     <div class="form-group col-md-3">
-                                        <label class="control-label visible-ie8 visible-ie9">Select Employee Role <span class="font-red">*</span></label>
+                                        <label class="control-label visible-ie8 visible-ie9">Select Marketer Type <span class="font-red">*</span></label>
                                         <div class="input-icon">
                                             <i class="fa fa-tag"></i>
-                                            <select class="form-control" name="role" id="role">
-                                                <option disabled selected value="">Select one...</option>
-                                                <option value="2">Manager</option>
-                                                <option value="5.1">Driver</option>
-                                                <option value="5.2">Helper</option>
-                                                <option value="5.3">Crewman/Other</option>
-                                                <option value="4">Customer Service Represenative</option>
+                                            <select class="form-control" name="type" id="type">
+                                                <option disabled selected value="">Select marketer type...</option>
+                                                <option value="Realtor">Realtor</option>
+                                                <option value="Storage Facility">Storage Facility</option>
+                                                <option value="Apartment Community">Apartment Community</option>
+                                                <option value="Retail">Retail</option>
+                                                <option value="Broker">Broker</option>
+                                                <option value="Senior Apartments">Senior Apartments</option>
+                                                <option value="Lawyer">Lawyer</option>
+                                                <option value="Other">Other</option>
                                             </select>
-                                            <span class="help-block">Otherwise known as their position.</span>
+                                            <span class="help-block">Just for your reference.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-9">
-                                        <label class="control-label visible-ie8 visible-ie9">Full Name <span class="font-red">*</span></label>
+                                        <label class="control-label visible-ie8 visible-ie9">Full Name of Contact <span class="font-red">*</span></label>
                                         <div class="input-icon">
                                             <i class="fa fa-user"></i>
-                                            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Full Name" name="fullname"/>
-                                            <span class="help-block">This will be used as reference for the employee.</span>
+                                            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Full Name of Contact" name="fullname"/>
+                                            <span class="help-block">This will be used as reference for the marketer.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -395,7 +398,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-phone"></i>
                                             <input class="form-control placeholder-no-fix" type="number" autocomplete="off" placeholder="Phone Number" name="phone" value="<?php echo $_GET['p']; ?>"/>
-                                            <span class="help-block">This will be the employee's mobile phone number.</span>
+                                            <span class="help-block">This will be the marketer's mobile phone number.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
@@ -403,7 +406,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-envelope"></i>
                                             <input class="form-control placeholder-no-fix" type="email" autocomplete="off" placeholder="Email Address" name="email"/>
-                                            <span class="help-block">This will be unique, and cannot be taken by another employee.</span>
+                                            <span class="help-block">This will be the marketer's email address.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -413,7 +416,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Street Address" name="address"/>
-                                            <span class="help-block">This will be the employee's street address.</span>
+                                            <span class="help-block">This will be the marketer's street address.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -429,7 +432,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Apt/Suite" name="apt"/>
-                                            <span class="help-block">This could be the employee's apartment number, or a business suite.</span>
+                                            <span class="help-block">This could be the marketer's apartment number, or a business suite.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -439,7 +442,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="City" name="city"/>
-                                            <span class="help-block">This will be the employee's billing city.</span>
+                                            <span class="help-block">This will be the marketer's city.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -500,7 +503,7 @@ if(isset($_SESSION['logged'])){
                                                 <option value="WI">Wisconsin</option>
                                                 <option value="WY">Wyoming</option>
                                             </select>
-                                            <span class="help-block">This will be the employee's billing state.</span>
+                                            <span class="help-block">This will be the marketer's state.</span>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -508,7 +511,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="number" autocomplete="off" placeholder="Zip Code" name="zip"/>
-                                            <span class="help-block">This will be the employee's billing city.</span>
+                                            <span class="help-block">This will be the marketer's city.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -518,12 +521,12 @@ if(isset($_SESSION['logged'])){
                                         <div class="input-icon">
                                             <i class="fa fa-location-arrow"></i>
                                             <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Company/Organization Name" name="company"/>
-                                            <span class="help-block">This will only be required if the employee has their own company, and you'd like to make record of it.</span>
+                                            <span class="help-block">This will only be required if the marketer has their own company, and you'd like to make record of it.</span>
                                         </div>
                                     </div>
                                 </div>
                                 <br/>
-                                <button type="submit" class="btn red">Create employee</button>
+                                <button type="submit" class="btn red">Create marketer</button>
                                 <a class="load_page btn default" data-href="assets/pages/dashboard.php" data-page-title="Dashboard">Cancel</a>
                             </div>
                         </form>
@@ -534,25 +537,26 @@ if(isset($_SESSION['logged'])){
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function() {
-            $('#create_employee').validate({
+            $('#create_marketer').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "",
                 rules: {
-                    role: {
+                    type: {
                         required: true
                     },
-                    fullname: {
+                    companyname: {
+                        required: true
+                    },
+                    name: {
                         required: true
                     },
                     phone: {
-                        required: true,
-                        remote: 'assets/app/search_phone.php'
+                        required: true
                     },
                     email: {
-                        required: false,
-                        remote: 'assets/app/search_email.php'
+                        required: false
                     },
                     address: {
                         required: true
@@ -565,15 +569,6 @@ if(isset($_SESSION['logged'])){
                     },
                     zip: {
                         required: true
-                    }
-                },
-
-                messages: {
-                    phone: {
-                        remote: "Phone number is already taken"
-                    },
-                    email: {
-                        remote: "Email address is already taken"
                     }
                 },
 
@@ -595,16 +590,16 @@ if(isset($_SESSION['logged'])){
                 submitHandler: function(form) {
                     var group = $('#role').val();
                     $.ajax({
-                        url: 'assets/app/register.php?gr='+group+'&c=<?php echo $_SESSION['cuid']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                        url: 'assets/app/add_setting.php?setting=marketer',
                         type: "POST",
-                        data: $('#create_employee').serialize(),
+                        data: $('#create_marketer').serialize(),
                         success: function(data) {
-                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your employee to the system, you will now be redirected to their profile.");
+                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to the master list.");
                             $.ajax({
-                                url: 'assets/pages/profile.php?uuid='+data,
+                                url: 'assets/pages/marketing.php?luid=<?php $_GET['luid']; ?>',
                                 success: function(data) {
                                     $('#page_content').html(data);
-                                    document.title = "Profile - For Movers Only";
+                                    document.title = "Marketing";
                                 },
                                 error: function() {
                                     toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");

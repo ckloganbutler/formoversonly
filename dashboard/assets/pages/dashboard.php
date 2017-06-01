@@ -129,6 +129,12 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <?php
                                         }
+                                    } else {
+                                        ?>
+                                        <center>
+                                            <h3>No events found for today at this location.</h3>
+                                        </center>
+                                        <?php
                                     }
                                     ?>
                                 </div>

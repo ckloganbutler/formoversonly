@@ -96,7 +96,7 @@ if(isset($_SESSION['logged'])){
                                             <div class="actions btn-set">
                                                 <a class="btn default red-stripe show_form" data-show="#add_license">
                                                     <i class="fa fa-plus"></i>
-                                                    <span class="hidden-480">Upload new document</span>
+                                                    <span class="hidden-480">Add new license</span>
                                                 </a>
                                             </div>
                                         </div>
