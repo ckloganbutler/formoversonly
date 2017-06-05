@@ -85,6 +85,18 @@ if($_GET['update'] == 'change_type'){
         echo true;
     }
 }
+if($_GET['update'] == 'event' && isset($_POST)){
+    $pfield = array('event_status', 'event_date_start', 'event_date_end', 'event_time', 'event_name', 'event_type', 'event_subtype', 'event_email', 'event_phone', 'event_truckfee', 'event_laborrate', 'event_countyfee');
+    $pvalue = array(1, date('Y-m-d', strtotime($_POST['startdate'])), date('Y-m-d', strtotime($_POST['enddate'])), $_POST['time'], $_POST['name'], $_POST['type'], $_POST['subtype'], $_POST['email'], $_POST['phone'], $_POST['truckfee'], $_POST['laborrate'], $_POST['countyfee']);
+    $ptoken = $_GET['e'];
+    for ($k = 0; $k<count($pfield); $k++) {
+        if(!empty($pvalue[$k])){
+            mysql_loop($pfield[$k], $pvalue[$k], "fmo_locations_events", "event_token", $ptoken);
+        }
+    }
+
+    return false;
+}
 if($_GET['update'] == 'personal' && isset($_POST)){
     $pfield = array('user_fname', 'user_lname', 'user_phone', 'user_address', 'user_city', 'user_state', 'user_zip', 'user_pword', 'user_company_name', 'user_website');
     $pvalue = array($_POST['fname'], $_POST['lname'], preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['phone']), $_POST['address'], $_POST['city'], $_POST['state'], $_POST['zip'], $_POST['pass'],$_POST['company'], $_POST['website']);
