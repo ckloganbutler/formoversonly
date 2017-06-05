@@ -707,6 +707,9 @@ if(isset($_SESSION['logged'])){
                                                                                 Clock-in Date & Time
                                                                             </th>
                                                                             <th>
+                                                                                Clock IP Address
+                                                                            </th>
+                                                                            <th>
                                                                                 Clock-out Date & Time
                                                                             </th>
                                                                             <th>

@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_status, event_email, event_phone, event_type, event_subtype FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($event['event_location_token'])."'"));
     $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lname, user_email, user_phone, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($event['event_user_token'])."'"));
     switch($event['event_status']){
@@ -24,7 +24,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <?php echo $event['event_name']; ?> <small><strong>(ID #0<?php echo $event['event_id']; ?>)</strong></small>
+            <?php echo $event['event_name']; ?> <small><strong>(EVENT ID #0<?php echo $event['event_id']; ?>)</strong></small>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -52,7 +52,11 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-title">
                         <div class="caption caption-md">
                             <i class="icon-directions theme-font bold"></i>
-                            <span class="caption-subject font-red bold uppercase">Crew Size: <i class="fa fa-user"></i> <i class="fa fa-user"></i> (2) [+] Trucks needed: <i class="fa fa-truck"></i> (1)</span>
+                            <span class="caption-subject font-red bold uppercase">
+                                <i class="fa fa-user"></i> <i class="fa fa-user"></i> (<?php echo $event['event_laborrate']; ?>)
+                                [+]
+                                <i class="fa fa-truck"></i> (<?php echo $event['event_truckfee']; ?>)
+                            </span>
                             <span class="hidden-480"><span class="font-red">|</span>
                                 <?php
                                 if($event['event_date_start'] == $event['event_date_end']){
@@ -156,6 +160,97 @@ if(isset($_SESSION['logged'])){
                         </div>
                     </div>
                     <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-user"></i>Customer Information
+                                        </div>
+                                        <div class="actions">
+                                            <a href="javascript:;" class="btn btn-default btn-sm">
+                                                <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md edit hidden" data-edit="ci">Edit</span> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Customer Name & ID:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo $user['user_fname']." ".$user['user_lname']; ?> (#<?php echo $user['user_id']; ?>)
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Email:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo secret_mail($user['user_email']); ?>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Phone Number:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo clean_phone($user['user_phone']); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-phone"></i>Event Information
+                                        </div>
+                                        <div class="actions">
+                                            <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="ev">
+                                                <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md">Edit</span> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Event Name:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_id']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event">
+                                                    <?php echo $event['event_name']; ?>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Phone:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo clean_phone($event['event_phone']);  ?>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Email:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo $event['event_email']; ?>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Comments:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <?php echo $event['event_comments']; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr/>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="portlet">
@@ -420,9 +515,6 @@ if(isset($_SESSION['logged'])){
                                 <div class="tabbable-custom nav-justified">
                                     <ul class="nav nav-tabs nav-justified">
                                         <li class="active">
-                                            <a href="#details" data-toggle="tab">General Details </a>
-                                        </li>
-                                        <li>
                                             <a href="#documents" data-toggle="tab">Documents / Photos </a>
                                         </li>
                                         <li>
@@ -452,125 +544,7 @@ if(isset($_SESSION['logged'])){
                                         </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="details">
-                                            <div class="row">
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="portlet">
-                                                        <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i class="fa fa-user"></i>Customer Information
-                                                            </div>
-                                                            <div class="actions">
-                                                                <a href="javascript:;" class="btn btn-default btn-sm">
-                                                                    <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md edit hidden" data-edit="ci">Edit</span> </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Customer Name:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo $user['user_fname']." ".$user['user_lname']; ?> (#<?php echo $user['user_id']; ?>)
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Email:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo secret_mail($user['user_email']); ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Phone Number:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo clean_phone($user['user_phone']); ?>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="portlet">
-                                                        <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i class="fa fa-phone"></i>Event Information
-                                                            </div>
-                                                            <div class="actions">
-                                                                <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="ev">
-                                                                    <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md">Edit</span> </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Event Name:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_id']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event">
-                                                                        <?php echo $event['event_name']; ?>
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Event Date & Time:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php
-                                                                    if($event['event_date_start'] == $event['event_date_end']){
-                                                                        ?>
-                                                                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?>
-                                                                        <?php
-                                                                    } else {
-                                                                        ?>
-                                                                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Move Type (& sub type):
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo $event['event_type'];  ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Phone:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo $event['event_phone'];  ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Email:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo $event['event_email']; ?>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row static-info">
-                                                                <div class="col-md-5 name">
-                                                                    Comments:
-                                                                </div>
-                                                                <div class="col-md-7 value">
-                                                                    <?php echo $event['event_email']; ?>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="documents">
+                                        <div class="tab-pane active" id="documents">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="portlet">
