@@ -43,7 +43,7 @@ function getBroadcast($company) {
 
     $broadcast = array();
     $broadcast['message'] = $cast['user_broadcast'];
-    $broadcast['time']    = $cast['user_broadcast_time'];
+    $broadcast['time']    = $cast['user_broadcast_timestamp'];
 
     return $broadcast;
 }

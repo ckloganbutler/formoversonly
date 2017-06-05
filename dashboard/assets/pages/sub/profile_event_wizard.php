@@ -98,7 +98,19 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3">Time of move <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group">
-                                                                            <input type="text" class="form-control timepicker timepicker-no-seconds" name="time">
+                                                                            <select class="form-control" name="time">
+                                                                                <option disabled selected value="">Select one..</option>
+                                                                                <?php
+                                                                                $timeOptions = mysql_query("SELECT time_start, time_end FROM fmo_locations_times WHERE time_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                                                                                if(mysql_num_rows($timeOptions) > 0){
+                                                                                    while($t = mysql_fetch_assoc($timeOptions)){
+                                                                                        ?>
+                                                                                            <option value="<?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?>"><?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?></option>
+                                                                                        <?php
+                                                                                    }
+                                                                                }
+                                                                                ?>
+                                                                            </select>
                                                                             <span class="input-group-btn">
                                                                               <button class="btn default" type="button"><i class="fa fa-clock-o"></i></button>
                                                                             </span>
