@@ -121,15 +121,12 @@ if($_GET['update'] == 'location_status' && isset($_POST)){
         mysql_query("UPDATE fmo_locations SET location_status='".mysql_real_escape_string(1)."' WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'");
     }
 }
-if($_GET['update'] == 'location_contact_details' && isset($_POST)){
-    $pfield = array('location_name', 'location_phone', 'location_email', 'location_address', 'location_address2', 'location_city', 'location_state', 'location_zip', 'location_county');
-    $pvalue = array($_POST['name'], preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['phone']), $_POST['email'], $_POST['address'], $_POST['address2'], $_POST['city'], $_POST['state'], $_POST['zip'],$_POST['county']);
-    $ptoken = $_GET['luid'];
-    for ($k = 0; $k<count($pfield); $k++) {
-        if(!empty($pvalue[$k])){
-            mysql_loop($pfield[$k], $pvalue[$k], "fmo_locations", "location_token", $ptoken);
-        }
-    }
+if($_GET['update'] == 'location' && isset($_POST)){
+    $field = $_POST['name'];
+    $value = $_POST['value'];
+    $pk    = $_POST['pk'];
+    mysql_query("UPDATE fmo_locations SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE location_token='".mysql_real_escape_string($pk)."'");
+
 }
 if($_GET['update'] == 'location_services'){
     $field = $_POST['name'];

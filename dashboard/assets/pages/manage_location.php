@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $location = mysql_fetch_array(mysql_query("SELECT location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -64,117 +64,113 @@ if(isset($_SESSION['logged'])){
                             <div class="tab-pane active" id="tab_1_1">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="note note-info">
-                                            <p>
-                                                NOTE: The software is fully customizable. You set your own settings, that are only used by your company.
-                                            </p>
-                                        </div>
                                         <div class="portlet">
                                             <div class="portlet-title">
                                                 <div class="caption">
-                                                    <i class="fa fa-users"></i>Contact Details
+                                                    <i class="fa fa-cogs"></i>Location Details for <?php echo $location['location_name']; ?>
                                                 </div>
                                                 <div class="actions">
-                                                    <a class="btn default red-stripe">
-                                                        <i class="fa fa-plus"></i>
-                                                        <span class="hidden-480">Action</span>
+                                                    <a class="btn default red-stripe edit" data-edit="loc" data-reload="">
+                                                        <i class="fa fa-pencil"></i>
+                                                        <span class="hidden-480">Edit</span>
                                                     </a>
                                                 </div>
                                             </div>
                                             <div class="portlet-body">
-                                                <form id="update_location_contact" role="form" action="">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Name (used for reference)</label>
-                                                        <input type="text" placeholder="<?php echo $location['location_name']; ?>" class="form-control" name="name"/>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Manager:
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Location Phone</label>
-                                                        <input type="number" placeholder="<?php echo $location['location_phone']; ?>" class="form-control" name="phone"/>
+                                                    <div class="col-md-7 value">
+                                                        <?php
+                                                        $managers = mysql_query("SELECT user_token, user_lname, user_fname FROM fmo_users WHERE user_group=".mysql_real_escape_string(2.0)." AND user_employer='".mysql_real_escape_string($_SESSION['cuid'])."'");
+                                                        if(mysql_num_rows($managers) > 0){
+                                                            while($manager = mysql_fetch_assoc($managers)){
+                                                                $source .= "{value: '".$manager['user_token']."', text: '".$manager['user_fname']." ".$manager['user_lname']."'},";
+                                                            }
+                                                        } else {
+                                                            $source = "{value: '', text: 'No managers have been added in this location'}";
+                                                        }
+                                                        ?>
+                                                        <a class="loc" style="color:#333333" data-name="location_manager" data-pk="<?php echo $location['location_token']; ?>" data-type="select" data-source="[<?php echo $source; ?>]" data-placement="right" data-title="Enter new location name.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php
+                                                            if(!empty($location['location_manager'])){
+                                                                echo name($location['location_manager']);
+                                                            } else {
+                                                                echo "Nobody selected";
+                                                            }
+                                                            ?>
+                                                        </a>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Location Email</label>
-                                                        <input type="email" placeholder="<?php echo $location['location_email']; ?>" class="form-control" name="email"/>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Name:
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Address Line 1</label>
-                                                        <input type="text" placeholder="<?php echo $location['location_address']; ?>" class="form-control" name="address"/>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_name" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location name.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_name']; ?>
+                                                        </a>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Address Line 2</label>
-                                                        <input type="text" placeholder="<?php echo $location['location_address2']; ?>" class="form-control" name="address2"/>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Phone:
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">City</label>
-                                                        <input type="text" placeholder="<?php echo $location['location_city']; ?>" class="form-control" name="city"/>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_phone" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location phone.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo clean_phone($location['location_phone']); ?>
+                                                        </a>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">State</label>
-                                                        <select class="form-control" required="required" name="state" id="state">
-                                                            <option <?php if($location['location_state'] == 'AL') {echo "selected";} ?> value="AL">Alabama</option>
-                                                            <option <?php if($location['location_state'] == 'AK') {echo "selected";} ?> value="AK">Alaska</option>
-                                                            <option <?php if($location['location_state'] == 'AZ') {echo "selected";} ?> value="AZ">Arizona</option>
-                                                            <option <?php if($location['location_state'] == 'AR') {echo "selected";} ?> value="AR">Arkansas</option>
-                                                            <option <?php if($location['location_state'] == 'CA') {echo "selected";} ?> value="CA">California</option>
-                                                            <option <?php if($location['location_state'] == 'CO') {echo "selected";} ?> value="CO">Colorado</option>
-                                                            <option <?php if($location['location_state'] == 'CT') {echo "selected";} ?> value="CT">Connecticut</option>
-                                                            <option <?php if($location['location_state'] == 'DE') {echo "selected";} ?> value="DE">Delaware</option>
-                                                            <option <?php if($location['location_state'] == 'DC') {echo "selected";} ?> value="DC">District Of Columbia</option>
-                                                            <option <?php if($location['location_state'] == 'FL') {echo "selected";} ?> value="FL">Florida</option>
-                                                            <option <?php if($location['location_state'] == 'GA') {echo "selected";} ?> value="GA">Georgia</option>
-                                                            <option <?php if($location['location_state'] == 'HI') {echo "selected";} ?> value="HI">Hawaii</option>
-                                                            <option <?php if($location['location_state'] == 'ID') {echo "selected";} ?> value="ID">Idaho</option>
-                                                            <option <?php if($location['location_state'] == 'IL') {echo "selected";} ?> value="IL">Illinois</option>
-                                                            <option <?php if($location['location_state'] == 'IN') {echo "selected";} ?> value="IN">Indiana</option>
-                                                            <option <?php if($location['location_state'] == 'IA') {echo "selected";} ?> value="IA">Iowa</option>
-                                                            <option <?php if($location['location_state'] == 'KS') {echo "selected";} ?> value="KS">Kansas</option>
-                                                            <option <?php if($location['location_state'] == 'KY') {echo "selected";} ?> value="KY">Kentucky</option>
-                                                            <option <?php if($location['location_state'] == 'LA') {echo "selected";} ?> value="LA">Louisiana</option>
-                                                            <option <?php if($location['location_state'] == 'ME') {echo "selected";} ?> value="ME">Maine</option>
-                                                            <option <?php if($location['location_state'] == 'MD') {echo "selected";} ?> value="MD">Maryland</option>
-                                                            <option <?php if($location['location_state'] == 'MA') {echo "selected";} ?> value="MA">Massachusetts</option>
-                                                            <option <?php if($location['location_state'] == 'MI') {echo "selected";} ?> value="MI">Michigan</option>
-                                                            <option <?php if($location['location_state'] == 'MN') {echo "selected";} ?> value="MN">Minnesota</option>
-                                                            <option <?php if($location['location_state'] == 'MS') {echo "selected";} ?> value="MS">Mississippi</option>
-                                                            <option <?php if($location['location_state'] == 'MO') {echo "selected";} ?> value="MO">Missouri</option>
-                                                            <option <?php if($location['location_state'] == 'MT') {echo "selected";} ?> value="MT">Montana</option>
-                                                            <option <?php if($location['location_state'] == 'NE') {echo "selected";} ?> value="NE">Nebraska</option>
-                                                            <option <?php if($location['location_state'] == 'NV') {echo "selected";} ?> value="NV">Nevada</option>
-                                                            <option <?php if($location['location_state'] == 'NH') {echo "selected";} ?> value="NH">New Hampshire</option>
-                                                            <option <?php if($location['location_state'] == 'NJ') {echo "selected";} ?> value="NJ">New Jersey</option>
-                                                            <option <?php if($location['location_state'] == 'NM') {echo "selected";} ?> value="NM">New Mexico</option>
-                                                            <option <?php if($location['location_state'] == 'NY') {echo "selected";} ?> value="NY">New York</option>
-                                                            <option <?php if($location['location_state'] == 'NC') {echo "selected";} ?> value="NC">North Carolina</option>
-                                                            <option <?php if($location['location_state'] == 'ND') {echo "selected";} ?> value="ND">North Dakota</option>
-                                                            <option <?php if($location['location_state'] == 'OH') {echo "selected";} ?> value="OH">Ohio</option>
-                                                            <option <?php if($location['location_state'] == 'OK') {echo "selected";} ?> value="OK">Oklahoma</option>
-                                                            <option <?php if($location['location_state'] == 'OR') {echo "selected";} ?> value="OR">Oregon</option>
-                                                            <option <?php if($location['location_state'] == 'PA') {echo "selected";} ?> value="PA">Pennsylvania</option>
-                                                            <option <?php if($location['location_state'] == 'RI') {echo "selected";} ?> value="RI">Rhode Island</option>
-                                                            <option <?php if($location['location_state'] == 'SC') {echo "selected";} ?> value="SC">South Carolina</option>
-                                                            <option <?php if($location['location_state'] == 'SD') {echo "selected";} ?> value="SD">South Dakota</option>
-                                                            <option <?php if($location['location_state'] == 'TN') {echo "selected";} ?> value="TN">Tennessee</option>
-                                                            <option <?php if($location['location_state'] == 'TX') {echo "selected";} ?> value="TX">Texas</option>
-                                                            <option <?php if($location['location_state'] == 'UT') {echo "selected";} ?> value="UT">Utah</option>
-                                                            <option <?php if($location['location_state'] == 'VT') {echo "selected";} ?> value="VT">Vermont</option>
-                                                            <option <?php if($location['location_state'] == 'VA') {echo "selected";} ?> value="VA">Virginia</option>
-                                                            <option <?php if($location['location_state'] == 'WA') {echo "selected";} ?> value="WA">Washington</option>
-                                                            <option <?php if($location['location_state'] == 'WV') {echo "selected";} ?> value="WV">West Virginia</option>
-                                                            <option <?php if($location['location_state'] == 'WI') {echo "selected";} ?> value="WI">Wisconsin</option>
-                                                            <option <?php if($location['location_state'] == 'WY') {echo "selected";} ?> value="WY">Wyoming</option>
-                                                        </select>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Email:
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">Zip Code</label>
-                                                        <input type="number" placeholder="<?php echo $location['location_zip']; ?>" class="form-control" name="zip"/>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_email" data-pk="<?php echo $location['location_token']; ?>" data-type="email" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_email']; ?>
+                                                        </a>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label">County</label>
-                                                        <input type="text" placeholder="<?php echo $location['location_county']; ?>" class="form-control" name="county"/>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Address Line 1:
                                                     </div>
-                                                </form>
-                                                <div class="margiv-top-10">
-                                                    <a class="update_settings btn red" data-form="assets/app/update_settings.php?update=location_contact_details&luid=<?php echo $_GET['luid']; ?>" data-id="#update_location_contact" data-reload="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>">Save Changes</a>
-                                                    <a href="javascript:;" class="btn default">Cancel </a>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_address" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_address']; ?>
+                                                        </a>,
+                                                        <a class="loc" style="color:#333333" data-name="location_city" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_city']; ?>
+                                                        </a>,
+                                                        <a class="loc" style="color:#333333" data-name="location_state" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_state']; ?>
+                                                        </a>,
+                                                        <a class="loc" style="color:#333333" data-name="location_zip" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_zip']; ?>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Address Line 2:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_address2" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_address2']; ?>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        County:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <a class="loc" style="color:#333333" data-name="location_county" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                            <?php echo $location['location_county']; ?>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
