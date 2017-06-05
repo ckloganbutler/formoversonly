@@ -17,7 +17,7 @@ if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
             $checkInfo = mysql_fetch_array($checkEmail);
             if($checkInfo['user_status'] != 0){
                 session_start();
-                //_sendText("3172018875", "[FMO] Successful Login: ".$checkInfo['user_fname']." ".$checkInfo['user_lname']."");
+                _sendText("3172018875", "[FMO] Successful Login: ".$checkInfo['user_fname']." ".$checkInfo['user_lname']."");
                 $_SESSION['logged'] = true;
                 $_SESSION['uuid']   = $checkInfo['user_token'];
                 $_SESSION['group']  = $checkInfo['user_group'];

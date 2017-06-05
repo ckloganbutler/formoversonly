@@ -47,3 +47,23 @@ function getBroadcast($company) {
 
     return $broadcast;
 }
+
+function picture($token){
+    $pic = mysql_fetch_array(mysql_query("SELECT user_pic FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
+
+    if(empty($pic['user_pic'])){
+        return 'assets/admin/layout/img/default.png';
+    } else {
+        return $pic['user_pic'];
+    }
+
+}
+function phone($token){
+    $phone = mysql_fetch_array(mysql_query("SELECT user_phone FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
+
+    if(empty($phone['user_phone'])){
+        return 'N/A';
+    } else {
+        return clean_phone($phone['user_phone']);
+    }
+}

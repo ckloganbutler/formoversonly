@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $location = mysql_fetch_array(mysql_query("SELECT location_name, location_manager FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -44,22 +44,36 @@ if(isset($_SESSION['logged'])){
                                 <div id="stats" class="chart" style="height: 170px;">
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="clearfix">
-                                    <ul class="media-list">
-                                        <li class="media">
-                                            <a class="pull-left" href="javascript:;">
-                                                <img class="media-object" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjZWVlIi8+PHRleHQgdGV4dC1hbmNob3I9Im1pZGRsZSIgeD0iMzIiIHk9IjMyIiBzdHlsZT0iZmlsbDojYWFhO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEycHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9zdmc+" alt="64x64" data-src="holder.js/64x64" style="width: 150px; height: 150px;">
-                                            </a>
-                                            <div class="media-body">
-                                                <h4 class="media-heading">Location Manager: <strong>John Fries</strong></h4>
-                                                <textarea style="height: 74px;" class="form-control" placeholder="Send john a message.."></textarea> <br/>
-                                                <button type="button" class="btn red">Send message</button>
-                                            </div>
-                                        </li>
-                                    </ul>
+                            <?php
+                            if(!empty($location['location_manager'])){
+                                ?>
+                                <div class="col-md-6">
+                                    <div class="clearfix">
+                                        <ul class="media-list">
+                                            <li class="media">
+                                                <a class="pull-left" href="javascript:;">
+                                                    <img class="media-object" src="<?php echo picture($location['location_manager']); ?>" alt="64x64" data-src="holder.js/64x64" style="width: 160px; height: 160px;">
+                                                </a>
+                                                <div class="media-body">
+                                                    <textarea style="height: 110px;" class="form-control" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
+                                                    <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?></h4>
+                                                    <button type="button" class="btn red pull-right ttm" style="margin-top: -7px;">Send text message</button>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                                <?php
+                            } else {
+                                ?>
+                                <div class="col-md-6 text-center">
+                                    <br/>
+                                    <h3><i class="fa fa-2x fa-question text-danger"></i><br/> No manager has been assigned to this location.</h3>
+                                </div>
+                                <?php
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -305,6 +319,22 @@ if(isset($_SESSION['logged'])){
                 }
             });
 
+            $('.ttm').click(function() {
+               var uuid = "<?php echo $location['location_manager']; ?>";
+               $.ajax({
+                   url: 'assets/app/texting.php?txt=ttm&uuid='+uuid,
+                   type: 'POST',
+                   data: {
+                       msg: $('#ttm_msg').val()
+                   },
+                   success: function(e){
+                       toastr.success("<strong>Logan says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
+                   },
+                   error: function(e){
+                       toastr.error("<strong>Logan says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
+                   }
+               })
+            });
         });
     </script>
     <?php
