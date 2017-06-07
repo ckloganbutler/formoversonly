@@ -54,10 +54,7 @@ if(isset($_SESSION['logged'])){
                                         <thead>
                                         <tr role="row" class="heading">
                                             <th width="18%">
-                                                <input type="checkbox" class="group-checkable"> Marketer Contacted
-                                            </th>
-                                            <th>
-                                                Marketer Name & ID
+                                                <input type="checkbox" class="group-checkable"> Marketer Contact Name
                                             </th>
                                             <th>
                                                 Marketer Phone
@@ -65,8 +62,14 @@ if(isset($_SESSION['logged'])){
                                             <th>
                                                 Marketer Email
                                             </th>
+                                            <th>
+                                                Marketer City / State
+                                            </th>
+                                            <th>
+                                                Contact Marketer
+                                            </th>
                                             <th width="10%">
-                                                Contact or Edit
+                                                Last Contacted By
                                             </th>
                                         </tr>
                                         </thead>
@@ -283,7 +286,7 @@ if(isset($_SESSION['logged'])){
                 onError: function (grid) {
                     // execute some code on network or other general error
                 },
-                onDataLoad: function(grid) {
+                onDataLoad: function (grid) {
 
                 },
                 loadingMessage: 'Loading...',
@@ -294,7 +297,7 @@ if(isset($_SESSION['logged'])){
                     "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
                     "bPaginate": false,
                     "ajax": {
-                        "url": "assets/app/api/marketers.php?luid=<?php echo $_GET['luid']; ?>", // ajax source
+                        "url": "assets/app/api/marketing.php?luid=<?php echo $_GET['luid']; ?>", // ajax source
                     },
                     "language": {
                         "aria": {
@@ -346,100 +349,36 @@ if(isset($_SESSION['logged'])){
                     }
                 },
 
-                invalidHandler: function(event, validator) { //display error alert on form submit
+                invalidHandler: function (event, validator) { //display error alert on form submit
 
                 },
 
-                highlight: function(element) { // hightlight error inputs
+                highlight: function (element) { // hightlight error inputs
                     $(element)
                         .closest('.form-group').addClass('has-error'); // set error class to the control group
                 },
 
-                success: function(label) {
+                success: function (label) {
                     label.closest('.form-group').removeClass('has-error');
                     label.remove();
                 },
 
 
-                submitHandler: function(form) {
+                submitHandler: function (form) {
                     var group = $('#role').val();
                     $.ajax({
                         url: 'assets/app/add_setting.php?setting=marketer',
                         type: "POST",
                         data: $('#new_marketers').serialize(),
-                        success: function(data) {
+                        success: function (data) {
                             toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to their profile.");
                         },
-                        error: function() {
+                        error: function () {
                             toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
                 }
             });
-        $('#new_marketers').validate({
-            errorElement: 'span', //default input error message container
-            errorClass: 'help-block', // default input error message class
-            focusInvalid: false, // do not focus the last invalid input
-            ignore: "",
-            rules: {
-                type: {
-                    required: true
-                },
-                fullname: {
-                    required: true
-                },
-                phone: {
-                    required: true
-                },
-                email: {
-                    required: true
-                },
-                address: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                state: {
-                    required: true
-                },
-                zip: {
-                    required: true
-                },
-                company: {
-                    required: true
-                }
-            },
-
-            invalidHandler: function(event, validator) { //display error alert on form submit
-
-            },
-
-            highlight: function(element) { // hightlight error inputs
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // set error class to the control group
-            },
-
-            success: function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
-
-
-            submitHandler: function(form) {
-                var group = $('#role').val();
-                $.ajax({
-                    url: 'assets/app/add_setting.php?setting=marketer',
-                    type: "POST",
-                    data: $('#new_marketers').serialize(),
-                    success: function(data) {
-                        toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to their profile.");
-                    },
-                    error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                    }
-                });
-            }
         });
     </script>
     <?php

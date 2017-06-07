@@ -12,19 +12,19 @@ if(isset($_SESSION['uuid'])){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findEmployees = mysql_query("SELECT marketer_id, marketer_contact, marketer_phone, marketer_email, marketer_city, marketer_state, marketer_last_contacted, marketer_by_user_token, marketer_timestamp FROM fmo_locations_marketers WHERE marketer_location_token='".mysql_real_escape_string($_GET['luid'])."' ORDER BY marketer_last_contacted DESC");
-    $iTotalRecords = mysql_num_rows($findEmployees);
+    $findMarketers = mysql_query("SELECT marketer_id, marketer_contact, marketer_phone, marketer_email, marketer_city, marketer_state, marketer_last_contacted, marketer_by_user_token, marketer_timestamp FROM fmo_locations_marketers WHERE marketer_location_token='".mysql_real_escape_string($_GET['luid'])."' ORDER BY marketer_last_contacted DESC");
+    $iTotalRecords = mysql_num_rows($findMarketers);
 
     $records = array();
     $records["data"] = array();
 
-    while($emp = mysql_fetch_assoc($findEmployees)) {
+    while($mk = mysql_fetch_assoc($findMarketers)) {
         $records["data"][] = array(
-            '<input type="checkbox" name="pk" value="'.$emp['user_token'].'"> '.$status_tag.'',
-            ''.$emp['user_lname'].', '.$emp['user_fname'].' '.$num.' '.$warning.'',
-            ''.clean_phone($emp['user_phone']).'',
-            ''.secret_mail($emp['user_email']).'',
-            '<a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid='.$emp['user_token'].'&luid='.$emp['user_employer_location'].'" data-page-title="'.$emp["user_fname"].' '.$profile["user_lname"].'"><i class="fa fa-edit"></i> View profile</a>'
+            '',
+            '',
+            '',
+            '',
+            ''
         );
     }
     if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
