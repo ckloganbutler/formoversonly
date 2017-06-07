@@ -556,11 +556,11 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane" id="tab4">
-                                                        <br/><br/><br/>
-                                                        <center><i class="fa fa-money fa-3x text-success"></i><br/>
-                                                            <h3>Lets pretend we collected a booking fee here. </h3>
-                                                        </center>
-                                                        <br/><br/><br/>
+                                                        <div class="row">
+                                                            <div class="col-md-12 text-center">
+                                                                <button id="pay" class="btn btn-block btn-xl btn-success">Securely pay <strong>$3.00</strong> registration fee</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -833,8 +833,46 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
     </form>
-    <script type="text/javascript">
+    <script>
         jQuery(document).ready(function(){
+
+            var handler = StripeCheckout.configure({
+                key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
+                image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                locale: 'auto',
+                token: function(token) {
+                    $.ajax({
+                        url: 'assets/app/api/charge.php',
+                        type: 'POST',
+                        data: {
+                            stripeToken: token.id,
+                            stripeEmail: token.email,
+                            stripeAmt: 300
+                        },
+                        success: function(data){
+
+                        },
+                        error: function(e){
+
+                        }
+                    })
+                }
+            });
+
+            document.getElementById('pay').addEventListener('click', function(e) {
+                // Open Checkout with further options:
+                handler.open({
+                    name: 'Booking Fee',
+                    description: 'Allows customer to use card/check to pay later.',
+                    amount: 300
+                });
+                e.preventDefault();
+            });
+
+            // Close Checkout on page navigation:
+            window.addEventListener('popstate', function() {
+                handler.close();
+            });
 
             $.ajax({
                 url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=jkv',

@@ -595,6 +595,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 <script src="assets/admin/pages/scripts/tasks.js" type="text/javascript"></script>
 <script src="assets/admin/pages/scripts/index.js" type="text/javascript"></script>
 <script src="assets/global/scripts/datatable.js"></script>
+<script src="https://checkout.stripe.com/checkout.js"></script>
 <script>
     $(document).ready(function() {
         $(document).ajaxStart(function() { Pace.restart(); });
