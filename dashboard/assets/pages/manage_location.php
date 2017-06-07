@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_booking_fee_disclaimer, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -53,6 +53,9 @@ if(isset($_SESSION['logged'])){
                             </li>
                             <li>
                                 <a href="#tab_1_4" data-toggle="tab">Call Catcher</a>
+                            </li>
+                            <li>
+                                <a href="#disclaimers" data-toggle="tab">Disclaimers</a>
                             </li>
                             <li>
                                 <a href="#service_areas" data-toggle="tab">Misc</a>
@@ -862,6 +865,42 @@ if(isset($_SESSION['logged'])){
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="disclaimers">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="fa fa-dot-circle-o"></i> Booking Fee Disclaimer
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="col-md-12">
+                                                    <a class="dc" style="color: #333333;" data-placement="bottom" data-name="location_booking_fee_disclaimer" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location booking fee disclaimer.." data-url="assets/app/update_settings.php?update=location">
+                                                        <?php
+                                                        if(empty($location['location_booking_fee_disclaimer'])){
+                                                            ?>
+                                                            <h3>You can edit this disclaimer!</h3>
+                                                            <p>Its easy, just hit edit & start editing away! You can even add cool colors like this: <span class="text-danger">WOW</span> <span class="text-warning">BLAM</span> <span class="text-info">SLAM</span></p>
+                                                            <?php
+                                                        } else {
+                                                            echo $location['location_booking_fee_disclaimer'];
+                                                        }
+                                                        ?>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="dc" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
                                     </div>
                                 </div>
                             </div>

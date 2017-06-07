@@ -28,6 +28,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css"/>
     <script src="assets/global/plugins/pace/pace.min.js" type="text/javascript"></script>
     <link href="assets/global/plugins/pace/themes/pace-theme-minimal.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.css"/>
 	<link href="assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
 	<link href="assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
 	<link href="assets/global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
@@ -596,6 +597,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 <script src="assets/admin/pages/scripts/index.js" type="text/javascript"></script>
 <script src="assets/global/scripts/datatable.js"></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>
+<script type="text/javascript" src="assets/global/plugins/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+<script type="text/javascript" src="assets/global/plugins/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+<script type="text/javascript" src="assets/global/plugins/bootstrap-editable/inputs-ext/wysihtml5/wysihtml5.js"></script>
 <script>
     $(document).ready(function() {
         $(document).ajaxStart(function() { Pace.restart(); });
