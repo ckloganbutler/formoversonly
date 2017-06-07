@@ -1,7 +1,7 @@
 <?php
 // Require the bundled autoload file - the path may need to change
 // based on where you downloaded and unzipped the SDK
-include_once 'twilio-php-master/Twilio/autoload.php';
+require '../twilio-php-master/Twilio/autoload.php';
 
 // Use the REST API Client to make requests to the Twilio REST API
 use Twilio\Rest\Client;

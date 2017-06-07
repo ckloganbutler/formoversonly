@@ -10,7 +10,7 @@ mysql_select_db("fmo") or die(mysql_error());
 
 require 'obj/misc.php';
 require 'obj/send_email.php';
-require 'obj/send_text.php';
+//require 'obj/send_text.php';
 
 function timeline_log($who, $by, $type, $reasoning){
     mysql_query("INSERT INTO fmo_users_employee_timelines (timeline_user_token, timeline_datatype, timeline_reasoning, timeline_by_user_token) VALUES (

@@ -50,7 +50,7 @@ if(isset($_SESSION['logged'])){
                         <div class="tab-content">
                             <div class="tab-pane active" id="employees_tab">
                                 <div class="table-container">
-                                    <table class="table table-striped table-bordered table-hover" id="employees">
+                                    <table class="table table-striped table-bordered table-hover" id="marketers">
                                         <thead>
                                         <tr role="row" class="heading">
                                             <th width="18%">
@@ -271,6 +271,113 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
     </form>
+    <script>
+        $(document).ready(function() {
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#marketers"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                onDataLoad: function(grid) {
+
+                },
+                loadingMessage: 'Loading...',
+                dataTable: {
+                    "processing": true,
+                    "serverSide": true,
+                    "dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                    "bPaginate": false,
+                    "ajax": {
+                        "url": "assets/app/api/marketers.php?luid=<?php echo $_GET['luid']; ?>", // ajax source
+                    },
+                    "language": {
+                        "aria": {
+                            "sortAscending": ": activate to sort column ascending",
+                            "sortDescending": ": activate to sort column descending"
+                        },
+                        "emptyTable": "No data available in table",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                        "infoEmpty": "No entries found",
+                        "infoFiltered": "(filtered1 from _MAX_ total entries)",
+                        "lengthMenu": "Show _MENU_ entries",
+                        "search": "Search:",
+                        "zeroRecords": "No matching records found"
+                    },
+                }
+            });
+            $('#new_marketers').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    type: {
+                        required: true
+                    },
+                    fullname: {
+                        required: true
+                    },
+                    phone: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    state: {
+                        required: true
+                    },
+                    zip: {
+                        required: true
+                    },
+                    company: {
+                        required: true
+                    }
+                },
+
+                invalidHandler: function(event, validator) { //display error alert on form submit
+
+                },
+
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function(label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+
+                submitHandler: function(form) {
+                    var group = $('#role').val();
+                    $.ajax({
+                        url: 'assets/app/add_setting.php?setting=marketer',
+                        type: "POST",
+                        data: $('#new_marketers').serialize(),
+                        success: function(data) {
+                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to their profile.");
+                        },
+                        error: function() {
+                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
     <?php
 } else {
     header("Location: ../../../index.php?err=no_access");
