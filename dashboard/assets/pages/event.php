@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype, event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($event['event_location_token'])."'"));
     $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lname, user_email, user_phone, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($event['event_user_token'])."'"));
     switch($event['event_status']){
@@ -50,151 +50,219 @@ if(isset($_SESSION['logged'])){
             <div class="col-md-12">
                 <div class="portlet light">
                     <div class="portlet-title">
-                        <div class="caption caption-md">
-                            <i class="icon-directions theme-font bold"></i>
-                            <span class="caption-subject font-red bold uppercase">
-                                <i class="fa fa-user"></i> <i class="fa fa-user"></i> (<?php echo $event['event_laborrate']; ?>)
-                                [+]
-                                <i class="fa fa-truck"></i> (<?php echo $event['event_truckfee']; ?>)
-                            </span>
-                            <span class="hidden-480"><span class="font-red">|</span>
-                                <?php
-                                if($event['event_date_start'] == $event['event_date_end']){
-                                    ?>
-                                     <small><?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?></small></span></span>
-                                    <?php
-                                } else {
-                                    ?>
-                                     <small><?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?></small></span></span>
-                                    <?php
-                                }
-                                ?>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <div class="actions btn-set">
+                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-users"></i> Crewmen:
+                                        <strong>
+                                            <?php echo $event['event_laborrate']; ?>
+                                        </strong>
+                                    </a>
+                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-truck"></i> Truck(s):
+                                        <strong>
+                                            <?php echo $event['event_truckfee']; ?>
+                                        </strong>
+                                    </a>
+                                    <a class="btn default red-stripe hidden-sm dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-clock-o"></i> Event Date/Time:
+                                        <strong>
+                                            <?php
+                                            if($event['event_date_start'] == $event['event_date_end']){
+                                                ?>
+                                                <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?>
+                                                <?php
+                                            } else {
+                                                ?>
+                                                <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
+                                                <?php
+                                            }
+                                            ?>
+                                        </strong>
+                                    </a>
 
-                        </div>
-                        <div class="actions btn-set">
+                                    <div class="btn-group hidden-xs hidden-sm">
+                                        <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+                                            <i class="fa fa-tag"></i> Event Type: <strong><?php echo $event['event_type']; ?></strong> <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <?php
+                                            $types = mysql_query("SELECT eventtype_name FROM fmo_locations_eventtypes WHERE eventtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                                            if(mysql_num_rows($types) > 0){
+                                                while($type = mysql_fetch_assoc($types)){
+                                                    ?>
+                                                    <li>
+                                                        <a class="change_type" data-id="<?php echo $type['eventtype_name']; ?>" data-type="eventtype"><?php echo $type['eventtype_name']; ?></a>
+                                                    </li>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
 
-                            <div class="btn-group hidden-xs hidden-sm">
-                                <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
-                                    <i class="fa fa-tag"></i> Event Type: <strong><?php echo $event['event_type']; ?></strong> <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <?php
-                                        $types = mysql_query("SELECT eventtype_name FROM fmo_locations_eventtypes WHERE eventtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
-                                        if(mysql_num_rows($types) > 0){
-                                            while($type = mysql_fetch_assoc($types)){
+                                    <div class="btn-group hidden-xs hidden-sm">
+                                        <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+                                            <i class="fa fa-tags"></i> Sub Type: <strong><?php echo $event['event_subtype']; ?></strong> <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <?php
+                                            $subtypes = mysql_query("SELECT subtype_id, subtype_name FROM fmo_locations_subtypes WHERE subtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                                            if(mysql_num_rows($types) > 0){
+                                                while($subtype = mysql_fetch_assoc($subtypes)){
+                                                    ?>
+                                                    <li>
+                                                        <a class="change_type" data-id="<?php echo $subtype['subtype_name']; ?>" data-type="subtype"><?php echo $subtype['subtype_name']; ?></a>
+                                                    </li>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+
+                                    <div class="btn-group">
+                                        <a class="btn red dropdown-toggle hidden-sm" href="javascript:;" data-toggle="dropdown">
+                                            <i class="fa fa-cogs"></i> Status: <strong><?php echo $status; ?></strong> <i class="fa fa-angle-down"></i>
+                                        </a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <?php
+                                            if($event['event_status'] != 1){
                                                 ?>
                                                 <li>
-                                                    <a class="change_type" data-id="<?php echo $type['eventtype_name']; ?>" data-type="eventtype"><?php echo $type['eventtype_name']; ?></a>
+                                                    <a class="change_type" data-id="1" data-type="status">Change to New Booking</a>
                                                 </li>
                                                 <?php
                                             }
-                                        }
-                                    ?>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group hidden-xs hidden-sm">
-                                <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
-                                    <i class="fa fa-tags"></i> Sub Type: <strong><?php echo $event['event_subtype']; ?></strong> <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <?php
-                                        $subtypes = mysql_query("SELECT subtype_id, subtype_name FROM fmo_locations_subtypes WHERE subtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
-                                        if(mysql_num_rows($types) > 0){
-                                            while($subtype = mysql_fetch_assoc($subtypes)){
+                                            if($event['event_status'] != 2){
                                                 ?>
                                                 <li>
-                                                    <a class="change_type" data-id="<?php echo $subtype['subtype_name']; ?>" data-type="subtype"><?php echo $subtype['subtype_name']; ?></a>
+                                                    <a class="change_type" data-id="2" data-type="status">Change to Confirmed</a>
                                                 </li>
                                                 <?php
                                             }
-                                        }
-                                    ?>
-                                </ul>
-                            </div>
-
-                            <div class="btn-group">
-                                <a class="btn red dropdown-toggle" href="javascript:;" data-toggle="dropdown">
-                                    <i class="fa fa-cogs"></i> Status: <strong><?php echo $status; ?></strong> <i class="fa fa-angle-down"></i>
-                                </a>
-                                <ul class="dropdown-menu pull-right">
-                                    <?php
-                                    if($event['event_status'] != 1){
-                                        ?>
-                                        <li>
-                                            <a class="change_type" data-id="1" data-type="status">Change to New Booking</a>
-                                        </li>
-                                        <?php
-                                    }
-                                    if($event['event_status'] != 2){
-                                        ?>
-                                        <li>
-                                            <a class="change_type" data-id="2" data-type="status">Change to Confirmed</a>
-                                        </li>
-                                        <?php
-                                    }
-                                    if($event['event_status'] != 3){
-                                        ?>
-                                        <li>
-                                            <a class="change_type" data-id="3" data-type="status">Change to Left Message</a>
-                                        </li>
-                                        <?php
-                                    }
-                                    if($event['event_status'] != 4){
-                                        ?>
-                                        <li>
-                                            <a class="change_type" data-id="4" data-type="status">Change to On Hold</a>
-                                        </li>
-                                        <?php
-                                    }
-                                    if($event['event_status'] != 5){
-                                        ?>
-                                        <li>
-                                            <a class="change_type" data-id="5" data-type="status">Change to Cancelled</a>
-                                        </li>
-                                        <?php
-                                    }
-                                    ?>
-                                </ul>
+                                            if($event['event_status'] != 3){
+                                                ?>
+                                                <li>
+                                                    <a class="change_type" data-id="3" data-type="status">Change to Left Message</a>
+                                                </li>
+                                                <?php
+                                            }
+                                            if($event['event_status'] != 4){
+                                                ?>
+                                                <li>
+                                                    <a class="change_type" data-id="4" data-type="status">Change to On Hold</a>
+                                                </li>
+                                                <?php
+                                            }
+                                            if($event['event_status'] != 5){
+                                                ?>
+                                                <li>
+                                                    <a class="change_type" data-id="5" data-type="status">Change to Cancelled</a>
+                                                </li>
+                                                <?php
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="portlet-body">
+                    <div class="portlet-body" style="padding-top: 0px;">
                         <div class="row">
                             <div class="col-md-6 col-sm-12">
                                 <div class="portlet">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-user"></i>Customer Information
-                                        </div>
-                                        <div class="actions">
-                                            <a href="javascript:;" class="btn btn-default btn-sm">
-                                                <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md edit hidden" data-edit="ci">Edit</span> </a>
-                                        </div>
+                                    <div class="portlet-title tabbable-line">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li class="active">
+                                                <a href="#event" data-toggle="tab" aria-expanded="true" style="color: black;">
+                                                    Event Information</a>
+                                            </li>
+                                            <li class="">
+                                                <a href="#customer" data-toggle="tab" aria-expanded="false" style="color: black;">
+                                                    Customer Information</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="portlet-body">
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Customer Name & ID:
+                                        <div class="tab-content">
+                                            <div class="tab-pane active" id="event">
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Event Name:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_id']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event">
+                                                            <?php echo $event['event_name']; ?>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Phone:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo clean_phone($event['event_phone']);  ?>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Email:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo $event['event_email']; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Comments:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo $event['event_comments']; ?>
+                                                    </div>
+                                                </div>
+                                                <hr/>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:;" class="btn red edit" data-edit="ev" data-reload="">
+                                                            <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md">Edit</span> </a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo $user['user_fname']." ".$user['user_lname']; ?> (#<?php echo $user['user_id']; ?>)
-                                            </div>
-                                        </div>
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Email:
-                                            </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo secret_mail($user['user_email']); ?>
-                                            </div>
-                                        </div>
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Phone Number:
-                                            </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo clean_phone($user['user_phone']); ?>
+                                            <div class="tab-pane" id="customer">
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Customer Name & ID:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo $user['user_fname']." ".$user['user_lname']; ?> (#<?php echo $user['user_id']; ?>)
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Email:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo secret_mail($user['user_email']); ?>
+                                                    </div>
+                                                </div>
+                                                <div class="row static-info">
+                                                    <div class="col-md-5 name">
+                                                        Phone Number:
+                                                    </div>
+                                                    <div class="col-md-7 value">
+                                                        <?php echo clean_phone($user['user_phone']); ?>
+                                                    </div>
+                                                </div>
+                                                <hr/>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:;" class="btn red edit" data-edit="ci" data-reload="">
+                                                            <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md">Edit</span> </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -202,55 +270,66 @@ if(isset($_SESSION['logged'])){
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="portlet">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-phone"></i>Event Information
-                                        </div>
-                                        <div class="actions">
-                                            <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="ev">
-                                                <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md">Edit</span> </a>
-                                        </div>
+                                    <div class="portlet-title tabbable-line">
+                                        <ul class="nav nav-tabs nav-justified">
+                                            <li class="active">
+                                                <a href="#additions" data-toggle="tab" aria-expanded="true" style="color: black;">
+                                                   Additional Items & Rates</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                     <div class="portlet-body">
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Event Name:
+                                        <div class="tab-content">
+                                            <style type="text/css">
+                                                .check {
+                                                    opacity:0.5;
+                                                    color:#996;
+                                                }
+                                            </style>
+                                            <?php
+                                            $additions = explode("|", $event['event_additions']);
+                                            foreach($additions as $ck){
+                                                $extra[$ck] = $ck;
+                                            }
+                                            ?>
+                                            <!--
+                                            <div class="tab-pane active" id="additions">
+                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?>" style="height: 60px; width: 120px;">
+                                                    <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-responsive img-check <?php if(empty($extra['hot_tub'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 5px;">Hot Tub -$398 [+] $350 w/ move</label>
+                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?>">
+                                                    <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['piano'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 5px;">Piano <br/>$398<br/>$350 w/ move</label>
+                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?>">
+                                                    <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['pool_table'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 5px;">Pool Table <br/>$398<br/>$350 w/ move</label>
+                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?>">
+                                                    <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['play_set'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 5px;">Play Set <br/>$378<br/>$300 w/ move</label>
+                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?>">
+                                                    <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['safe'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 5px;">Safe <br/>$298<br/>$200 w/ move</label>
+                                                    <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
                                             </div>
-                                            <div class="col-md-7 value">
-                                                <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_id']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event">
-                                                    <?php echo $event['event_name']; ?>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Phone:
-                                            </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo clean_phone($event['event_phone']);  ?>
-                                            </div>
-                                        </div>
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Email:
-                                            </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo $event['event_email']; ?>
-                                            </div>
-                                        </div>
-                                        <div class="row static-info">
-                                            <div class="col-md-5 name">
-                                                Comments:
-                                            </div>
-                                            <div class="col-md-7 value">
-                                                <?php echo $event['event_comments']; ?>
-                                            </div>
+                                            -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <hr/>
+                    </div>
+                </div>
+                <div class="portlet light">
+                    <div class="portlet-body">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="portlet">
@@ -509,7 +588,10 @@ if(isset($_SESSION['logged'])){
                                 </div>
                             </div>
                         </div>
-                        <hr/>
+                    </div>
+                </div>
+                <div class="portlet light">
+                    <div class="portlet-body">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-md-12">
                                 <div class="tabbable-custom nav-justified">
@@ -1132,6 +1214,11 @@ if(isset($_SESSION['logged'])){
                $(show).show();
             });
 
+            $(".img-check").click(function(){
+                $(this).toggleClass("check");
+                $(this).parent().toggleClass("red");
+            });
+
             var address = '<?php echo $pk_strt; ?>, <?php echo $pk_city; ?>, <?php echo $pk_state; ?>, <?php echo $pk_zip; ?>';
 
             var map = new google.maps.Map(document.getElementById('gmap_basic'), {
@@ -1244,10 +1331,8 @@ if(isset($_SESSION['logged'])){
                    }
                });
             });
-            $(document).on('click', '.edit', function(){
-                var line = $(this).attr('data-edit');
-                $('.'+line).editable();
-                toastr.info("<strong>Logan says</strong>:<br/>You can now edit that information. If you change a value, remember that you may need to refresh the page to see the changes.")
+            $('.editable_inf').editable({
+
             });
     </script>
     <?php
