@@ -24,7 +24,24 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <?php echo $event['event_name']; ?> <small><strong>(EVENT ID #0<?php echo $event['event_id']; ?>)</strong></small>
+            <strong><?php echo $event['event_name']; ?></strong> <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
+
+            <a class="btn red hidden-sm dropdown-toggle pull-right" readonly href="javascript:;" data-toggle="dropdown">
+                <i class="fa fa-clock-o"></i> Event Date/Time:
+                <strong>
+                    <?php
+                    if($event['event_date_start'] == $event['event_date_end']){
+                        ?>
+                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?>
+                        <?php
+                    } else {
+                        ?>
+                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
+                        <?php
+                    }
+                    ?>
+                </strong>
+            </a>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -72,23 +89,6 @@ if(isset($_SESSION['logged'])){
                                         </strong>
                                     </a>
 
-                                    <a class="btn default red-stripe hidden-sm dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
-                                        <i class="fa fa-clock-o"></i> Event Date/Time:
-                                        <strong>
-                                            <?php
-                                            if($event['event_date_start'] == $event['event_date_end']){
-                                                ?>
-                                                <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?>
-                                                <?php
-                                            } else {
-                                                ?>
-                                                <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
-                                                <?php
-                                            }
-                                            ?>
-                                        </strong>
-                                    </a>
-
                                     <div class="btn-group hidden-xs hidden-sm">
                                         <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
                                             <i class="fa fa-tag"></i> Event Type: <strong><?php echo $event['event_type']; ?></strong> <i class="fa fa-angle-down"></i>
@@ -130,7 +130,7 @@ if(isset($_SESSION['logged'])){
                                     </div>
 
                                     <div class="btn-group">
-                                        <a class="btn red dropdown-toggle hidden-sm" href="javascript:;" data-toggle="dropdown">
+                                        <a class="btn default red-stripe dropdown-toggle hidden-sm" href="javascript:;" data-toggle="dropdown">
                                             <i class="fa fa-cogs"></i> Status: <strong><?php echo $status; ?></strong> <i class="fa fa-angle-down"></i>
                                         </a>
                                         <ul class="dropdown-menu pull-right">
@@ -273,13 +273,13 @@ if(isset($_SESSION['logged'])){
                                         <ul class="nav nav-tabs nav-justified">
                                             <li class="active">
                                                 <a href="#additions" data-toggle="tab" aria-expanded="true" style="color: black;">
-                                                   Additional Items & Rates</a>
+                                                  Comments & Additional Items</a>
                                             </li>
                                         </ul>
                                     </div>
                                     <div class="portlet-body">
                                         <div class="tab-content">
-                                            <textarea placeholder="BOL comments" class="form-control"></textarea>
+                                            <textarea placeholder="BOL comments" class="form-control" style="height: 80px;"></textarea>
                                             <style type="text/css">
                                                 .check {
                                                     opacity:0.5;
@@ -292,35 +292,34 @@ if(isset($_SESSION['logged'])){
                                                 $extra[$ck] = $ck;
                                             }
                                             ?>
-                                            <!--
+                                            <hr/>
                                             <div class="tab-pane active" id="additions">
-                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?>" style="height: 60px; width: 120px;">
-                                                    <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-responsive img-check <?php if(empty($extra['hot_tub'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 5px;">Hot Tub -$398 [+] $350 w/ move</label>
-                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                </label>
-                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?>">
-                                                    <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['piano'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 5px;">Piano <br/>$398<br/>$350 w/ move</label>
-                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                </label>
-                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?>">
-                                                    <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['pool_table'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 5px;">Pool Table <br/>$398<br/>$350 w/ move</label>
-                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                </label>
-                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?>">
-                                                    <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['play_set'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 5px;">Play Set <br/>$378<br/>$300 w/ move</label>
-                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                </label>
-                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?>">
-                                                    <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['safe'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 5px;">Safe <br/>$298<br/>$200 w/ move</label>
+                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px; margin-left: 5px;">
+                                                    <img src="assets/global/img/catcher/safe.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['safe'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 1px;">Safe</label>
                                                     <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
                                                 </label>
+                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
+                                                    <img src="assets/global/img/catcher/playset.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['play_set'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 1px;">Play Set</label>
+                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
+                                                    <img src="assets/global/img/catcher/pooltable.gif" alt="..." height="22px" width="22px"  class="img-thumbnail img-check <?php if(empty($extra['pool_table'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 1px;">Pool Table</label>
+                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
+                                                    <img src="assets/global/img/catcher/babygrand.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['piano'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 1px;">Piano</label>
+                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
+                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
+                                                    <img src="assets/global/img/catcher/hottub.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['hot_tub'])){ echo "checked"; } ?>" style="vertical-align: top;">
+                                                    <label style="padding-top: 1px;">Hot Tub</label>
+                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                </label>
                                             </div>
-                                            -->
                                         </div>
                                     </div>
                                 </div>
