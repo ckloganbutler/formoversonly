@@ -54,17 +54,24 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-12 text-center">
                                 <div class="actions btn-set">
                                     <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
+                                        <i class="fa fa-truck"></i> Truck(s):
+                                        <strong>
+                                            <?php echo $event['event_truckfee']; ?>
+                                        </strong>
+                                    </a>
+                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
                                         <i class="fa fa-users"></i> Crewmen:
                                         <strong>
                                             <?php echo $event['event_laborrate']; ?>
                                         </strong>
                                     </a>
                                     <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
-                                        <i class="fa fa-truck"></i> Truck(s):
+                                        <i class="fa fa-location-arrow"></i> Counties:
                                         <strong>
-                                            <?php echo $event['event_truckfee']; ?>
+                                            <?php echo $event['event_countyfee']; ?>
                                         </strong>
                                     </a>
+
                                     <a class="btn default red-stripe hidden-sm dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
                                         <i class="fa fa-clock-o"></i> Event Date/Time:
                                         <strong>
@@ -215,14 +222,6 @@ if(isset($_SESSION['logged'])){
                                                         <?php echo $event['event_email']; ?>
                                                     </div>
                                                 </div>
-                                                <div class="row static-info">
-                                                    <div class="col-md-5 name">
-                                                        Comments:
-                                                    </div>
-                                                    <div class="col-md-7 value">
-                                                        <?php echo $event['event_comments']; ?>
-                                                    </div>
-                                                </div>
                                                 <hr/>
                                                 <div class="row">
                                                     <div class="col-md-12">
@@ -280,6 +279,7 @@ if(isset($_SESSION['logged'])){
                                     </div>
                                     <div class="portlet-body">
                                         <div class="tab-content">
+                                            <textarea placeholder="BOL comments" class="form-control"></textarea>
                                             <style type="text/css">
                                                 .check {
                                                     opacity:0.5;
@@ -612,18 +612,6 @@ if(isset($_SESSION['logged'])){
                                                 <span class="badge badge-danger"> 2 </span>
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="#actions" data-toggle="tab">Actions </a>
-                                        </li>
-                                        <li>
-                                            <a href="#estimates" data-toggle="tab">Estimates </a>
-                                        </li>
-                                        <li>
-                                            <a href="#claims" data-toggle="tab">Claims </a>
-                                        </li>
-                                        <li>
-                                            <a href="#reviews" data-toggle="tab">Reviews </a>
-                                        </li>
                                     </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="documents">
@@ -939,14 +927,6 @@ if(isset($_SESSION['logged'])){
                                                     <!-- End: life time stats -->
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="tab-pane" id="actions">
-                                        </div>
-                                        <div class="tab-pane" id="estimates">
-                                        </div>
-                                        <div class="tab-pane" id="claims">
-                                        </div>
-                                        <div class="tab-pane" id="reviews">
                                         </div>
                                     </div>
                                 </div>
