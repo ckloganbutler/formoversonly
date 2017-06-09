@@ -20,6 +20,14 @@ function timeline_log($who, $by, $type, $reasoning){
     '".mysql_real_escape_string($by)."')");
 }
 
+function timeline_event($event, $by, $type, $reasoning){
+    mysql_query("INSERT INTO fmo_locations_events_timeline (timeline_event_token, timeline_type, timeline_reasoning, timeline_by_user_token) VALUES (
+    '".mysql_real_escape_string($event)."',
+    '".mysql_real_escape_string($type)."',
+    '".mysql_real_escape_string($reasoning)."',
+    '".mysql_real_escape_string($by)."')");
+}
+
 function name($token){
     $name = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
     return $name['user_fname']." ".$name['user_lname'];

@@ -269,11 +269,21 @@ if(isset($_SESSION['logged'])){
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <div class="portlet">
+                                    <?php
+                                    $additions = explode("|", $event['event_additions']);
+                                    $add       = 0;
+                                    foreach($additions as $ck){
+                                        $add++;
+                                        $extra[$ck] = $ck;
+                                    }
+                                    ?>
                                     <div class="portlet-title tabbable-line">
                                         <ul class="nav nav-tabs nav-justified">
                                             <li class="active">
                                                 <a href="#additions" data-toggle="tab" aria-expanded="true" style="color: black;">
-                                                  Comments & Additional Items</a>
+                                                  Comments & Additional Items
+                                                    <span class="badge badge-danger"> <?php echo $add - 1; ?> </span>
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -286,12 +296,7 @@ if(isset($_SESSION['logged'])){
                                                     color:#996;
                                                 }
                                             </style>
-                                            <?php
-                                            $additions = explode("|", $event['event_additions']);
-                                            foreach($additions as $ck){
-                                                $extra[$ck] = $ck;
-                                            }
-                                            ?>
+
                                             <hr/>
                                             <div class="tab-pane active" id="additions">
                                                 <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px; margin-left: 5px;">
@@ -596,7 +601,7 @@ if(isset($_SESSION['logged'])){
                                 <div class="tabbable-custom nav-justified">
                                     <ul class="nav nav-tabs nav-justified">
                                         <li class="active">
-                                            <a href="#documents" data-toggle="tab">Documents / Photos </a>
+                                            <a href="#comments" data-toggle="tab"> Comments / Timeline </a>
                                         </li>
                                         <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
@@ -604,16 +609,16 @@ if(isset($_SESSION['logged'])){
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#comments" data-toggle="tab"> Comments / Timeline </a>
-                                        </li>
-                                        <li>
                                             <a href="#labor" data-toggle="tab">Labor / Assets
                                                 <span class="badge badge-danger"> 2 </span>
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="#documents" data-toggle="tab">Documents / Photos </a>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="documents">
+                                        <div class="tab-pane" id="documents">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="portlet">
@@ -793,7 +798,7 @@ if(isset($_SESSION['logged'])){
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane" id="comments">
+                                        <div class="tab-pane active" id="comments">
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="portlet">
@@ -824,17 +829,17 @@ if(isset($_SESSION['logged'])){
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=comments&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
-                                                                            <th width="18%">
-                                                                                Comment Date
+                                                                            <th width="12%">
+                                                                                Record Timestamp
                                                                             </th>
-                                                                            <th >
-                                                                                Comment
+                                                                            <th>
+                                                                                Record Type
+                                                                            </th>
+                                                                            <th>
+                                                                                Record Details
                                                                             </th>
                                                                             <th width="12%">
-                                                                                Submitted by
-                                                                            </th>
-                                                                            <th width="8%">
-                                                                                Actions
+                                                                                Record Creator
                                                                             </th>
                                                                         </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="new_comment">
