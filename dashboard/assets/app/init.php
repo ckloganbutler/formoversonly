@@ -21,7 +21,7 @@ function timeline_log($who, $by, $type, $reasoning){
 }
 
 function timeline_event($event, $by, $type, $reasoning){
-    mysql_query("INSERT INTO fmo_locations_events_timeline (timeline_event_token, timeline_type, timeline_reasoning, timeline_by_user_token) VALUES (
+    mysql_query("INSERT INTO fmo_locations_events_timelines (timeline_event_token, timeline_type, timeline_reasoning, timeline_by_user_token) VALUES (
     '".mysql_real_escape_string($event)."',
     '".mysql_real_escape_string($type)."',
     '".mysql_real_escape_string($reasoning)."',

@@ -49,36 +49,22 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
     echo json_encode($records);
 }
 
-if(isset($_GET) && $_GET['type'] == 'comments'){
+if(isset($_GET) && $_GET['type'] == 'timeline'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
-    $iTotalRecords = mysql_num_rows($findRates);
+    $findTimelines = mysql_query("SELECT timeline_id, timeline_by_user_token, timeline_type, timeline_reasoning, timeline_timestamp  FROM fmo_locations_events_timelines WHERE timeline_event_token='".mysql_real_escape_string($_GET['ev'])."' ORDER BY timeline_timestamp DESC");
+    $iTotalRecords = mysql_num_rows($findTimelines);
 
     $records = array();
     $records["data"] = array();
 
-    while($services = mysql_fetch_assoc($findRates)) {
-        if($services['services_taxable'] == 0) {
-            $taxable_tag = '<span class="label label-sm label-danger">NO</span>';
-        } else {
-            $taxable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_commissionable'] == 0) {
-            $commissionable_tag = '<span class="label label-sm label-danger">NO</span>';
-        }  else  {
-            $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_status'] == 0) {
-            $status_tag = '<span class="label label-sm label-danger">DISABLED</span>';
-        } else {
-            $status_tag = '<span class="label label-sm label-success">ACTIVE</span>';
-        }
+    while($time = mysql_fetch_assoc($findTimelines)) {
         $records["data"][] = array(
-            '<input type="checkbox" name="pk" value="'.$services['services_id'].'"> '.$status_tag.'',
-            'desc',
-            '<button type="button" value="editable_item_'.$services['services_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
+            ''.$time['timeline_timestamp'].'',
+            ''.$time['timeline_type'].'',
+            ''.$time['timeline_reasoning'].'',
+            ''.name($time['timeline_by_user_token']).''
         );
     }
 

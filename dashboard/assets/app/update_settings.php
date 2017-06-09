@@ -61,11 +61,11 @@ if($_GET['update'] == 'event_addy'){
     $pk    = $_POST['pk'];
     mysql_query("UPDATE fmo_locations_events_addresses SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE address_id='".mysql_real_escape_string($pk)."'");
 }
-if($_GET['update'] == 'event'){
+if($_GET['update'] == 'event_fly'){
     $field = $_POST['name'];
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
-    mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_id='".mysql_real_escape_string($pk)."'");
+    mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($pk)."'");
     timeline_event($pk, $_SESSION['uuid'], "Information update", "'".$field."' was changed to: ".$value);
 }
 if($_GET['update'] == 'change_type'){

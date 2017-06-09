@@ -5,6 +5,7 @@
  * Date: 5/4/2017
  * Time: 10:38 PM
  */
+session_start();
 include 'init.php';
 if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
     $token      = $_GET['e'];

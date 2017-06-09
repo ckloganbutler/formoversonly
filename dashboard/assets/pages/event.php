@@ -201,7 +201,7 @@ if(isset($_SESSION['logged'])){
                                                         Event Name:
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_id']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event">
+                                                        <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_token']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event_fly">
                                                             <?php echo $event['event_name']; ?>
                                                         </a>
                                                     </div>
@@ -826,7 +826,7 @@ if(isset($_SESSION['logged'])){
                                                                     <button class="btn btn-sm red table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
                                                                 </div>
                                                                 <form role="form" id="add_service_rate">
-                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=comments&ev=<?php echo $_GET['ev']; ?>">
+                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=timeline&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
                                                                             <th width="12%">
