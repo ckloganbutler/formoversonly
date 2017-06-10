@@ -171,8 +171,8 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($available)."',
         '".mysql_real_escape_string($reasoning)."',
         '".mysql_real_escape_string($by)."')");
+        $id = mysql_insert_id();
         timeline_log($token, $by, "Advance", name($by)." authorized loan for: $<strong>".$advance."</strong>/$<strong>".$available."</strong>");
-
         $user_pay = mysql_fetch_array(mysql_query("SELECT user_employer_rate FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
         if($user_pay['user_employer_rate'] > 0){
             $refStart                = new DateTime('2017-01-02');
@@ -220,6 +220,7 @@ if(isset($_GET['setting'])){
             $pay['hours']     = 0;
             $pay['earned']    = 0;
         }
+        $pay['id'] = $id;
         echo json_encode($pay);
     }
     if($_GET['setting'] == 'usr_writeup'){

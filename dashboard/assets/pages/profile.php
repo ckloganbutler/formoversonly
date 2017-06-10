@@ -1517,6 +1517,7 @@ if(isset($_SESSION['logged'])){
                             $('#ad_avail').html(inf.available);
                             $('#add_advances')[0].reset();
                             $('input[name="available"]').val(inf.available);
+                            window.open('assets/public/loan_auth.php?t=auth_tok&i='+inf.id,'_blank');
                             toastr.info('<strong>Logan says</strong>:<br/>Advance has been added to users advance history.');
                         },
                         error: function() {
@@ -1563,7 +1564,7 @@ if(isset($_SESSION['logged'])){
                     processData: false
                 });
                 return false;
-            })
+            });
         });
     </script>
     <?php
