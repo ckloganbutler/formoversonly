@@ -62,6 +62,15 @@ if(isset($_SESSION['logged'])){
                     <a class="load_page" data-href="assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>" data-page-title="<?php echo $event['event_name']; ?>"><?php echo $event['event_name']; ?></a>
                 </li>
             </ul>
+            <div class="page-toolbar">
+                <div class="pull-right tooltips btn btn-fit-height green">
+                    <i class="fa fa-credit-card"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block">BOOKING FEE PAID <i class="fa fa-arrow-right"></i> CLICK TO VIEW</span>
+                </div>
+                <!--
+                <div class="pull-right tooltips btn btn-fit-height grey-salt">
+                    <i class="fa fa-credit-card text-danger"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block text-danger">BOOKING FEE UNPAID <i class="fa fa-arrow-right"></i> CLICK TO PAY</span>
+                </div> -->
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -70,24 +79,30 @@ if(isset($_SESSION['logged'])){
                         <div class="row">
                             <div class="col-md-12 text-center">
                                 <div class="actions btn-set">
-                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
-                                        <i class="fa fa-truck"></i> Truck(s):
-                                        <strong>
-                                            <?php echo $event['event_truckfee']; ?>
-                                        </strong>
-                                    </a>
-                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
-                                        <i class="fa fa-users"></i> Crewmen:
-                                        <strong>
-                                            <?php echo $event['event_laborrate']; ?>
-                                        </strong>
-                                    </a>
-                                    <a class="btn red dropdown-toggle" readonly href="javascript:;" data-toggle="dropdown">
-                                        <i class="fa fa-location-arrow"></i> Counties:
-                                        <strong>
-                                            <?php echo $event['event_countyfee']; ?>
-                                        </strong>
-                                    </a>
+                                    <div class="btn-group hidden-xs hidden-sm">
+                                        <button class="btn red edit_inf" data-edit="truckfee">
+                                            <i class="fa fa-truck"></i> Truck(s):
+                                            <strong>
+                                                <a id="truckfee" style="color: white; text-decoration: none !important;" data-name="event_truckfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of truck(s)." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_truckfee']; ?></a>
+                                            </strong> @ 80$
+                                        </button>
+                                    </div>
+                                    <div class="btn-group hidden-xs hidden-sm">
+                                        <button class="btn red edit_inf" data-edit="laborrate">
+                                            <i class="fa fa-users"></i> Crewmen:
+                                            <strong>
+                                                <a id="laborrate" style="color: white; text-decoration: none !important;" data-name="event_laborrate" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of crewmen." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_laborrate']; ?></a>
+                                            </strong> @ 90$/hr
+                                        </button>
+                                    </div>
+                                    <div class="btn-group hidden-xs hidden-sm">
+                                        <button class="btn red edit_inf" data-edit="countyfee">
+                                            <i class="fa fa-location-arrow"></i> Counties:
+                                            <strong>
+                                                <a id="countyfee" style="color: white; text-decoration: none !important;" data-name="event_countyfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of counties." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_countyfee']; ?></a>
+                                            </strong> @ 0$
+                                        </button>
+                                    </div>
 
                                     <div class="btn-group hidden-xs hidden-sm">
                                         <a class="btn default red-stripe dropdown-toggle" href="javascript:;" data-toggle="dropdown">
@@ -601,7 +616,7 @@ if(isset($_SESSION['logged'])){
                                 <div class="tabbable-custom nav-justified">
                                     <ul class="nav nav-tabs nav-justified">
                                         <li class="active">
-                                            <a href="#comments" data-toggle="tab"> Comments / Timeline </a>
+                                            <a href="#comments" data-toggle="tab"> Timeline & Comments </a>
                                         </li>
                                         <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
@@ -609,12 +624,12 @@ if(isset($_SESSION['logged'])){
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#labor" data-toggle="tab">Labor / Assets
+                                            <a href="#labor" data-toggle="tab">Laborers & Assets
                                                 <span class="badge badge-danger"> 2 </span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#documents" data-toggle="tab">Documents / Photos </a>
+                                            <a href="#documents" data-toggle="tab">Documents </a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
@@ -1316,7 +1331,12 @@ if(isset($_SESSION['logged'])){
                });
             });
             $('.editable_inf').editable({
-
+                toggle: 'manual'
+            });
+            $('.edit_inf').on('click', function(e) {
+                var inf = $(this).attr('data-edit');
+                e.stopPropagation();
+                $('#'+inf).editable('toggle');
             });
     </script>
     <?php

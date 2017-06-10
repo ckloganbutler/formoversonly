@@ -72,6 +72,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             opacity:0.5;
             color:#996;
         }
+        .popover-title {
+            color: black !important;
+        }
     </style>
 
 </head>
