@@ -213,12 +213,12 @@ if(isset($_SESSION['logged'])){
                                             <div class="tab-pane active" id="event">
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
-                                                        Event Name:
+                                                        Event Name & ID:
                                                     </div>
                                                     <div class="col-md-7 value">
                                                         <a class="ev" style="color:#333333" data-name="event_name" data-pk="<?php echo $event['event_token']; ?>" data-type="text" data-placement="right" data-title="Enter new event name.." data-url="assets/app/update_settings.php?update=event_fly">
                                                             <?php echo $event['event_name']; ?>
-                                                        </a>
+                                                        </a> (#0<?php echo $event['event_id']; ?>)
                                                     </div>
                                                 </div>
                                                 <div class="row static-info">
@@ -256,18 +256,18 @@ if(isset($_SESSION['logged'])){
                                                 </div>
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
-                                                        Email:
+                                                        Phone:
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo secret_mail($user['user_email']); ?>
+                                                        <?php echo clean_phone($user['user_phone']); ?>
                                                     </div>
                                                 </div>
                                                 <div class="row static-info">
                                                     <div class="col-md-5 name">
-                                                        Phone Number:
+                                                        Email:
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo clean_phone($user['user_phone']); ?>
+                                                        <?php echo $user['user_email']; ?>
                                                     </div>
                                                 </div>
                                                 <hr/>
@@ -907,30 +907,42 @@ if(isset($_SESSION['logged'])){
                                                                     </select>
                                                                     <button class="btn btn-sm red table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
                                                                 </div>
-                                                                <form role="form" id="add_service_rate">
+                                                                <form role="form" id="add_laborer">
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=labor&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
-                                                                            <th width="18%">
-                                                                                Comment Date
+                                                                            <th width="12%">
+                                                                                Laborer Role
                                                                             </th>
-                                                                            <th >
-                                                                                Comment
+                                                                            <th>
+                                                                                Laborer
+                                                                            </th>
+                                                                            <th>
+                                                                                Laborer Rates
                                                                             </th>
                                                                             <th width="12%">
-                                                                                Submitted by
-                                                                            </th>
-                                                                            <th width="8%">
-                                                                                Actions
+                                                                                Laborer Added By
                                                                             </th>
                                                                         </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="new_labor">
-                                                                            <td><i class="icon-control-forward"><br/></i>new</td>
-                                                                            <td><input type="text" class="form-control form-filter input-sm" name="item"></td>
-                                                                            <td></td>
+                                                                            <td colspan="3">
+                                                                                <select class="form-control laborers" name="laborer">
+                                                                                    <option disabled selected value="">Select laborer..</option>
+                                                                                    <?php
+                                                                                    $laborers = mysql_query("SELECT user_fname, user_lname, user_employer_rate, user_token FROM fmo_users WHERE user_employer='".mysql_real_escape_string($_SESSION['cuid'])."' ORDER BY user_lname ASC");
+                                                                                    if(mysql_num_rows($laborers) > 0){
+                                                                                        while($laborer = mysql_fetch_assoc($laborers)){
+                                                                                            ?>
+                                                                                            <option value="<?php echo $laborer['user_token']; ?>"><?php echo $laborer['user_lname'].", ".$laborer['user_fname']; ?></option>
+                                                                                            <?php
+                                                                                        }
+                                                                                    }
+                                                                                    ?>
+                                                                                </select>
+                                                                            </td>
                                                                             <td>
                                                                                 <div class="margin-bottom-5">
-                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_service_rate"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>
+                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_laborer"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
@@ -1183,8 +1195,12 @@ if(isset($_SESSION['logged'])){
         </div>
     </form>
     <script type="text/javascript">
+        $(document).ready(function() {
+            $(".laborers").select2({
+                placeholder: 'Select laborer..'
+            });
             $('.add_item').off('click');
-           $('.datatable').each(function(){
+            $('.datatable').each(function(){
                 var url = $(this).attr('data-src');
                 $(this).DataTable({
                     "processing": true,
@@ -1201,16 +1217,32 @@ if(isset($_SESSION['logged'])){
                         [10, 20, 50, 100, 150, -1],
                         [10, 20, 50, 100, 150, "All"] // change per page values here
                     ],
-                        "pageLength": 10, // default record count per page
-                        "order": [
+                    "pageLength": 10, // default record count per page
+                    "order": [
                         [1, "asc"]
                     ]// set first column as a default sort by asc
                 });
             });
+            if($("#add_laborer").valid()){
+                $('.add_laborer').on('click', function(){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $event['event_token']; ?>",
+                        type: "POST",
+                        data: $('#add_laborer').serialize(),
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of laborers for this event.');
+                            $('.datatable').getDataTable().ajax.reload();
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                        }
+                    });
+                });
+            }
             $('.show_form').on('click', function() {
-               var show = $(this).attr('data-show');
+                var show = $(this).attr('data-show');
 
-               $(show).show();
+                $(show).show();
             });
 
             $(".img-check").click(function(){
@@ -1228,17 +1260,17 @@ if(isset($_SESSION['logged'])){
             var geocoder = new google.maps.Geocoder();
 
             geocoder.geocode({
-                'address': address
-            },
-            function(results, status) {
-                if(status == google.maps.GeocoderStatus.OK) {
-                    new google.maps.Marker({
-                        position: results[0].geometry.location,
-                        map: map
-                    });
-                    map.setCenter(results[0].geometry.location);
-                }
-            });
+                    'address': address
+                },
+                function(results, status) {
+                    if(status == google.maps.GeocoderStatus.OK) {
+                        new google.maps.Marker({
+                            position: results[0].geometry.location,
+                            map: map
+                        });
+                        map.setCenter(results[0].geometry.location);
+                    }
+                });
 
             $('#new_location').validate({
                 errorElement: 'span', //default input error message container
@@ -1305,30 +1337,30 @@ if(isset($_SESSION['logged'])){
                 }
             });
             $('.change_type').on('click', function(){
-               var type   = $(this).attr('data-type');
-               var id     = $(this).attr('data-id');
-               $.ajax({
-                  url: 'assets/app/update_settings.php?update=change_type&ev=<?php echo $event['event_token']; ?>',
-                   type: 'POST',
-                   data: {
+                var type   = $(this).attr('data-type');
+                var id     = $(this).attr('data-id');
+                $.ajax({
+                    url: 'assets/app/update_settings.php?update=change_type&ev=<?php echo $event['event_token']; ?>',
+                    type: 'POST',
+                    data: {
                         type: type,
                         value: id
-                   },
-                   success: function(d){
-                       $.ajax({
-                           url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
-                           success: function(data) {
-                               $('#page_content').html(data);
-                           },
-                           error: function() {
-                               toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                           }
-                       });
-                   },
-                   error: function(e){
-                       toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                   }
-               });
+                    },
+                    success: function(d){
+                        $.ajax({
+                            url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                            success: function(data) {
+                                $('#page_content').html(data);
+                            },
+                            error: function() {
+                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            }
+                        });
+                    },
+                    error: function(e){
+                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    }
+                });
             });
             $('.editable_inf').editable({
                 toggle: 'manual'
@@ -1338,6 +1370,7 @@ if(isset($_SESSION['logged'])){
                 e.stopPropagation();
                 $('#'+inf).editable('toggle');
             });
+        });
     </script>
     <?php
 } else {
