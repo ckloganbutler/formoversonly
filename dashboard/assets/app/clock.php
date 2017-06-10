@@ -42,7 +42,7 @@ if(isset($_GET['clock'])){
             $seconds += $diff->s;
             $hours   = $hours + ($diff->days*24);
             $worked = decimalHours($hours.":".$minutes.":".$seconds);
-            mysql_query("UPDATE fmo_users_employee_timeclock SET timeclock_clockout='".mysql_real_escape_string($date_out)."', timeclock_hours='".mysql_real_escape_string($worked)."', timeclock_complete=1 WHERE timeclock_id='".mysql_real_escape_string($clock['timeclock_id'])."'") or die(mysql_error());
+            mysql_query("UPDATE fmo_users_employee_timeclock SET timeclock_clockout='".mysql_real_escape_string($date_out)."', timeclock_hours='".mysql_real_escape_string($worked)."', timeclock_ip_out='".mysql_real_escape_string($ip)."', timeclock_complete=1 WHERE timeclock_id='".mysql_real_escape_string($clock['timeclock_id'])."'") or die(mysql_error());
             echo $worked;
         } else {
             // user already clocked out. Clock-in to continue using the clock-in system.

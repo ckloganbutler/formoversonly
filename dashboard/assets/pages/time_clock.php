@@ -84,7 +84,7 @@ if(isset($_SESSION['logged'])){
                                     </div>
                                 </div>
                                 <div class="row" style="margin-top: 80px;">
-                                    <div class="col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+                                    <div class="col-md-12">
                                         <div class="table-container">
                                             <table class="table table-striped table-bordered table-hover" id="timeclock">
                                                 <thead>
@@ -93,13 +93,10 @@ if(isset($_SESSION['logged'])){
                                                             Date Worked
                                                         </th>
                                                         <th>
-                                                            Clock-in Date & Time
+                                                            Clock-in Date & Time ( + In IP address )
                                                         </th>
                                                         <th>
-                                                            Clock-in IP Address
-                                                        </th>
-                                                        <th>
-                                                            Clock-out Date & Time
+                                                            Clock-out Date & Time ( + Out IP Address )
                                                         </th>
                                                         <th>
                                                             Hours worked

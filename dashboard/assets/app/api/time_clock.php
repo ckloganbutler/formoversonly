@@ -42,7 +42,7 @@ if(isset($_GET['admin']) && $_GET['admin'] == 'trl'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findEmployees = mysql_query("SELECT timeclock_id, timeclock_clockin, timeclock_clockout, timeclock_hours, timeclock_timestamp, timeclock_ip FROM fmo_users_employee_timeclock WHERE timeclock_user='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY timeclock_timestamp DESC");
+    $findEmployees = mysql_query("SELECT timeclock_id, timeclock_clockin, timeclock_clockout, timeclock_hours, timeclock_timestamp, timeclock_ip, timeclock_ip_out FROM fmo_users_employee_timeclock WHERE timeclock_user='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY timeclock_timestamp DESC");
     $iTotalRecords = mysql_num_rows($findEmployees);
 
     $records = array();
@@ -55,10 +55,9 @@ if(isset($_GET['admin']) && $_GET['admin'] == 'trl'){
         }
         $records["data"][] = array(
             ''.date('M, d, Y', strtotime($emp['timeclock_timestamp'])).'',
-            ''.$emp['timeclock_clockin'].'',
-            ''.$emp['timeclock_ip'].'',
-            ''.$emp['timeclock_clockout'].'',
-            ''.$emp['timeclock_hours'].''
+            '<strong>'.$emp['timeclock_clockin'].'</strong> ( '.$emp['timeclock_ip'].' )',
+            '<strong>'.$emp['timeclock_clockout'].'</strong> ( '.$emp['timeclock_ip_out'].' )',
+            '<strong>'.$emp['timeclock_hours'].'</strong>'
         );
     }
 
