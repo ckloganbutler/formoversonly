@@ -615,8 +615,11 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-12">
                                 <div class="tabbable-custom nav-justified">
                                     <ul class="nav nav-tabs nav-justified">
+                                        <?php
+                                        $laborers = mysql_num_rows(mysql_query("SELECT laborer_id FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($event['event_token'])."'"));
+                                        ?>
                                         <li class="active">
-                                            <a href="#comments" data-toggle="tab"> Timeline & Comments </a>
+                                            <a href="#comments" data-toggle="tab"> Timeline / Comments </a>
                                         </li>
                                         <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
@@ -624,8 +627,16 @@ if(isset($_SESSION['logged'])){
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#labor" data-toggle="tab">Laborers & Assets
-                                                <span class="badge badge-danger"> 2 </span>
+                                            <a href="#labor" data-toggle="tab">
+                                                Laborers
+                                                <?php
+                                                    if($laborers > 0){
+                                                        ?>
+                                                        <span class="badge badge-danger"> <?php echo $laborers; ?> </span>
+                                                        <?php
+                                                    }
+                                                ?> /
+                                                Assets
                                             </a>
                                         </li>
                                         <li>
@@ -883,18 +894,15 @@ if(isset($_SESSION['logged'])){
                                         <div class="tab-pane" id="labor">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <?php
-                                                    $laborers = mysql_num_rows()
-                                                    ?>
                                                     <div class="portlet">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-cogs"></i>Labor & Assets <small><span class="font-red">|</span> Currently tracked laborers and assets that have been assigned to this job.</small>
+                                                                <i class="fa fa-cogs"></i>Laborers <small><span class="font-red">|</span> Currently tracked laborers that have been assigned to this job.</small>
                                                             </div>
                                                             <div class="actions">
                                                                 <a class="btn default red-stripe show_form" data-show="#new_labor">
                                                                     <i class="fa fa-plus"></i>
-                                                                    <span class="hidden-480">Add new laborer/asset </span>
+                                                                    <span class="hidden-480">Add new laborer</span>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -904,10 +912,10 @@ if(isset($_SESSION['logged'])){
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=labor&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
-                                                                            <th width="15%">
+                                                                            <th width="12%">
                                                                                 Role
                                                                             </th>
-                                                                            <th>
+                                                                            <th width="25%">
                                                                                 Laborer Name
                                                                             </th>
                                                                             <th>
@@ -917,7 +925,7 @@ if(isset($_SESSION['logged'])){
                                                                                 Paid Hours
                                                                             </th>
                                                                             <th>
-                                                                                Tip/Other
+                                                                                Tips/Other Pay
                                                                             </th>
                                                                             <th width="12%">
                                                                                 Added By
@@ -928,7 +936,13 @@ if(isset($_SESSION['logged'])){
                                                                         </tr>
                                                                         </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="new_labor">
-                                                                            <td></td>
+                                                                            <td>
+                                                                                <select class="form-control" name="role">
+                                                                                    <option disabled selected value="">Select one..</option>
+                                                                                    <option value="CREW LEADER">Crew Leader</option>
+                                                                                    <option value="CREWMAN">Crewman</option>
+                                                                                </select>
+                                                                            </td>
                                                                             <td>
                                                                                 <select class="form-control laborers" name="laborer">
                                                                                     <option disabled selected value="">Select laborer..</option>
@@ -944,10 +958,10 @@ if(isset($_SESSION['logged'])){
                                                                                     ?>
                                                                                 </select>
                                                                             </td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
+                                                                            <td><input type="text" class="form-control" readonly value="$__.__"></td>
+                                                                            <td><input type="number" class="form-control" name="hp"></td>
+                                                                            <td><input type="text" class="form-control" name="tip"></td>
+                                                                            <td><input readonly class="form-control" value="<?php echo name($_SESSION['uuid']); ?>"</td>
                                                                             <td>
                                                                                 <div class="margin-bottom-5">
                                                                                     <button type="button" class="btn btn-sm red margin-bottom add_laborer"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>

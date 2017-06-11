@@ -55,9 +55,10 @@ if(isset($_SESSION['logged'])){
                                                     <img class="media-object" src="<?php echo picture($location['location_manager']); ?>" alt="64x64" data-src="holder.js/64x64" style="width: 160px; height: 160px;">
                                                 </a>
                                                 <div class="media-body">
-                                                    <textarea style="height: 110px;" class="form-control" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
-                                                    <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?></h4>
-                                                    <button type="button" class="btn red pull-right ttm" style="margin-top: -7px;">Send text message</button>
+                                                    <textarea style="height: 110px;" class="form-control txt-message" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
+                                                    <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?> </h4>
+                                                    <button type="button" class="btn red pull-right ttm" style="margin-top: -7px; margin-left: 15px;">Send text message</button>
+                                                    <small><span class="txt-countdown pull-right"></span></small>
                                                 </div>
                                             </li>
                                         </ul>
@@ -161,6 +162,13 @@ if(isset($_SESSION['logged'])){
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function(){
+            function updateCountdown() {
+                var remaining = 160 - $('.txt-message').val().length;
+                $('.txt-countdown').text(remaining + ' characters remaining.');
+            }
+            updateCountdown();
+            $('.txt-message').change(updateCountdown);
+            $('.txt-message').keyup(updateCountdown);
             var pageviews = [
                 [1, 2],
                 [2, 2],

@@ -11,11 +11,21 @@ include 'init.php';
 if(isset($_GET['setting'])){
     if($_GET['setting'] == 'laborer'){
         $token          = $_GET['ev'];
+        $role           = $_POST['role'];
         $laborer        = $_POST['laborer'];
+        $wage           = mysql_fetch_array(mysql_query("SELECT user_employer_rate FROM fmo_users WHERE user_token='".mysql_real_escape_string($laborer)."'"));
+        $desc           = $_POST['desc'];
+        $hp             = $_POST['hp'];
+        $tip            = $_POST['tip'];
 
-        mysql_query("INSERT INTO fmo_locations_events_laborers (laborer_event_token, laborer_user_token, laborer_by_user_token) VALUES (
+        mysql_query("INSERT INTO fmo_locations_events_laborers (laborer_event_token, laborer_user_token, laborer_rate, laborer_role, laborer_desc, laborer_hours_worked, laborer_tip, laborer_by_user_token) VALUES (
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($laborer)."',
+        '".mysql_real_escape_string($wage['user_employer_rate'])."',
+        '".mysql_real_escape_string($role)."',
+        '".mysql_real_escape_string($desc)."',
+        '".mysql_real_escape_string($hp)."',
+        '".mysql_real_escape_string($tip)."',
         '".mysql_real_escape_string($_SESSION['uuid'])."')");
     }
     if($_GET['setting'] == 'usr_lic'){
