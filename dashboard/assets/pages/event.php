@@ -934,17 +934,16 @@ if(isset($_SESSION['logged'])){
                                                                                 Actions
                                                                             </th>
                                                                         </tr>
-                                                                        </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="new_labor">
                                                                             <td>
-                                                                                <select class="form-control" name="role">
+                                                                                <select class="form-control input-sm" name="role">
                                                                                     <option disabled selected value="">Select one..</option>
                                                                                     <option value="CREW LEADER">Crew Leader</option>
                                                                                     <option value="CREWMAN">Crewman</option>
                                                                                 </select>
                                                                             </td>
                                                                             <td>
-                                                                                <select class="form-control laborers" name="laborer">
+                                                                                <select class="form-control input-sm laborers" name="laborer">
                                                                                     <option disabled selected value="">Select laborer..</option>
                                                                                     <?php
                                                                                     $laborers = mysql_query("SELECT user_fname, user_lname, user_employer_rate, user_token FROM fmo_users WHERE user_employer='".mysql_real_escape_string($_SESSION['cuid'])."' ORDER BY user_lname ASC");
@@ -958,10 +957,10 @@ if(isset($_SESSION['logged'])){
                                                                                     ?>
                                                                                 </select>
                                                                             </td>
-                                                                            <td><input type="text" class="form-control" readonly value="$__.__"></td>
-                                                                            <td><input type="number" class="form-control" name="hp"></td>
-                                                                            <td><input type="text" class="form-control" name="tip"></td>
-                                                                            <td><input readonly class="form-control" value="<?php echo name($_SESSION['uuid']); ?>"</td>
+                                                                            <td><input type="text" class="form-control input-sm" readonly value="$__.__"></td>
+                                                                            <td><input type="number" class="form-control input-sm" name="hp"></td>
+                                                                            <td><input type="text" class="form-control input-sm" name="tip"></td>
+                                                                            <td><input readonly class="form-control input-sm" value="<?php echo name($_SESSION['uuid']); ?>"</td>
                                                                             <td>
                                                                                 <div class="margin-bottom-5">
                                                                                     <button type="button" class="btn btn-sm red margin-bottom add_laborer"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>
@@ -1220,6 +1219,8 @@ if(isset($_SESSION['logged'])){
         $(document).ready(function() {
             $(".laborers").select2({
                 placeholder: 'Select laborer..'
+            }).on('change', function() {
+                $(this).valid();
             });
             $('.add_item').off('click');
             $('.datatable').each(function(){
@@ -1245,8 +1246,22 @@ if(isset($_SESSION['logged'])){
                     ]// set first column as a default sort by asc
                 });
             });
-            if($("#add_laborer").valid()){
-                $('.add_laborer').on('click', function(){
+            $('#add_laborer').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    role: {
+                        required: true
+                    },
+                    laborer: {
+                        required: true
+                    }
+                }
+            });
+            $('.add_laborer').on('click', function(){
+                if($("#add_laborer").valid()){
                     $.ajax({
                         url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $event['event_token']; ?>",
                         type: "POST",
@@ -1259,8 +1274,8 @@ if(isset($_SESSION['logged'])){
                             toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
-                });
-            }
+                }
+            });
             $('.show_form').on('click', function() {
                 var show = $(this).attr('data-show');
 

@@ -741,6 +741,7 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="actions">
                                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#child_support_only" style="margin-left: 5px;"><i class="fa fa-child"></i> View <strong>child support</strong></button>
                                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#advances_only"><i class="fa fa-money"></i> View <strong>advances</strong></button>
+                                                                    <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#labor_only"><i class="fa fa-area-chart"></i> View <strong>labor</strong></button>
                                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#write_ups_only"><i class="fa fa-pencil"></i> View <strong>write-ups</strong></button>
                                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#comments_only"><i class="fa fa-comments-o"></i> View <strong>comments</strong></button>
                                                                 </div>
@@ -920,6 +921,76 @@ if(isset($_SESSION['logged'])){
                 </div>
             </div>
         </div>
+        <div class="modal fade bs-modal-lg" id="labor_only" tabindex="-1" role="basic" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content box red">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h3 class="modal-title font-bold">Misc labor for <?php echo $profile['user_fname']; ?></h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="portlet">
+                            <div class="portlet-title" style="border-bottom: none;">
+                                <div class="actions">
+                                    <a class="btn default red-stripe show_form" data-show="#add_labor">
+                                        <i class="fa fa-plus"></i>
+                                        <span class="hidden-480">Add new labor record</span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div class="table-container">
+                                    <form role="form" id="add_laborer">
+                                        <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=labor&uuid=<?php echo $profile['user_token']; ?>">
+                                            <thead>
+                                                <tr role="row" class="heading">
+                                                    <th>
+                                                        Timestamp
+                                                    </th>
+                                                    <th width="35%">
+                                                        Labor Description
+                                                    </th>
+                                                    <th>
+                                                        Labor Rate
+                                                    </th>
+                                                    <th>
+                                                        Hours Paid
+                                                    </th>
+                                                    <th width="18%">
+                                                        Added By
+                                                    </th>
+                                                </tr>
+                                                <tr role="row" class="filter" style="display: none;" id="add_labor">
+                                                    <td><input type="text" class="hidden" readonly name="laborer" value="<?php echo $profile['user_token']; ?>"></td>
+                                                    <td><input type="text" class="form-control form-filter input-sm" name="desc"></td>
+                                                    <td>
+                                                        <input type="text" class="form-control input-sm" readonly value="$__.__">
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" class="form-control input-sm" name="hp">
+                                                    </td>
+                                                    <td>
+                                                        <div class="margin-bottom-5">
+                                                            <button type="button" class="btn btn-sm red margin-bottom add_labor"><i class="fa fa-download"></i> Save</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="modal fade bs-modal-lg" id="advances_only" tabindex="-1" role="basic" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content box red">
@@ -939,7 +1010,7 @@ if(isset($_SESSION['logged'])){
                             $currentPeriodStart      = clone $now;
                             $currentPeriodStart->sub(new DateInterval('P'.$daysIntoCurrentPeriod.'D'));
                             $start                   = date("Y-m-d", strtotime($cur." -".$daysIntoCurrentPeriod." days"));
-                            $end                     = date('Y-m-d', strtotime($start." +14 days"));
+                            $end                     = date('Y-m-d', strtotime($start." +13 days"));
                             $hours = array();
                             $prev  = mysql_query("
                             SELECT advance_requested FROM fmo_users_employee_advances
@@ -960,7 +1031,7 @@ if(isset($_SESSION['logged'])){
                                             $pay['loans'] += $loans['advance_requested'];
                                         }
                                     } else {$pay['loans'] = 0;}
-                                    $pay['available'] = ($pay['earned'] * .25) - $pay['loans'];
+                                    $pay['available'] = number_format(($pay['earned'] * .25) - $pay['loans'], 2);
                                 } else {
                                     $pay['available'] = 0;
                                     $pay['hours']     = 0;
@@ -996,10 +1067,10 @@ if(isset($_SESSION['logged'])){
                                                     Advance Timestamp
                                                 </th>
                                                 <th>
-                                                    Advance Requested
+                                                    Advance Available
                                                 </th>
                                                 <th>
-                                                    Advance Available
+                                                    Advance Requested
                                                 </th>
                                                 <th>
                                                     Advance Reasoning
@@ -1010,8 +1081,8 @@ if(isset($_SESSION['logged'])){
                                             </tr>
                                             <tr role="row" class="filter" style="display: none;" id="add_advance">
                                                 <td></td>
-                                                <td><input type="number" class="form-control form-filter input-sm" name="requested"></td>
                                                 <td><input type="number" class="form-control form-filter input-sm" name="available" readonly value="<?php echo number_format($pay['available'], 2); ?>"></td>
+                                                <td><input type="number" class="form-control form-filter input-sm" name="requested"></td>
                                                 <td><input type="text" class="form-control form-filter input-sm" name="reasoning"></td>
                                                 <td>
                                                     <div class="margin-bottom-5">
@@ -1336,6 +1407,20 @@ if(isset($_SESSION['logged'])){
                    }
                })
             });
+            $('#add_laborer').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    desc: {
+                        required: true
+                    },
+                    hp: {
+                        required: true
+                    }
+                }
+            });
             $("#add_documents").validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'font-red', // default input error message class
@@ -1452,6 +1537,22 @@ if(isset($_SESSION['logged'])){
                         },
                         error: function() {
                             toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                }
+            });
+            $('.add_laborer').on('click', function(){
+                if($("#add_laborer").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $profile['user_token']; ?>",
+                        type: "POST",
+                        data: $('#add_laborer').serialize(),
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of laborers for this event.');
+                            $('.datatable').getDataTable().ajax.reload();
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }

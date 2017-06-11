@@ -20,7 +20,7 @@ if(isset($_GET) && $_GET['type'] == 'advance_amt'){
         $currentPeriodStart      = clone $now;
         $currentPeriodStart->sub(new DateInterval('P'.$daysIntoCurrentPeriod.'D'));
         $start                   = date("Y-m-d", strtotime($cur." -".$daysIntoCurrentPeriod." days"));
-        $end                     = date('Y-m-d', strtotime($start." +14 days"));
+        $end                     = date('Y-m-d', strtotime($start." +13 days"));
         $hours = array();
         $hours = mysql_query("
         SELECT timeclock_user, timeclock_hours FROM fmo_users_employee_timeclock 
@@ -33,12 +33,13 @@ if(isset($_GET) && $_GET['type'] == 'advance_amt'){
             if($pay['hours'] > 0){
                 $pay['rate']      = $user_pay['user_employer_rate'];
                 $pay['earned']    = $pay['hours'] * $user_pay['user_employer_rate'];
-                $pay['available'] = $pay['earned'] * .25;
+                $pay['available'] = number_format($pay['earned'] * .25, 2);
 
                 if($pay['available'] >= $_GET['requested']){
                     // user loan approved, they may continue with amount.
                     echo json_encode(true);
                 } else {
+                    echo json_encode(false);
                     // user is trying to take more than allowed
                 }
             } else {
@@ -174,8 +175,8 @@ if(isset($_GET) && $_GET['type'] == 'advances'){
     while($ad = mysql_fetch_assoc($findAdvances)) {
         $records["data"][] = array(
             ''.$ad['advance_timestamp'].'',
-            ''.$ad['advance_requested'].'',
             ''.$ad['advance_available'].'',
+            ''.$ad['advance_requested'].'',
             ''.$ad['advance_reason'].'',
             ''.name($ad['advance_by_user_token']).''
         );
@@ -206,6 +207,37 @@ if(isset($_GET) && $_GET['type'] == 'licenses'){
             ''.$lc['license_prefix'].'',
             ''.$lc['license_number'].'',
             ''.$lc['license_timestamp'].''
+        );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+
+if(isset($_GET) && $_GET['type'] == 'labor'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findLabor = mysql_query("SELECT laborer_id, laborer_user_token, laborer_event_token, laborer_desc, laborer_hours_worked, laborer_timestamp, laborer_by_user_token, laborer_rate FROM fmo_locations_events_laborers WHERE laborer_user_token='".mysql_real_escape_string($_GET['uuid'])."'");
+    $iTotalRecords = mysql_num_rows($findLabor);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($lb = mysql_fetch_assoc($findLabor)) {
+        if(!empty($lb['laborer_event_token'])){
+            continue;
+        }
+        $records["data"][] = array(
+            ''.$lb['laborer_desc'].'',
+            '$'.number_format($lb['laborer_rate'], 2).'/hr',
+            '<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_hours_worked" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new paid hours.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_hours_worked'], 2).'</a>',
+            ''.name($lb['laborer_by_user_token']).'',
+            '<a class="btn default btn-xs red-stripe edit" data-edit="lb_'.$lb['laborer_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a>',
         );
     }
 

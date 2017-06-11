@@ -87,19 +87,14 @@ if(isset($_GET) && $_GET['type'] == 'labor'){
     $records["data"] = array();
 
     while($lb = mysql_fetch_assoc($findLabor)) {
-        if($lb['laborer_role'] == 0) {
-            $role = '<span class="label label-sm label-danger text-center">CREWMAN</span>';
-        } else {
-            $role = '<span class="label label-sm label-success text-center">CREW LEADER</span>';
-        }
         $records["data"][] = array(
-            ''.$role.'',
+            '<span class="label label-sm label-success text-center"><a class="lb_'.$lb['laborer_id'].'" style="color:white" data-name="laborer_role" data-pk="'.$lb['laborer_id'].'" data-type="select" data-source="[{value: \'CREW LEADER\', text: \'Crew Leader\'}, {value: \'CREWMAN\', text: \'Crewman\'}]" data-placement="right" data-title="Select new role.." data-url="assets/app/update_settings.php?setting=event_laborers">'.$lb['laborer_role'].'</a></span>',
             ''.name($lb['laborer_user_token']).'',
             '$'.number_format($lb['laborer_rate'], 2).'/hr',
-            ''.number_format($lb['laborer_hours_worked'], 2).'',
-            '$'.number_format($lb['laborer_tip'], 2).'',
+            '<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_hours_worked" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new paid hours.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_hours_worked'], 2).'</a>',
+            '$<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_tip" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new tip/other pay.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_tip'], 2).'</a>',
             ''.name($lb['laborer_by_user_token']).'',
-            '<button type="button" value="editable_item_'.$lb['laborer_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
+            '<a class="btn default btn-xs red-stripe edit" data-edit="lb_'.$lb['laborer_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a>',
         );
     }
 

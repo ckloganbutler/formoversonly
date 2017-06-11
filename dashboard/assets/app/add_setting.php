@@ -202,7 +202,7 @@ if(isset($_GET['setting'])){
             $currentPeriodStart      = clone $now;
             $currentPeriodStart->sub(new DateInterval('P'.$daysIntoCurrentPeriod.'D'));
             $start                   = date("Y-m-d", strtotime($cur." -".$daysIntoCurrentPeriod." days"));
-            $end                     = date('Y-m-d', strtotime($start." +14 days"));
+            $end                     = date('Y-m-d', strtotime($start." +13 days"));
             $hours = array();
             $prev  = mysql_query("
                             SELECT advance_requested FROM fmo_users_employee_advances
@@ -223,7 +223,7 @@ if(isset($_GET['setting'])){
                             $pay['loans'] += $loans['advance_requested'];
                         }
                     } else {$pay['loans'] = 0;}
-                    $pay['available'] = ($pay['earned'] * .25) - $pay['loans'];
+                    $pay['available'] = number_format(($pay['earned'] * .25) - $pay['loans'], 2);
                 } else {
                     $pay['available'] = 0;
                     $pay['hours']     = 0;
