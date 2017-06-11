@@ -80,32 +80,40 @@ if(isset($_GET) && $_GET['type'] == 'labor'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
-    $iTotalRecords = mysql_num_rows($findRates);
+    $findLabor = mysql_query("SELECT laborer_id, laborer_user_token, laborer_hours_worked, laborer_role, laborer_timestamp, laborer_by_user_token FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $iTotalRecords = mysql_num_rows($findLabor);
 
     $records = array();
     $records["data"] = array();
 
-    while($services = mysql_fetch_assoc($findRates)) {
-        if($services['services_taxable'] == 0) {
-            $taxable_tag = '<span class="label label-sm label-danger">NO</span>';
+    while($lb = mysql_fetch_assoc($findLabor)) {
+        $user = mysql_fetch_array(mysql_query("SELECT user_employer_rate, user_group FROM fmo_users WHERE user_token='".mysql_real_escape_string($lb['laborer_user_token'])."'"));
+        if($lb['laborer_role'] == 0) {
+            $role = '<span class="label label-sm label-danger">CREWMAN</span>';
         } else {
-            $taxable_tag = '<span class="label label-sm label-success">YES</span>';
+            $role = '<span class="label label-sm label-success">CREW LEADER</span>';
         }
-        if($services['services_commissionable'] == 0) {
-            $commissionable_tag = '<span class="label label-sm label-danger">NO</span>';
-        }  else  {
-            $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_status'] == 0) {
-            $status_tag = '<span class="label label-sm label-danger">DISABLED</span>';
-        } else {
-            $status_tag = '<span class="label label-sm label-success">ACTIVE</span>';
+        if($user['user_group'] == 1) {
+            $status_tag = '<span class="label label-sm label-danger">ADMINISTRATOR</span>';
+        } elseif($user['user_group'] == 2) {
+            $status_tag = '<span class="label label-sm label-success"> MANAGER</span>';
+        } elseif($user['user_group'] == 4) {
+            $status_tag = '<span class="label label-sm label-info">CUSTOMER SERVICE</span>';
+        } elseif($user['user_group'] == 5.1) {
+            $status_tag = '<span class="label label-sm label-warning">DRIVER</span>';
+        } elseif($user['user_group'] == 5.2) {
+            $status_tag = '<span class="label label-sm label-warning2">HELPER</span>';
+        } elseif($user['user_group'] == 5.3) {
+            $status_tag = '<span class="label label-sm label-default">CREWMAN/OTHER</span>';
         }
         $records["data"][] = array(
-            '<input type="checkbox" name="pk" value="'.$services['services_id'].'"> '.$status_tag.'',
-            'desc',
-            '<button type="button" value="editable_item_'.$services['services_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
+            ''.$status_tag.' '.$role.'',
+            ''.name($lb['laborer_user_token']).'',
+            '$'.number_format($user['user_employer_rate'], 2).'',
+            '5',
+            '$25.00',
+            ''.name($lb['laborer_by_user_token']).'',
+            '<button type="button" value="editable_item_'.$lb['laborer_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
         );
     }
 

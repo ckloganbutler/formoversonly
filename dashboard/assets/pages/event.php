@@ -883,6 +883,9 @@ if(isset($_SESSION['logged'])){
                                         <div class="tab-pane" id="labor">
                                             <div class="row">
                                                 <div class="col-md-12">
+                                                    <?php
+                                                    $laborers = mysql_num_rows()
+                                                    ?>
                                                     <div class="portlet">
                                                         <div class="portlet-title">
                                                             <div class="caption">
@@ -897,35 +900,36 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                         <div class="portlet-body">
                                                             <div class="table-container">
-                                                                <div class="table-actions-wrapper">
-                                                                    <span>
-
-                                                                    </span>
-                                                                    <select class="table-group-action-input form-control input-inline input-small input-sm">
-                                                                        <option value="">Select...</option>
-                                                                        <option value="Delete" class="font-red">Delete</option>
-                                                                    </select>
-                                                                    <button class="btn btn-sm red table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
-                                                                </div>
                                                                 <form role="form" id="add_laborer">
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=labor&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
-                                                                            <th width="12%">
-                                                                                Laborer Role
+                                                                            <th width="15%">
+                                                                                Role
                                                                             </th>
                                                                             <th>
-                                                                                Laborer
+                                                                                Laborer Name
                                                                             </th>
                                                                             <th>
-                                                                                Laborer Rates
+                                                                                Laborer Wage
+                                                                            </th>
+                                                                            <th>
+                                                                                Paid Hours
+                                                                            </th>
+                                                                            <th>
+                                                                                Tip/Other
                                                                             </th>
                                                                             <th width="12%">
-                                                                                Laborer Added By
+                                                                                Added By
+                                                                            </th>
+                                                                            <th width="12%">
+                                                                                Actions
                                                                             </th>
                                                                         </tr>
+                                                                        </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="new_labor">
-                                                                            <td colspan="3">
+                                                                            <td></td>
+                                                                            <td>
                                                                                 <select class="form-control laborers" name="laborer">
                                                                                     <option disabled selected value="">Select laborer..</option>
                                                                                     <?php
@@ -940,6 +944,10 @@ if(isset($_SESSION['logged'])){
                                                                                     ?>
                                                                                 </select>
                                                                             </td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <td>
                                                                                 <div class="margin-bottom-5">
                                                                                     <button type="button" class="btn btn-sm red margin-bottom add_laborer"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>

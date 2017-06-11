@@ -350,7 +350,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                         <div class="form-group catcher-items-hide" id="calenderinput" style="display: none; width: 100%;">
                                             <label>Which day do they prefer?</label>
                                             <div class="input-group col-md-12">
-                                                <div class="date-picker" data-date-format="mm/dd/yyyy" style="background-color: white; margin: auto;"></div>
+                                                <div class="date-picker" style="background-color: white; margin: auto;"></div>
                                                 <input class="hide" name="date" id="date">
                                             </div>
                                         </div>
@@ -786,7 +786,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                         var date = new Date();
                                                         date.setDate(date.getDate());
                                                         $('.date-picker').datepicker({
-                                                            startDate: date
+                                                            startDate: date,
+                                                            altField: '#date',
+                                                            dateFormat: 'yyyy-mm-dd'
                                                         }).on("changeDate", function (e) {
                                                             var luid = $('select[name="location"]').val();
                                                             var date = $(this).datepicker('getDate');

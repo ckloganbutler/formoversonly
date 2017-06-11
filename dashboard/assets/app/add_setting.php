@@ -9,6 +9,15 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'laborer'){
+        $token          = $_GET['ev'];
+        $laborer        = $_POST['laborer'];
+
+        mysql_query("INSERT INTO fmo_locations_events_laborers (laborer_event_token, laborer_user_token, laborer_by_user_token) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($laborer)."',
+        '".mysql_real_escape_string($_SESSION['uuid'])."')");
+    }
     if($_GET['setting'] == 'usr_lic'){
         $token          = $_GET['uuid'];
         $type           = $_POST['type'];
