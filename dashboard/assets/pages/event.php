@@ -83,24 +83,24 @@ if(isset($_SESSION['logged'])){
                                         <button class="btn red edit_inf" data-edit="truckfee">
                                             <i class="fa fa-truck"></i> Truck(s):
                                             <strong>
-                                                <a id="truckfee" style="color: white; text-decoration: none !important;" data-name="event_truckfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of truck(s)." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_truckfee']; ?></a>
-                                            </strong> @ 80$
+                                                <a id="truckfee" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_truckfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of truck(s)." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_truckfee']; ?></a>
+                                            </strong> @ <span id="TF">80</span>$
                                         </button>
                                     </div>
                                     <div class="btn-group hidden-xs hidden-sm">
                                         <button class="btn red edit_inf" data-edit="laborrate">
                                             <i class="fa fa-users"></i> Crewmen:
                                             <strong>
-                                                <a id="laborrate" style="color: white; text-decoration: none !important;" data-name="event_laborrate" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of crewmen." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_laborrate']; ?></a>
-                                            </strong> @ 90$/hr
+                                                <a id="laborrate" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_laborrate" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of crewmen." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_laborrate']; ?></a>
+                                            </strong> @ <span id="LR">90</span>$/hr
                                         </button>
                                     </div>
                                     <div class="btn-group hidden-xs hidden-sm">
                                         <button class="btn red edit_inf" data-edit="countyfee">
                                             <i class="fa fa-location-arrow"></i> Counties:
                                             <strong>
-                                                <a id="countyfee" style="color: white; text-decoration: none !important;" data-name="event_countyfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of counties." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_countyfee']; ?></a>
-                                            </strong> @ 0$
+                                                <a id="countyfee" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_countyfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of counties." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_countyfee']; ?></a>
+                                            </strong> @ <span id="CF">0</span>$
                                         </button>
                                     </div>
 
@@ -1362,14 +1362,40 @@ if(isset($_SESSION['logged'])){
                     }
                 });
             });
-            $('.editable_inf').editable({
-                toggle: 'manual'
-            });
+
+            function updateRates(){
+                var a = $('#truckfee').attr('data-a');
+                var b = $('#laborrate').attr('data-b');
+                var c = $('#countyfee').attr('data-c');
+                $.ajax({
+                    url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=doMath',
+                    type: 'POST',
+                    data: {
+                        day: <?php echo date('N', strtotime($event['event_date_start'])); ?>,
+                        a: $(a).text(),
+                        b: $(b).text(),
+                        c: $(c).text()
+                    },
+                    success: function(d){
+                        var e = JSON.parse(d);
+                        $("#TF").html(e.truck_fee);
+                        $("#LR").html(e.total_labor_rate);
+                        $("#CF").html(e.county_fee);
+                    },
+                    error: function(e){
+
+                    }
+                })
+            }
+
             $('.edit_inf').on('click', function(e) {
                 var inf = $(this).attr('data-edit');
                 e.stopPropagation();
                 $('#'+inf).editable('toggle');
+                updateRates();
             });
+
+
         });
     </script>
     <?php
