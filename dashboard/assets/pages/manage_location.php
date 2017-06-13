@@ -20,15 +20,11 @@ if(isset($_SESSION['logged'])){
             <ul class="page-breadcrumb">
                 <li>
                     <i class="fa fa-home"></i>
-                    <a><?php echo $location['location_name']; ?></a>
+                    <a class="load_page" data-href="assets/pages/dashboard.php?luid=<?php echo $_GET['luid']; ?>"><?php echo $location['location_name']; ?></a>
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/dashboard.php?luid=<?php echo $_GET['luid']; ?>">Dashboard</a>
-                    <i class="fa fa-angle-right"></i>
-                </li>
-                <li>
-                    <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-act="breadcrumb">Settings</a>
+                    <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-act="breadcrumb">Location Settings</a>
                 </li>
             </ul>
         </div>
