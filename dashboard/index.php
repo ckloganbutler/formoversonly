@@ -892,7 +892,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                         $('#page_content').html(vat);
                                                                                                                                         $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
                                                                                                                                         $.ajax({
-                                                                                                                                            url: 'assets/pages/sub/profile_event_wizard.php?&conf='+ev,
+                                                                                                                                            url: 'assets/pages/sub/profile_event_wizard.php?&conf='+ev+'&uuid='+dat,
                                                                                                                                             success: function(data) {
                                                                                                                                                 $('#profile-content').html(data);
                                                                                                                                                 /*$('input[name="startdate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));

@@ -1425,6 +1425,29 @@ if(isset($_SESSION['logged'])){
                 })
             });
 
+            var a = $('#truckfee').attr('data-a');
+            var b = $('#laborrate').attr('data-b');
+            var c = $('#countyfee').attr('data-c');
+            $.ajax({
+                url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=doMath',
+                type: 'POST',
+                data: {
+                    day: <?php echo date('N', strtotime($event['event_date_start'])); ?>,
+                    a: $(a).text(),
+                    b: $(b).text(),
+                    c: $(c).text()
+                },
+                success: function(d){
+                    var e = JSON.parse(d);
+                    $("#TF").html(e.truck_fee);
+                    $("#LR").html(e.total_labor_rate);
+                    $("#CF").html(e.county_fee);
+                },
+                error: function(e){
+
+                }
+            })
+
             $('.edit_inf').on('click', function(e) {
                 var inf = $(this).attr('data-edit');
                 e.stopPropagation();

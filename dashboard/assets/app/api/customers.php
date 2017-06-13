@@ -30,6 +30,8 @@ if(isset($_SESSION['uuid'])){
             $num        = '<span class="label label-sm label-success"><strong>#'.$cus['user_id'].'</strong></span>';
         } elseif($cus['user_group'] == 3){
 
+            $status_tag = '<span class="label label-sm label-info"> CUSTOMER</span>';
+            $num        = '<span class="label label-sm label-info"><strong>#'.$cus['user_id'].'</strong></span>';
         } elseif($cus['user_group'] == 4) {
             $status_tag = '<span class="label label-sm label-info">CUSTOMER SERVICE</span>';
             $num        = '<span class="label label-sm label-info"><strong>#'.$cus['user_id'].'</strong></span>';
