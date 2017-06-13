@@ -596,10 +596,19 @@ if(isset($_SESSION['logged'])){
                                 <div class="tabbable-custom nav-justified">
                                     <ul class="nav nav-tabs nav-justified">
                                         <?php
+                                        $timelines = mysql_num_rows(mysql_query("SELECT timeline_id FROM fmo_locations_events_timelines WHERE timeline_event_token='".mysql_real_escape_string($event['event_token'])."'"));
                                         $laborers = mysql_num_rows(mysql_query("SELECT laborer_id FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($event['event_token'])."'"));
                                         ?>
                                         <li class="active">
-                                            <a href="#comments" data-toggle="tab"> Timeline </a>
+                                            <a href="#comments" data-toggle="tab"> Timeline
+                                                <?php
+                                                if($timelines > 0){
+                                                    ?>
+                                                    <span class="badge badge-danger"> <?php echo $timelines; ?> </span>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </a>
                                         </li>
                                         <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
@@ -815,7 +824,7 @@ if(isset($_SESSION['logged'])){
                                                             <div class="actions">
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#comments_only">
                                                                     <i class="fa fa-comments"></i>
-                                                                    <span class="hidden-480">View <strong>comments</strong></span>
+                                                                    <span class="hidden-480">View <strong>comments</strong> (<?php echo mysql_num_rows(mysql_query("SELECT comment_id FROM fmo_locations_events_comments WHERE comment_event_token='".mysql_real_escape_string($event['event_token'])."'")); ?>)</span>
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#estimates_only">
                                                                     <i class="fa fa-usd"></i>
@@ -823,15 +832,15 @@ if(isset($_SESSION['logged'])){
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#claims_only">
                                                                     <i class="fa fa-exclamation-triangle"></i>
-                                                                    <span class="hidden-480">View <strong>claims</strong></span>
+                                                                    <span class="hidden-480">View <strong>customer claims</strong></span>
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#reviews_only">
                                                                     <i class="fa fa-book"></i>
-                                                                    <span class="hidden-480">View <strong>reviews</strong> </span>
+                                                                    <span class="hidden-480">View <strong>customer reviews</strong> </span>
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#tools_only">
                                                                     <i class="fa fa-external-link"></i>
-                                                                    <span class="hidden-480">View <strong>misc tools</strong> </span>
+                                                                    <span class="hidden-480">View <strong><span class="hidden-480">miscellaneous</span> tools</strong> </span>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -1044,6 +1053,86 @@ if(isset($_SESSION['logged'])){
                                     </table>
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="estimates_only" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Estimates for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="claims_only" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Customer claims for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="reviews_only" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Customer reviews for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="tools_only" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Miscellenous tools for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
                         </div>
                     </div>
                 </div>
