@@ -619,7 +619,7 @@ if(isset($_SESSION['logged'])){
                                         $laborers = mysql_num_rows(mysql_query("SELECT laborer_id FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($event['event_token'])."'"));
                                         ?>
                                         <li class="active">
-                                            <a href="#comments" data-toggle="tab"> Timeline / Comments </a>
+                                            <a href="#comments" data-toggle="tab"> Timeline </a>
                                         </li>
                                         <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
@@ -830,12 +830,28 @@ if(isset($_SESSION['logged'])){
                                                     <div class="portlet">
                                                         <div class="portlet-title">
                                                             <div class="caption">
-                                                                <i class="fa fa-cogs"></i>Comments / Timeline <small><span class="font-red">|</span> This is the track record of the event--we save everything for easy reference.</small>
+                                                                <i class="fa fa-cogs"></i>Timeline <small><span class="font-red">|</span>Records and tools for this event.</small>
                                                             </div>
                                                             <div class="actions">
-                                                                <a class="btn default red-stripe show_form" data-show="#new_comment">
-                                                                    <i class="fa fa-plus"></i>
-                                                                    <span class="hidden-480">Add new comment </span>
+                                                                <a class="btn default red-stripe" data-toggle="modal" href="#comments_only">
+                                                                    <i class="fa fa-comments"></i>
+                                                                    <span class="hidden-480">View <strong>comments</strong></span>
+                                                                </a>
+                                                                <a class="btn default red-stripe" data-toggle="modal" href="#estimates_only">
+                                                                    <i class="fa fa-usd"></i>
+                                                                    <span class="hidden-480">View <strong>estimates</strong></span>
+                                                                </a>
+                                                                <a class="btn default red-stripe" data-toggle="modal" href="#claims_only">
+                                                                    <i class="fa fa-exclamation-triangle"></i>
+                                                                    <span class="hidden-480">View <strong>claims</strong></span>
+                                                                </a>
+                                                                <a class="btn default red-stripe" data-toggle="modal" href="#reviews_only">
+                                                                    <i class="fa fa-book"></i>
+                                                                    <span class="hidden-480">View <strong>reviews</strong> </span>
+                                                                </a>
+                                                                <a class="btn default red-stripe" data-toggle="modal" href="#tools_only">
+                                                                    <i class="fa fa-external-link"></i>
+                                                                    <span class="hidden-480">View <strong>misc tools</strong> </span>
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -854,30 +870,20 @@ if(isset($_SESSION['logged'])){
                                                                 <form role="form" id="add_service_rate">
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=timeline&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
-                                                                        <tr role="row" class="heading">
-                                                                            <th width="12%">
-                                                                                Record Timestamp
-                                                                            </th>
-                                                                            <th>
-                                                                                Record Type
-                                                                            </th>
-                                                                            <th>
-                                                                                Record Details
-                                                                            </th>
-                                                                            <th width="12%">
-                                                                                Record Creator
-                                                                            </th>
-                                                                        </tr>
-                                                                        <tr role="row" class="filter" style="display: none;" id="new_comment">
-                                                                            <td><i class="icon-control-forward"><br/></i>new</td>
-                                                                            <td><input type="text" class="form-control form-filter input-sm" name="item"></td>
-                                                                            <td></td>
-                                                                            <td>
-                                                                                <div class="margin-bottom-5">
-                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_service_rate"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
+                                                                            <tr role="row" class="heading">
+                                                                                <th width="12%">
+                                                                                    Record Timestamp
+                                                                                </th>
+                                                                                <th>
+                                                                                    Record Type
+                                                                                </th>
+                                                                                <th>
+                                                                                    Record Details
+                                                                                </th>
+                                                                                <th width="12%">
+                                                                                    Record Creator
+                                                                                </th>
+                                                                            </tr>
                                                                         </thead>
                                                                         <tbody>
 
@@ -985,6 +991,64 @@ if(isset($_SESSION['logged'])){
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="comments_only" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Comments for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-title" style="border-bottom: none;">
+                            <div class="actions">
+                                <a class="btn default red-stripe show_form" data-show="#add_comment">
+                                    <i class="fa fa-plus"></i>
+                                    <span class="hidden-480">Add new comment</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-container">
+                                <form role="form" id="add_comt">
+                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=comments&ev=<?php echo $event['event_token']; ?>">
+                                        <thead>
+                                        <tr role="row" class="heading">
+                                            <th width="12%">
+                                                Comment Timestamp
+                                            </th>
+                                            <th>
+                                                Comment Content
+                                            </th>
+                                            <th width="12%">
+                                                Comment Creator
+                                            </th>
+                                        </tr>
+                                        <tr role="row" class="filter" style="display: none;" id="add_comment">
+                                            <td></td>
+                                            <td><input type="text" class="form-control form-filter input-sm" name="comment"></td>
+                                            <td>
+                                                <div class="margin-bottom-5">
+                                                    <button type="button" class="btn btn-sm red margin-bottom add_comment"><i class="fa fa-download"></i> Save</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
