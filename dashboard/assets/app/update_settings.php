@@ -74,6 +74,51 @@ if($_GET['update'] == 'event_fly'){
     mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($pk)."'");
     timeline_event($pk, $_SESSION['uuid'], "Information update", "'".$field."' was changed to: ".$value);
 }
+if($_GET['update'] == 'ev_bol_comments'){
+    $comment   = $_POST['comment'];
+    $event     = $_POST['ev'];
+    mysql_query("UPDATE fmo_locations_events SET event_comments='".mysql_real_escape_string($comment)."' WHERE event_token='".mysql_real_escape_string($event)."'");
+}
+if($_GET['update'] == 'ev_additions'){
+    $value     = $_POST['value'];
+    $action    = $_GET['t'];
+    $event     = $_POST['ev'];
+    if($action == 'a'){
+        $additions = array(); $extra = "";
+        $items = mysql_query("SELECT event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($event)."'");
+        if(mysql_num_rows($items)){
+            $item_list  = mysql_fetch_array($items);
+            $item_array = explode("|", $item_list['event_additions']);
+            foreach($item_array as $item){
+                $additions[] = $item;
+            }
+            if(!in_array($value, $additions)){
+                $additions[] = $value;
+                foreach($additions as $addition){
+                    $extra .= $addition."|";
+                } echo $extra;
+                mysql_query("UPDATE fmo_locations_events SET event_additions='".mysql_real_escape_string($extra)."' WHERE event_token='".mysql_real_escape_string($event)."'");
+            }
+        }
+    } elseif($action == 'r'){
+        $additions = array(); $extra = "";
+        $items = mysql_query("SELECT event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($event)."'");
+        if(mysql_num_rows($items)){
+            $item_list  = mysql_fetch_array($items);
+            $item_array = explode("|", $item_list['event_additions']);
+            foreach($item_array as $item){
+                $additions[] = $item;
+            }
+            if(($key = array_search($value, $additions)) !== false){
+                unset($additions[$key]);
+                foreach($additions as $addition){
+                    $extra .= $addition."|";
+                }
+                mysql_query("UPDATE fmo_locations_events SET event_additions='".mysql_real_escape_string($extra)."' WHERE event_token='".mysql_real_escape_string($event)."'");
+            }
+        }
+    }
+}
 if($_GET['update'] == 'change_type'){
     if(isset($_POST['type']) && $_POST['type'] == 'status'){
         $value = $_POST['value'];

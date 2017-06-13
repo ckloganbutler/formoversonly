@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype, event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+    $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($event['event_location_token'])."'"));
     $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lname, user_email, user_phone, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($event['event_user_token'])."'"));
     switch($event['event_status']){
@@ -304,40 +304,34 @@ if(isset($_SESSION['logged'])){
                                     </div>
                                     <div class="portlet-body">
                                         <div class="tab-content">
-                                            <textarea placeholder="BOL comments" class="form-control" style="height: 80px;"></textarea>
+                                            <textarea placeholder="BOL comments (psst! the comment you're about to type will automatically save when you're done typing." class="form-control bol_comments" style="height: 80px;"><?php echo $event['event_comments']; ?></textarea>
                                             <style type="text/css">
                                                 .check {
                                                     opacity:0.5;
                                                     color:#996;
                                                 }
                                             </style>
-
                                             <hr/>
                                             <div class="tab-pane active" id="additions">
-                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px; margin-left: 5px;">
-                                                    <img src="assets/global/img/catcher/safe.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['safe'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 1px;">Safe</label>
-                                                    <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?> pull-right img-check" style="height: 34px; width: 130px; margin-left: 5px;">
+                                                    <label style="padding-top: 1px;"><i class="fa <?php if(!empty($extra['safe'])){ echo "fa-check"; } ?>"></i> Safe</label>
+                                                    <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
                                                 </label>
-                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
-                                                    <img src="assets/global/img/catcher/playset.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['play_set'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 1px;">Play Set</label>
-                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?> pull-right img-check" style="height: 34px; width: 130px;">
+                                                    <label style="padding-top: 1px;"><i class="fa <?php if(!empty($extra['play_set'])){ echo "fa-check"; } ?>"></i> Play Set</label>
+                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
                                                 </label>
-                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
-                                                    <img src="assets/global/img/catcher/pooltable.gif" alt="..." height="22px" width="22px"  class="img-thumbnail img-check <?php if(empty($extra['pool_table'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 1px;">Pool Table</label>
-                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?> pull-right img-check" style="height: 34px; width: 130px;">
+                                                    <label style="padding-top: 1px;"><i class="fa <?php if(!empty($extra['pool_table'])){ echo "fa-check"; } ?> "></i> Pool Table</label>
+                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
                                                 </label>
-                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
-                                                    <img src="assets/global/img/catcher/babygrand.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['piano'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 1px;">Piano</label>
-                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?> pull-right img-check" style="height: 34px; width: 130px;">
+                                                    <label style="padding-top: 1px;"><i class="fa <?php if(!empty($extra['piano'])){ echo "fa-check"; } ?>"></i> Piano</label>
+                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
                                                 </label>
-                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?> pull-right" style="height: 34px; width: 130px;">
-                                                    <img src="assets/global/img/catcher/hottub.gif" alt="..." height="22px" width="22px" class="img-thumbnail img-check <?php if(empty($extra['hot_tub'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                    <label style="padding-top: 1px;">Hot Tub</label>
-                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
+                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?> pull-right img-check" style="height: 34px; width: 130px;">
+                                                    <label style="padding-top: 1px;"><i class="fa <?php if(!empty($extra['hot_tub'])){ echo "fa-check"; } ?>"></i> Hot Tub</label>
+                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
                                                 </label>
                                             </div>
                                         </div>
@@ -1347,8 +1341,41 @@ if(isset($_SESSION['logged'])){
             });
 
             $(".img-check").click(function(){
-                $(this).toggleClass("check");
-                $(this).parent().toggleClass("red");
+                $(this).toggleClass("red");
+                $(this).find('.fa').toggleClass("fa-check");
+                $(this).find('.hidden-checkbox').prop("checked", !$(this).find('.hidden-checkbox').prop("checked"));
+                var value = $(this).find('.hidden-checkbox').val();
+                if(!$(this).find('.hidden-checkbox').attr('checked')){
+                    $.ajax({
+                         url: 'assets/app/update_settings.php?update=ev_additions&t=r',
+                         type: 'POST',
+                         data: {
+                             value: value,
+                             ev: '<?php echo $event['event_token']; ?>'
+                         },
+                        success: function(){
+                            toastr.info(value+" removed.");
+                        },
+                        error: function(){
+
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: 'assets/app/update_settings.php?update=ev_additions&t=a',
+                        type: 'POST',
+                        data: {
+                            value: value,
+                            ev: '<?php echo $event['event_token']; ?>'
+                        },
+                        success: function(){
+                            toastr.info(value+" added.");
+                        },
+                        error: function(){
+
+                        }
+                    });
+                }
             });
 
             var address = '<?php echo $pk_strt; ?>, <?php echo $pk_city; ?>, <?php echo $pk_state; ?>, <?php echo $pk_zip; ?>';
@@ -1464,6 +1491,24 @@ if(isset($_SESSION['logged'])){
                 });
             });
 
+            $('.bol_comments').on('change', function(){
+                var comment = $(this).val();
+                $.ajax({
+                    url: 'assets/app/update_settings.php?update=ev_bol_comments',
+                    type: 'POST',
+                    data: {
+                        comment: comment,
+                        ev: '<?php echo $event['event_token']; ?>'
+                    },
+                    success: function(bol_cmts){
+                        toastr.success("<strong>Logan says:</strong><br/> BOL comments saved (see? told you). ")
+                    },
+                    error: function(){
+
+                    }
+                }) ;
+            });
+
             $('.edits').bind("DOMSubtreeModified",function() {
                 var a = $('#truckfee').attr('data-a');
                 var b = $('#laborrate').attr('data-b');
@@ -1517,8 +1562,6 @@ if(isset($_SESSION['logged'])){
                 e.stopPropagation();
                 $('#'+inf).editable('toggle');
             });
-
-
         });
     </script>
     <?php
