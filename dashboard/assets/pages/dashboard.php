@@ -82,7 +82,7 @@ if(isset($_SESSION['logged'])){
         </div>
         <?php
         $broadcast = getBroadcast($_SESSION['cuid']);
-        if(!empty($broadcast['message']) && $broadcast['time'] >= strtotime('+ 1 days')){
+        if(!empty($broadcast['message']) && $broadcast['time'] <= strtotime('+ 2 days')){
             ?>
             <div class="row">
                 <div class="col-md-12">

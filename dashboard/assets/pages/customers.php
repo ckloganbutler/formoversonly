@@ -83,7 +83,32 @@ if(isset($_SESSION['logged'])){
                             <div class="tab-pane" id="customers_list">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <br/><br/><br/>
+                                        <div class="table-container">
+                                            <table class="table table-striped table-bordered table-hover" id="customers">
+                                                <thead>
+                                                <tr role="row" class="heading">
+                                                    <th width="12%">
+                                                        <input type="checkbox" class="group-checkable"> Customer ID
+                                                    </th>
+                                                    <th>
+                                                        Customer Name
+                                                    </th>
+                                                    <th>
+                                                        Customer Phone
+                                                    </th>
+                                                    <th>
+                                                        Customer Email
+                                                    </th>
+                                                    <th width="12%">
+                                                        View & edit
+                                                    </th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -118,6 +143,44 @@ if(isset($_SESSION['logged'])){
                             toastr.error('<strong>Logan says</strong>:<br/>An unexpected error has occurred. Please try again later.');
                         }
                     });
+                }
+            });
+            var grid = new Datatable();
+
+            grid.init({
+                src: $("#customers"),
+                onSuccess: function (grid) {
+                    // execute some code after table records loaded
+                },
+                onError: function (grid) {
+                    // execute some code on network or other general error
+                },
+                onDataLoad: function(grid) {
+
+                },
+                loadingMessage: 'Loading...',
+                dataTable: {
+                    "processing": true,
+                    "serverSide": true,
+                    "dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                    "bPaginate": false,
+                    "ajax": {
+                        "url": "assets/app/api/customers.php?luid=<?php echo $_GET['luid']; ?>", // ajax source
+                    },
+                    "language": {
+                        "aria": {
+                            "sortAscending": ": activate to sort column ascending",
+                            "sortDescending": ": activate to sort column descending"
+                        },
+                        "emptyTable": "No data available in table",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                        "infoEmpty": "No entries found",
+                        "infoFiltered": "(filtered1 from _MAX_ total entries)",
+                        "lengthMenu": "Show _MENU_ entries",
+                        "search": "Search:",
+                        "zeroRecords": "No matching records found"
+                    },
                 }
             });
         });

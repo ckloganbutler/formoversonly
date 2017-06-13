@@ -870,7 +870,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 
                                                                                                                 var truckfee = $("#catcher_truckfee");
                                                                                                                 $.ajax({
-                                                                                                                    url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
+                                                                                                                    url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>&luid='+luid,
                                                                                                                     type: 'POST',
                                                                                                                     data: {
                                                                                                                         fullname: $('input[id="catcher_name"').val(),

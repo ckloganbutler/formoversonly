@@ -68,29 +68,30 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <div class="" style="">
-                                            <?php
-                                            $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
-                                            if(mysql_num_rows($assets) > 0){
-                                                $pk = 0;
-                                                while($asset = mysql_fetch_assoc($assets)){
-                                                    $pk++
-                                                    ?>
-                                                    <div id="asset_h_<?php echo $pk; ?>" class="panel-group">
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading">
-                                                                <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
-                                                                    <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="as_<?php echo $asset['asset_id']; ?>" data-reload="">
-                                                                        <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
-                                                                </div>
-                                                                <div class="caption">
-                                                                    <h4 class="panel-title">
-                                                                        <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
-                                                                    </h4>
-                                                                </div>
+                                        <?php
+                                        $assets = mysql_query("SELECT asset_id, asset_type, asset_desc, asset_vin, asset_year, asset_make, asset_model, asset_color, asset_dop, asset_price, asset_tire_size, asset_agent, asset_plate, asset_by_user_token, asset_timestamp, asset_last_dot_inspec, asset_comments, asset_location_token FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
+                                        if(mysql_num_rows($assets) > 0){
+                                            $pk = 0;
+                                            while($asset = mysql_fetch_assoc($assets)){
+                                                $pk++
+                                                ?>
+                                                <div id="asset_h_<?php echo $pk; ?>" class="panel-group">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <div class="actions pull-right" style="margin-top: -6px; margin-right: -9px">
+                                                                <a href="javascript:;" class="btn btn-default btn-sm edit" data-edit="as_<?php echo $asset['asset_id']; ?>" data-reload="">
+                                                                    <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md hidden-xs">Edit</span> </a>
                                                             </div>
-                                                            <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
-                                                                <div class="panel-body">
+                                                            <div class="caption">
+                                                                <h4 class="panel-title">
+                                                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
+                                                                </h4>
+                                                            </div>
+                                                        </div>
+                                                        <div id="asset_<?php echo $pk; ?>" class="panel-collapse collapse" aria-expanded="true" style="height: 0px;">
+
+                                                            <div class="panel-body">
+                                                                <div class="scroller">
                                                                     <div class="row">
                                                                         <div class="col-md-4 col-sm-12 col-xs-12">
                                                                             <div class="well">
@@ -316,18 +317,18 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <?php
-                                                }
-                                            } else {
-                                                ?>
-                                                <div class="alert alert-warning alert-dismissable">
-                                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-                                                    <strong>No assets added yet!</strong> Add new assets to see them appear here.
                                                 </div>
                                                 <?php
                                             }
+                                        } else {
                                             ?>
-                                        </div>
+                                            <div class="alert alert-warning alert-dismissable">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                                                <strong>No assets added yet!</strong> Add new assets to see them appear here.
+                                            </div>
+                                            <?php
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </div>
@@ -460,6 +461,9 @@ if(isset($_SESSION['logged'])){
     </form>
     <script>
         $(document).ready(function() {
+            $('.scroller').slimScroll({
+                height: 300
+            })
             $('.datatable').each(function(){
                 var url = $(this).attr('data-src');
                 $(this).DataTable({
