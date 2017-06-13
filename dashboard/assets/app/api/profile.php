@@ -22,19 +22,30 @@ if(isset($_GET) && $_GET['type'] == 'advance_amt'){
         $start                   = date("Y-m-d", strtotime($cur." -".$daysIntoCurrentPeriod." days"));
         $end                     = date('Y-m-d', strtotime($start." +13 days"));
         $hours = array();
+        $prev  = mysql_query("
+                            SELECT advance_requested FROM fmo_users_employee_advances
+                            WHERE (advance_timestamp>='".mysql_real_escape_string($start)."' AND advance_timestamp<'".mysql_real_escape_string($end)."') AND advance_user_token='".mysql_real_escape_string($user)."'");
+
         $hours = mysql_query("
         SELECT timeclock_user, timeclock_hours FROM fmo_users_employee_timeclock 
         WHERE (timeclock_clockout>='".mysql_real_escape_string($start)."' AND timeclock_clockout<'".mysql_real_escape_string($end)."') AND timeclock_user='".mysql_real_escape_string($user)."'") or die(mysql_error());
+        $misc_hours = mysql_query("SELECT laborer_hours_worked FROM fmo_locations_events_laborers WHERE (laborer_timestamp>='".mysql_real_escape_string($start)."' AND laborer_timestamp<'".mysql_real_escape_string($end)."') AND laborer_user_token='".mysql_real_escape_string($user)."'");
         $pay = array();
-        if(mysql_num_rows($hours) > 0){
+        if(mysql_num_rows($hours) > 0 || mysql_num_rows($misc_hours) > 0){
             while($work = mysql_fetch_assoc($hours)){
                 $pay['hours']+=$work['timeclock_hours'];
+            } while ($misc_work = mysql_fetch_assoc($misc_hours)){
+                $pay['hours']+=$misc_work['laborer_hours_worked'];
             }
             if($pay['hours'] > 0){
                 $pay['rate']      = $user_pay['user_employer_rate'];
                 $pay['earned']    = $pay['hours'] * $user_pay['user_employer_rate'];
-                $pay['available'] = number_format($pay['earned'] * .25, 2);
-
+                if(mysql_num_rows($prev) > 0){
+                    while($loans = mysql_fetch_assoc($prev)){
+                        $pay['loans'] += $loans['advance_requested'];
+                    }
+                } else {$pay['loans'] = 0;}
+                $pay['available'] = number_format(($pay['earned'] * .25) - $pay['loans'], 2);
                 if($pay['available'] >= $_GET['requested']){
                     // user loan approved, they may continue with amount.
                     echo json_encode(true);

@@ -879,6 +879,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                         luid: luid
                                                                                                                     },
                                                                                                                     success: function(dat){
+                                                                                                                        $('#date').val(date.toISOString().slice(0,10));
                                                                                                                         me.data('requestRunning', false);
                                                                                                                         toastr.success("Customer has been added to our database, you can now further configure their booking.");
                                                                                                                         $.ajax({

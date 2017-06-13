@@ -210,10 +210,13 @@ if(isset($_GET['setting'])){
             $hours = mysql_query("
                             SELECT timeclock_user, timeclock_hours FROM fmo_users_employee_timeclock 
                             WHERE (timeclock_clockout>='".mysql_real_escape_string($start)."' AND timeclock_clockout<'".mysql_real_escape_string($end)."') AND timeclock_user='".mysql_real_escape_string($token)."'") or die(mysql_error());
+            $misc_hours = mysql_query("SELECT laborer_hours_worked FROM fmo_locations_events_laborers WHERE (laborer_timestamp>='".mysql_real_escape_string($start)."' AND laborer_timestamp<'".mysql_real_escape_string($end)."') AND laborer_user_token='".mysql_real_escape_string($token)."'");
             $pay = array();
-            if(mysql_num_rows($hours) > 0){
+            if(mysql_num_rows($hours) > 0 || mysql_num_rows($misc_hours) > 0){
                 while($work = mysql_fetch_assoc($hours)){
                     $pay['hours']+=$work['timeclock_hours'];
+                } while ($misc_work = mysql_fetch_assoc($misc_hours)){
+                    $pay['hours']+=$misc_work['laborer_hours_worked'];
                 }
                 if($pay['hours'] > 0){
                     $pay['rate']      = $user_pay['user_employer_rate'];
