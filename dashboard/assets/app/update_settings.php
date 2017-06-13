@@ -95,7 +95,9 @@ if($_GET['update'] == 'ev_additions'){
             if(!in_array($value, $additions)){
                 $additions[] = $value;
                 foreach($additions as $addition){
-                    $extra .= $addition."|";
+                    if(!empty($addition)){
+                        $extra .= $addition."|";
+                    }
                 } echo $extra;
                 mysql_query("UPDATE fmo_locations_events SET event_additions='".mysql_real_escape_string($extra)."' WHERE event_token='".mysql_real_escape_string($event)."'");
             }
@@ -112,7 +114,9 @@ if($_GET['update'] == 'ev_additions'){
             if(($key = array_search($value, $additions)) !== false){
                 unset($additions[$key]);
                 foreach($additions as $addition){
-                    $extra .= $addition."|";
+                    if(!empty($addition)){
+                        $extra .= $addition."|";
+                    }
                 }
                 mysql_query("UPDATE fmo_locations_events SET event_additions='".mysql_real_escape_string($extra)."' WHERE event_token='".mysql_real_escape_string($event)."'");
             }

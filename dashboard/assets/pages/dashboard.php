@@ -58,7 +58,7 @@ if(isset($_SESSION['logged'])){
                                                     <textarea style="height: 110px;" class="form-control txt-message" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
                                                     <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?> </h4>
                                                     <button type="button" class="btn red pull-right ttm" style="margin-top: -7px; margin-left: 15px;">Send text message</button>
-                                                    <small><span class="txt-countdown pull-right"></span></small>
+                                                    <small class="pull-right" style="margin-top: -6px;"><span class="txt-countdown"></span> <br/> <a data-toggle="modal" href="#recent_texts"><i class="fa fa-external-link fa-1x"></i> view recent messages</a></small>
                                                 </div>
                                             </li>
                                         </ul>
@@ -1141,6 +1141,26 @@ if(isset($_SESSION['logged'])){
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-modal-lg" id="recent_texts" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Recent texts to <?php echo name($location['location_manager']); ?> <small>(and maybe Joshua)</small></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

@@ -26,21 +26,11 @@ if(isset($_SESSION['logged'])){
         <h3 class="page-title">
             <strong><?php echo $event['event_name']; ?></strong> <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
 
-            <a class="btn red hidden-sm dropdown-toggle pull-right" readonly href="javascript:;" data-toggle="dropdown">
-                <i class="fa fa-clock-o"></i> Event Date/Time:
-                <strong>
-                    <?php
-                    if($event['event_date_start'] == $event['event_date_end']){
-                        ?>
-                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> @ <?php echo $event['event_time']; ?>
-                        <?php
-                    } else {
-                        ?>
-                        <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
-                        <?php
-                    }
-                    ?>
-                </strong>
+            <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+                <i class="icon-calendar"></i>&nbsp;
+                <span class="bold uppercase visible-lg-inline-block">
+                    <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
+                </span>&nbsp; <i class="fa fa-angle-down"></i>
             </a>
         </h3>
         <div class="page-bar">
@@ -63,7 +53,7 @@ if(isset($_SESSION['logged'])){
                 </li>
             </ul>
             <div class="page-toolbar">
-                <div class="pull-right tooltips btn btn-fit-height green">
+                <div class="pull-right tooltips btn btn-fit-height green" data-toggle="modal" href="#booking_fee">
                     <i class="fa fa-credit-card"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block">BOOKING FEE PAID <i class="fa fa-arrow-right"></i> CLICK TO VIEW</span>
                 </div>
                 <!--
@@ -868,7 +858,7 @@ if(isset($_SESSION['logged'])){
                                                                                 <th width="12%">
                                                                                     Record Timestamp
                                                                                 </th>
-                                                                                <th>
+                                                                                <th width="14%">
                                                                                     Record Type
                                                                                 </th>
                                                                                 <th>
@@ -989,6 +979,26 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
     </div>
+    <div class="modal fade bs-modal-lg" id="booking_fee" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Booking fee information for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade bs-modal-lg" id="comments_only" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content box red">
@@ -1016,7 +1026,7 @@ if(isset($_SESSION['logged'])){
                                                 Comment Timestamp
                                             </th>
                                             <th>
-                                                Comment Content
+                                                Comment
                                             </th>
                                             <th width="12%">
                                                 Comment Creator
@@ -1464,6 +1474,30 @@ if(isset($_SESSION['logged'])){
                     });
                 }
             });
+            $("#add_comt").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'font-red', // default input error message class
+                rules: {
+                    comment: {
+                        required: true
+                    }
+                }
+            });
+            $('.add_comment').on('click', function(){
+                if($("#add_comt").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=ev_cmt&ev=<?php echo $event['event_token']; ?>",
+                        type: "POST",
+                        data: $('#add_comt').serialize(),
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>Comment has been added to events comment history.');
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                        }
+                    });
+                }
+            });
             $('.change_type').on('click', function(){
                 var type   = $(this).attr('data-type');
                 var id     = $(this).attr('data-id');
@@ -1562,6 +1596,37 @@ if(isset($_SESSION['logged'])){
                 e.stopPropagation();
                 $('#'+inf).editable('toggle');
             });
+
+            $('#dashboard-report-range').daterangepicker({
+                    opens: (Metronic.isRTL() ? 'right' : 'left'),
+                    startDate: <?php echo $event['event_date_start']; ?>,
+                    endDate: <?php echo $event['event_date_end']; ?>,
+                    showDropdowns: false,
+                    showWeekNumbers: true,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    buttonClasses: ['btn btn-sm'],
+                    applyClass: ' blue',
+                    cancelClass: 'default',
+                    format: 'YYYY-MM-DD',
+                    separator: ' to ',
+                    locale: {
+                        applyLabel: 'Apply',
+                        fromLabel: 'From',
+                        toLabel: 'To',
+                        customRangeLabel: 'Custom Range',
+                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }
+                },
+                function (start, end) {
+                    $('#dashboard-report-range span').html(start.format('YYYY-DD-MM') + ' - ' + end.format('YYYY-DD-MM'));
+                }
+            );
+
+            $('#dashboard-report-range').show();
         });
     </script>
     <?php

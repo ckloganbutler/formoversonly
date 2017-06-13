@@ -8,6 +8,32 @@
 session_start();
 include '../init.php';
 
+if(isset($_GET) && $_GET['type'] == 'comments'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findComments = mysql_query("SELECT comment_id, comment_comment, comment_by_user_token, comment_timestamp FROM fmo_locations_events_comments WHERE comment_event_token='".mysql_real_escape_string($_GET['ev'])."' ORDER BY comment_timestamp DESC");
+    $iTotalRecords = mysql_num_rows($findComments);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($comt = mysql_fetch_assoc($findComments)) {
+        $records["data"][] = array(
+            ''.$comt['comment_timestamp'].'',
+            ''.$comt['comment_comment'].'',
+            ''.name($comt['comment_by_user_token']).'',
+        );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+
 if(isset($_GET) && $_GET['type'] == 'documents'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);

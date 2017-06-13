@@ -267,7 +267,18 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($comment)."',
         '".mysql_real_escape_string($by)."')");
-        timeline_log($token, $by, "Comment", "Comment created: <strong>".$comment."</strong>");
+        timeline_log($token, $by, "Comment", "<strong>".name($by)."</strong> commented: <strong>".$comment."</strong>");
+    }
+    if($_GET['setting'] == 'ev_cmt'){
+        $token      = $_GET['ev'];
+        $comment    = $_POST['comment'];
+        $by         = $_SESSION['uuid'];
+
+        mysql_query("INSERT INTO fmo_locations_events_comments (comment_event_token, comment_comment, comment_by_user_token) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($comment)."',
+        '".mysql_real_escape_string($by)."')");
+        timeline_event($token, $by, "Comment", "<strong>".name($by)."</strong> commented: <strong>".$comment."</strong>");
     }
     if($_GET['setting'] == 'service_rates'){
         $location_token = $_GET['luid'];
