@@ -56,7 +56,7 @@ if(isset($_SESSION['logged'])){
                                                 <div class="media-body">
                                                     <textarea style="height: 110px;" class="form-control txt-message" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
                                                     <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?> </h4>
-                                                    <button type="button" class="btn red pull-right ttm" style="margin-top: -7px; margin-left: 15px;">Send text message</button>
+                                                    <button type="button" class="btn red pull-right ttm" style="margin-top: -7px; margin-left: 15px;">Send message</button>
                                                     <small class="pull-right" style="margin-top: -6px;"><span class="txt-countdown"></span> <br/> <a data-toggle="modal" href="#recent_texts"><i class="fa fa-external-link fa-1x"></i> view recent messages</a></small>
                                                 </div>
                                             </li>
@@ -105,6 +105,19 @@ if(isset($_SESSION['logged'])){
                             <i class="icon-home theme-font bold"></i>
                             <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span> <small>All Events</small>
                         </div>
+                        <div class="actions">
+                            <div class="btn-group">
+                                <button class="btn red"><i class="fa fa-external-link"></i> Month at a Glance</button>
+                            </div>
+                            <div class="btn-group">
+                                <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
+                                    <i class="icon-calendar"></i>&nbsp;
+                                    <span class="bold uppercase visible-lg-inline-block">
+                                        <?php echo date('M d, Y'); ?> - <?php echo date('M d, Y'); ?>
+                                    </span>&nbsp; <i class="fa fa-angle-down"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="row">
@@ -114,6 +127,7 @@ if(isset($_SESSION['logged'])){
                                     <?php
                                     $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
                                     if(mysql_num_rows($events) > 0){
+                                        $morningCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
                                             if($event['event_status'] == 0){
                                                 continue;
@@ -164,6 +178,7 @@ if(isset($_SESSION['logged'])){
                                     <?php
                                     $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
                                     if(mysql_num_rows($events) > 0){
+                                        $afternoonCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
                                             if($event['event_status'] == 0){
                                                 continue;
@@ -1407,6 +1422,37 @@ if(isset($_SESSION['logged'])){
                    }
                })
             });
+            $('#dashboard-report-range').daterangepicker({
+                    opens: (Metronic.isRTL() ? 'right' : 'left'),
+                    startDate: "<?php echo date('Y-m-d') ?>",
+                    endDate: "<?php echo date('Y-m-d'); ?>",
+                    showDropdowns: false,
+                    showWeekNumbers: true,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    buttonClasses: ['btn btn-sm'],
+                    applyClass: ' blue',
+                    cancelClass: 'default',
+                    format: 'YYYY-MM-DD',
+                    separator: ' to ',
+                    locale: {
+                        applyLabel: 'Apply',
+                        fromLabel: 'From',
+                        toLabel: 'To',
+                        customRangeLabel: 'Custom Range',
+                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }
+                },
+                function (start, end) {
+                    $('#dashboard-report-range span').html(start.format('YYYY-DD-MM') + ' - ' + end.format('YYYY-DD-MM'));
+
+                }
+            );
+
+            $('#dashboard-report-range').show();
         });
     </script>
     <?php
