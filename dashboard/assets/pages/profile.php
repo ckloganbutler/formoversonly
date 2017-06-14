@@ -15,11 +15,13 @@ if(isset($_SESSION['logged'])){
     if(!empty($profile['user_employer']) && !empty($profile['user_employer_location'])) {
         $employee = true;
         $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
-    } else {$employee = false;$location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));}
+    } else {
+        $employee = false;
+        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));}
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <?php echo $profile['user_fname']." ".$profile['user_lname']; ?>
+            <strong><?php echo $profile['user_fname']." ".$profile['user_lname']; ?></strong>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -29,7 +31,7 @@ if(isset($_SESSION['logged'])){
                     <i class="fa fa-angle-right"></i>
                 </li>
                 <li>
-                    <a class="load_page" data-href="assets/pages/profile.php?uuid=<?php echo $_GET['uuid']; ?>" data-page-title="<?php echo $profile['user_fname']." ".$profile['user_lname']; ?>"><?php echo $profile['user_fname']." ".$profile['user_lname']; ?></a>
+                    <a class="load_page" data-href="assets/pages/profile.php?uuid=<?php echo $_GET['uuid']; ?>&luid=<?php echo $_GET['luid']; ?>" data-page-title="<?php echo $profile['user_fname']." ".$profile['user_lname']; ?>"><?php echo $profile['user_fname']." ".$profile['user_lname']; ?></a>
                 </li>
             </ul>
         </div>
@@ -122,7 +124,7 @@ if(isset($_SESSION['logged'])){
                                 if($profile['user_group'] == 3){
                                    ?>
                                     <li>
-                                        <a class="load_profile_tab" data-href="assets/pages/sub/profile_event_wizard.php?luid=<?php echo $profile['user_last_ext_location']; ?>&uuid=<?php echo $profile['user_token']; ?>" data-page-title="Book new move"><i class="icon-plus"></i>Create event for <?php echo $profile['user_fname']; ?>  </a>
+                                        <a class="load_profile_tab" data-href="assets/pages/sub/profile_event_wizard.php?luid=<?php echo $location['location_token']; ?>&uuid=<?php echo $profile['user_token']; ?>&n=nekotwen" data-page-title="Book new move"><i class="icon-plus"></i>Create event for <?php echo $profile['user_fname']; ?>  </a>
                                     </li>
                                     <?php
                                 }
@@ -1626,25 +1628,7 @@ if(isset($_SESSION['logged'])){
                     });
                 }
             });
-            $(document).on('click', '.load_profile_tab', function(){
-                var act = $(this).attr('data-act');
-                var url = $(this).attr('data-href');
-                var tit = $(this).attr('data-page-title');
-                $(".active").removeClass("active");
-                $(this).parent().addClass("active");
-                Pace.track(function(){
-                    $.ajax({
-                        url: url,
-                        success: function(data) {
-                            $('#profile-content').html(data);
 
-                        },
-                        error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                        }
-                    });
-                });
-            });
             $(document).on('click', '.updt_pp', function () {
                 var formData = new FormData($('form#pp_upload')[0]);
                 $.ajax({

@@ -14,7 +14,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <?php echo $location['location_name']; ?> <small>Settings</small>
+            <strong><?php echo $location['location_name']; ?> </strong> | <small>Settings</small>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">

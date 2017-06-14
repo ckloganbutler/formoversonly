@@ -14,7 +14,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            Assets
+            <strong>Assets</strong>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">

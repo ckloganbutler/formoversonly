@@ -89,7 +89,7 @@ if(isset($_POST) && !isset($_GET['disabled'])){
         '".mysql_real_escape_string($pic)."',
         '".mysql_real_escape_string($last_ext)."')");
 
-        if($group != 1 && $group != 3){
+        if($group != 1){
             timeline_log($uuid, $creator, "User creation", $fname." was registered to the system.");
         }
         echo $uuid;

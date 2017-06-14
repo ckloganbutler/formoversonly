@@ -24,7 +24,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <strong><?php echo $event['event_name']; ?></strong> <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
+            <strong><?php echo $event['event_name']; ?></strong> | <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
 
             <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
                 <i class="icon-calendar"></i>&nbsp;
@@ -87,6 +87,12 @@ if(isset($_SESSION['logged'])){
                                             <strong>
                                                 <a id="countyfee" class="edits" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_countyfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of counties." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_countyfee']; ?></a>
                                             </strong> for <span id="CF">0</span>$
+                                        </button>
+                                    </div>
+
+                                    <div class="btn-group">
+                                        <button class="btn blue mbol" data-toggle="modal" href="#print_bol" data-event="<?php echo $event['event_token']; ?>">
+                                            <i class="fa fa-print"></i> Print BOL
                                         </button>
                                     </div>
 
@@ -984,6 +990,27 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
     </div>
+    <div class="modal fade bs-modal-lg" id="print_bol" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content box red">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h3 class="modal-title font-bold">Bill of Lading confirmation for <?php echo $event['event_name']; ?></h3>
+                </div>
+                <div class="modal-body">
+                    <div class="portlet">
+                        <div class="portlet-body" id="bol_inf">
+                            // todo: generate preview & confirm button
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn red">Print BOL</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade bs-modal-lg" id="booking_fee" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content box red">
@@ -1674,12 +1701,6 @@ if(isset($_SESSION['logged'])){
                 error: function(e){
 
                 }
-            })
-
-            $('.edit_inf').on('click', function(e) {
-                var inf = $(this).attr('data-edit');
-                e.stopPropagation();
-                $('#'+inf).editable('toggle');
             });
 
             $('#dashboard-report-range').daterangepicker({
@@ -1708,6 +1729,18 @@ if(isset($_SESSION['logged'])){
                 },
                 function (start, end) {
                     $('#dashboard-report-range span').html(start.format('YYYY-DD-MM') + ' - ' + end.format('YYYY-DD-MM'));
+                    $.ajax({
+                        type: "POST",
+                        url: "assets/app/update_settings.php?update=event_date",
+                        data: {
+                            dateStart: start.format('YYYY-MM-DD'),
+                            dateEnd: end.format('YYYY-MM-DD'),
+                            ev: '<?php echo $event['event_token']; ?>'
+                        },
+                        success: function(result) {
+                            toastr.info(""+result+"");
+                        }
+                    });
                 }
             );
 

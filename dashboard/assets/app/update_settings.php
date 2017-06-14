@@ -74,6 +74,14 @@ if($_GET['update'] == 'event_fly'){
     mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($pk)."'");
     timeline_event($pk, $_SESSION['uuid'], "Information update", "'".$field."' was changed to: ".$value);
 }
+if($_GET['update'] == 'event_date'){
+    $startDate = $_POST['dateStart'];
+    $endDate   = $_POST['dateEnd'];
+    $token     = $_POST['ev'];
+
+    mysql_query("UPDATE fmo_locations_events SET event_date_start='".mysql_real_escape_string($startDate)."', event_date_end='".mysql_real_escape_string($endDate)."' WHERE event_token='".mysql_real_escape_string($token)."'");
+    timeline_event($token, $_SESSION['uuid'], "Date update", "Date range was changed to ".$startDate." through ".$endDate."");
+}
 if($_GET['update'] == 'ev_bol_comments'){
     $comment   = $_POST['comment'];
     $event     = $_POST['ev'];

@@ -9,14 +9,35 @@ session_start();
 include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    if(isset($_GET['conf'])){
-        $event = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
-    }
     $profile = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname, user_email, user_phone, user_company_name, user_website, user_pic, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if($_GET['uuid'] == $profile['user_token']) {
         $editable = true;
         $view     = 'editOnly';
     } else {$editable = false;$view='infoOnly';}
+    if(isset($_GET['conf'])){
+        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
+    } elseif(isset($_GET['n']) && $_GET['n'] == 'nekotwen'){
+        $new_token      = struuid(true);
+        $new_location   = $_GET['luid'];
+        $new_user_token = $profile['user_token'];
+        $new_start      = date('Y-m-d');
+        $new_end        = date('Y-m-d');
+        $new_name       = $profile['user_fname']." ".$profile['user_lname']."'s move";
+        $new_status     = 0;
+        mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_name, event_status) VALUES (
+        '".mysql_real_escape_string($new_token)."',
+        '".mysql_real_escape_string($new_location)."',
+        '".mysql_real_escape_string($new_user_token)."',
+        '".mysql_real_escape_string($new_start)."',
+        '".mysql_real_escape_string($new_end)."',
+        '".mysql_real_escape_string($new_name)."',
+        '".mysql_real_escape_string($new_status)."')") or die(mysql_error());
+        timeline_event($new_token, $_SESSION['uuid'], "Creation", name($_SESSION['uuid'])." created this event.");
+        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($new_token)."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
+    }
+
     ?>
     <div class="row">
         <div class="col-md-12">
@@ -41,23 +62,17 @@ if(isset($_SESSION['logged'])){
                                     <form action="#" class="form-horizontal" id="submit_form" method="POST">
                                         <div class="form-wizard">
                                             <div class="form-body">
-                                                <ul class="nav nav-pills nav-justified steps">
+                                                <ul class="nav nav-pills nav-justified steps hidden">
                                                     <li>
                                                         <a href="#tab1" data-toggle="tab" class="step">
                                                             <span class="number"> 1 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Customer Information </span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#tab2" data-toggle="tab" class="step">
-                                                            <span class="number"> 2 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Services </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Event Information </span>
                                                         </a>
                                                     </li>
                                                     <li>
                                                         <a href="#tab3" data-toggle="tab" class="step">
                                                             <span class="number">3 </span>
-                                                            <span class="desc"><i class="fa fa-check"></i> Locations </span>
+                                                            <span class="desc"><i class="fa fa-check"></i> Event Locations </span>
                                                         </a>
                                                     </li>
                                                     <li>
@@ -77,13 +92,27 @@ if(isset($_SESSION['logged'])){
                                                         You have some form errors. Please check below.
                                                     </div>
                                                     <div class="tab-pane active" id="tab1">
-                                                        <h3>Date & Time</h3> <br/>
                                                         <div class="row">
-                                                            <div class="col-md-6">
+                                                            <div class="col-md-12">
+                                                                <h3 style="margin-top: 0;">Event Information</h3><small>Below, we will need basic information about the event. Once you've completed this section, you will be able to move onto the next. All fields marked with a <strong>red star</strong> ( <span class="text-danger">*</span> ) are <strong>required</strong>!</small>
+                                                                <hr/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-6 col-sm-12">
+                                                                <div class="form-group">
+                                                                    <label class="control-label col-md-3">Event Name <span class="required">*</span></label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control" name="name" value="<?php echo $event['event_name']; ?>">
+                                                                        <span class="help-block">
+																        This should something like the homeowner's name, or their business name (if applicable) </span>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Start/end dates <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <div class="input-group input-md date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy">
+                                                                        <div class="input-group input-md date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy" style="width: 100% !important;">
                                                                             <input type="text" class="form-control" name="startdate" value="<?php echo $event['event_date_start']; ?>">
                                                                             <span class="input-group-addon"> to </span>
                                                                             <input type="text" class="form-control" name="enddate" value="<?php echo $event['event_date_end']; ?>">
@@ -92,8 +121,6 @@ if(isset($_SESSION['logged'])){
                                                                         <span class="help-block" for="startdate enddate">Select date range of the event </span>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Time of move <span class="required">*</span></label>
                                                                     <div class="col-md-9">
@@ -108,7 +135,7 @@ if(isset($_SESSION['logged'])){
                                                                                             $t['time_end'] = "finish";
                                                                                         }
                                                                                         ?>
-                                                                                            <option value="<?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?>"><?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?></option>
+                                                                                        <option <?php if($t['time_start']." to ".$t['time_end'] == $event['event_time']){echo "selected";} ?> value="<?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?>"><?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?></option>
                                                                                         <?php
                                                                                     }
                                                                                 }
@@ -121,24 +148,6 @@ if(isset($_SESSION['logged'])){
                                                                         <span class="help-block">Select time of customers event</span>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr/>
-                                                        <h3>Information Gathering</h3> <br/>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label class="control-label col-md-3">Event Name <span class="required">*</span></label>
-                                                                    <div class="col-md-9">
-                                                                        <input type="text" class="form-control" name="name" value="<?php echo $event['event_name']; ?>'s move">
-                                                                        <span class="help-block">
-																        This should something like the homeowner's name, or their business name (if applicable) </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Type <span class="required">*</span></label>
                                                                     <div class="col-md-9">
@@ -158,8 +167,6 @@ if(isset($_SESSION['logged'])){
                                                                         Most cases will use the option, "Local Move". </span>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Sub-Type <span class="required">*</span></label>
                                                                     <div class="col-md-9">
@@ -175,12 +182,10 @@ if(isset($_SESSION['logged'])){
                                                                             }
                                                                             ?>
                                                                         </select>
+                                                                        <span class="help-block">
+                                                                        Most cases will use the option, "Move". </span>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Contact Email <span class="required">*</span></label>
                                                                     <div class="col-md-9">
@@ -189,8 +194,6 @@ if(isset($_SESSION['logged'])){
                                                                         example: something@somewhere.com </span>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Contact Phone <span class="required">*</span></label>
                                                                     <div class="col-md-9">
@@ -200,101 +203,91 @@ if(isset($_SESSION['logged'])){
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane" id="tab2">
-                                                        <div class="row" style="margin-top: 100px;">
-                                                            <div class="col-md-4">
+                                                            <div class="col-md-6 col-sm-12">
                                                                 <div class="form-group">
-                                                                    <label class="control-label col-md-3"><i class="fa fa-truck"></i> <span class="required">*</span></label>
-                                                                    <div class="col-md-9">
-                                                                        <div class="input-group">
-                                                                            <input type="number" class="form-control doMath" name="truckfee" id="event_truckfee" value="<?php echo $event['event_truckfee']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
-                                                                            <span class="input-group-btn">
-                                                                                <button class="btn red" type="button" id="ev_TR" value="">$<span></span></button>
-                                                                            </span>
+                                                                    <div class="col-md-12 text-left">
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn red edit_inf" data-edit="truckfee">
+                                                                                <i class="fa fa-truck"></i> Truck(s):
+                                                                                <strong>
+                                                                                    <a id="truckfee" class="edits" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_truckfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of truck(s)." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_truckfee']; ?></a>
+                                                                                </strong> for $<span id="TF"></span>
+                                                                            </button>
                                                                         </div>
-                                                                        <span class="help-block">
-                                                                        # of trucks needed. </span>
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn red edit_inf" data-edit="laborrate">
+                                                                                <i class="fa fa-users"></i> Crewmen:
+                                                                                <strong>
+                                                                                    <a id="laborrate" class="edits" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_laborrate" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of crewmen." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_laborrate']; ?></a>
+                                                                                </strong> for $<span id="LR"></span>/hr
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="btn-group">
+                                                                            <button type="button" class="btn red edit_inf" data-edit="countyfee">
+                                                                                <i class="fa fa-location-arrow"></i> Counties:
+                                                                                <strong>
+                                                                                    <a id="countyfee" class="edits" data-a="#truckfee" data-b="#laborrate" data-c="#countyfee" style="color: white; text-decoration: none !important;" data-name="event_countyfee" data-pk="<?php echo $event['event_token']; ?>" data-type="number" data-placement="bottom" data-title="Enter new amount of counties." data-inputclass="form-control" data-url="assets/app/update_settings.php?update=event_fly"><?php echo $event['event_countyfee']; ?></a>
+                                                                                </strong> for $<span id="CF"></span>
+                                                                            </button>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-4">
                                                                 <div class="form-group">
-                                                                    <label class="control-label col-md-3"><i class="fa fa-user"></i> <span class="required">*</span></label>
-                                                                    <div class="col-md-9">
-                                                                        <div class="input-group">
-                                                                            <input type="number" class="form-control doMath" name="laborrate" id="event_laborrate" value="<?php echo $event['event_laborrate']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
-                                                                            <span class="input-group-btn">
-                                                                                <button class="btn red" type="button" id="ev_LR" value="">$<span></span></button>
-                                                                            </span>
-                                                                        </div>
-                                                                        <span class="help-block">
-                                                                        # of men needed. </span>
+                                                                    <div class="col-md-12">
+                                                                        <textarea class="form-control bol_comments" style="height: 173px;" placeholder="BOL comments"><?php echo $event['event_comments']; ?></textarea>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-4">
+                                                                <hr/>
                                                                 <div class="form-group">
-                                                                    <label class="control-label col-md-3"><i class="fa fa-location-arrow"></i> <span class="required">*</span></label>
-                                                                    <div class="col-md-9">
-                                                                        <div class="input-group">
-                                                                            <input type="text" class="form-control doMath" name="countyfee" id="event_countyfee" value="<?php echo $event['event_countyfee']; ?>" data-a="#event_truckfee" data-b="#event_laborrate" data-c="#event_countyfee">
-                                                                            <span class="input-group-btn">
-                                                                                <button class="btn red" type="button" id="ev_CR" value="">$<span></span></button>
-                                                                            </span>
-                                                                        </div>
-                                                                        <span class="help-block">
-                                                                        # of counties traveling through. </span>
+                                                                    <div class="col-md-12">
+                                                                        <style type="text/css">
+                                                                            .check {
+                                                                                opacity:0.5;
+                                                                                color:#996;
+                                                                            }
+                                                                        </style>
+                                                                        <?php
+                                                                        $additions = explode("|", $event['event_additions']);
+                                                                        $add       = 0;
+                                                                        foreach($additions as $ck){
+                                                                            $add++;
+                                                                            $extra[$ck] = $ck;
+                                                                        }
+                                                                        ?>
+                                                                        <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } else { echo "check"; } ?> pull-right img-check" style="height: 34px; width: 130px; margin-left: 5px; cursor: default;">
+                                                                            <label style="padding-top: 1px; cursor: pointer;"><i class="fa <?php if(!empty($extra['safe'])){ echo "fa-check"; } ?>"></i> Safe</label>
+                                                                            <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
+                                                                        </label>
+                                                                        <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } else { echo "check"; } ?> pull-right img-check" style="height: 34px; width: 130px; cursor: default;">
+                                                                            <label style="padding-top: 1px; cursor: pointer;"><i class="fa <?php if(!empty($extra['play_set'])){ echo "fa-check"; } ?>"></i> Play Set</label>
+                                                                            <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
+                                                                        </label>
+                                                                        <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } else { echo "check"; } ?> pull-right img-check" style="height: 34px; width: 130px; cursor: default;">
+                                                                            <label style="padding-top: 1px; cursor: pointer;"><i class="fa <?php if(!empty($extra['pool_table'])){ echo "fa-check"; } ?> "></i> Pool Table</label>
+                                                                            <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
+                                                                        </label> <br/><br/>
+                                                                        <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } else { echo "check"; } ?> pull-right img-check" style="height: 34px; margin-left: 5px;width: 130px; cursor: default;">
+                                                                            <label style="padding-top: 1px; cursor: pointer;"><i class="fa <?php if(!empty($extra['piano'])){ echo "fa-check"; } ?>"></i> Piano</label>
+                                                                            <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
+                                                                        </label>
+                                                                        <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } else { echo "check"; } ?> pull-right img-check" style="height: 34px; width: 130px; cursor: default;">
+                                                                            <label style="padding-top: 1px; cursor: pointer"><i class="fa <?php if(!empty($extra['hot_tub'])){ echo "fa-check"; } ?>"></i> Hot Tub</label>
+                                                                            <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden hidden-checkbox" autocomplete="off">
+                                                                        </label>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-8 col-md-offset-2 text-center">
-                                                                <style type="text/css">
-                                                                    .check {
-                                                                        opacity:0.5;
-                                                                        color:#996;
-                                                                    }
-                                                                </style>
-                                                                <?php
-                                                                    $additions = explode("|", $event['event_additions']);
-                                                                    foreach($additions as $ck){
-                                                                        $extra[$ck] = $ck;
-                                                                    }
-                                                                ?>
-                                                                <br/><br/><br/>
-                                                                <label class="btn <?php if(!empty($extra['hot_tub'])){ echo "red"; } ?>">
-                                                                    <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['hot_tub'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                                    <label style="padding-top: 5px;">Hot Tub <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                                    <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" <?php if(!empty($extra['hot_tub'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                                </label>
-                                                                <label class="btn <?php if(!empty($extra['piano'])){ echo "red"; } ?>">
-                                                                    <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['piano'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                                    <label style="padding-top: 5px;">Piano <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                                    <input type="checkbox" name="addition[]" id="piano" value="piano" <?php if(!empty($extra['piano'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                                </label>
-                                                                <label class="btn <?php if(!empty($extra['pool_table'])){ echo "red"; } ?>">
-                                                                    <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['pool_table'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                                    <label style="padding-top: 5px;">Pool Table <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                                    <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" <?php if(!empty($extra['pool_table'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                                </label> <br/><br/><br/>
-                                                                <label class="btn <?php if(!empty($extra['play_set'])){ echo "red"; } ?>">
-                                                                    <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['play_set'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                                    <label style="padding-top: 5px;">Play Set <br/>$378<br/>$300 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                                    <input type="checkbox" name="addition[]" id="play_set" value="play_set" <?php if(!empty($extra['play_set'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                                </label>
-                                                                <label class="btn <?php if(!empty($extra['safe'])){ echo "red"; } ?>">
-                                                                    <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-check <?php if(empty($extra['safe'])){ echo "checked"; } ?>" style="vertical-align: top;">
-                                                                    <label style="padding-top: 5px;">Safe <br/>$298<br/>$200 w/ move <br/> <small>click image <br/>to add</small> </label>
-                                                                    <input type="checkbox" name="addition[]" id="safe" value="safe" <?php if(!empty($extra['safe'])){ echo "checked"; } ?> class="hidden" autocomplete="off">
-                                                                </label>
-                                                                <br/><br/><br/>
+
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane" id="tab3">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h3 style="margin-top: 0;">Location Information</h3><small>Now, you have the option to add events to this location for the customer. On the left: <strong>PICKUP LOCATIONS</strong>, and on the right: <strong>DESTINATION LOCATIONS</strong>. <br/> <strong>Note</strong>: <i>you don't have to add locations right now, but it is recommended.</i></small>
+                                                                <hr/>
+                                                            </div>
+                                                        </div>
+
                                                         <div class="row">
                                                             <div class="col-md-5">
                                                                 <div class="portlet">
@@ -426,8 +419,8 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                             <div class="col-md-2 text-center">
                                                                 <br/><br/>
-                                                                <i class="fa fa-2x fa-info"></i> <br/>
-                                                                <h3>Add locations</h3>
+                                                                <i class="fa fa-2x fa-map-marker text-success"></i> <br/>
+                                                                <h3>Map goes here</h3>
                                                             </div>
                                                             <div class="col-md-5">
                                                                 <div class="portlet">
@@ -557,8 +550,26 @@ if(isset($_SESSION['logged'])){
                                                     </div>
                                                     <div class="tab-pane" id="tab4">
                                                         <div class="row">
+                                                            <div class="col-md-12">
+                                                                <h3 style="margin-top: 0;">Finalization</h3>
+                                                                <small>
+                                                                    Finally, we need to benefit our security and ask the customer to give us validation that they have good form of payment.
+                                                                    <br/> If we <strong class="text-danger">DO NOT</strong> collect a booking fee, the customer/client will be <strong>required</strong> to use <strong>CASH</strong> as their form of payment.
+                                                                    <br/> If we <strong class="text-success">DO</strong> collect a booking fee, the customer/client will be <strong>free to choose</strong> their form of payment.
+                                                                </small>
+                                                                <hr/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <?php
+                                                                    echo $location['location_booking_fee_disclaimer'];
+                                                                ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
                                                             <div class="col-md-12 text-center">
-                                                                <button id="pay" class="btn btn-block btn-xl btn-success">Securely pay <strong>$3.00</strong> registration fee</button>
+                                                                <button id="pay" class="btn btn-block btn-xl btn-success">Securely pay <strong>$10.00</strong> booking fee</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -569,11 +580,11 @@ if(isset($_SESSION['logged'])){
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <button href="javascript:;" class="btn default button-previous">
                                                             <i class="m-icon-swapleft"></i> Back </button>
-                                                        <button href="javascript:;" class="btn blue button-next">
-                                                            Continue <i class="m-icon-swapright m-icon-white"></i>
-                                                        </button>
                                                         <button href="javascript:;" class="btn yellow button-save" name="status" value="0">
                                                             Save for later <i class="fa fa-download"></i>
+                                                        </button>
+                                                        <button href="javascript:;" class="btn blue button-next">
+                                                            Continue <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
                                                         <button href="javascript:;" class="btn green button-submit" name="status" value="1">
                                                             Submit <i class="m-icon-swapright m-icon-white"></i>
@@ -859,12 +870,20 @@ if(isset($_SESSION['logged'])){
                 }
             });
 
-            document.getElementById('pay').addEventListener('click', function(e) {
+            $('#pay').click(function(e) {
                 // Open Checkout with further options:
                 handler.open({
                     name: 'Booking Fee',
                     description: 'Allows customer to use card/check to pay later.',
-                    amount: 300
+                    amount: 1000,
+                    <?php
+                    if(!empty($event['event_email'])){
+                    ?>
+                    email: '<?php echo $event['event_email']; ?>'
+                    <?php
+                    }
+                    ?>
+
                 });
                 e.preventDefault();
             });
@@ -872,31 +891,6 @@ if(isset($_SESSION['logged'])){
             // Close Checkout on page navigation:
             window.addEventListener('popstate', function() {
                 handler.close();
-            });
-
-            $.ajax({
-                url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=jkv',
-                type: 'POST',
-                data: {
-                    day: <?php echo date('N', strtotime($event['event_date_start'])); ?>
-                },
-                success: function(e){
-                    var inf = JSON.parse(e);
-                    $('#ev_TR > span').html(inf.truck_fee);
-                    $('#ev_TR').attr('value', parseInt(inf.truck_fee));
-                    $('#ev_LR > span').html(inf.total_labor_rate);
-                    $('#ev_LR').val(inf.total_labor_rate);
-                    $('#ev_CR > span').html(inf.county_fee);
-                    $('#ev_CR').val(inf.county_fee);
-                },
-                error: function(e){
-
-                }
-            });
-
-            $(".img-check").click(function(){
-                $(this).toggleClass("check");
-                $(this).parent().toggleClass("red");
             });
 
             $("#mask_phone").inputmask("mask", {
@@ -908,30 +902,12 @@ if(isset($_SESSION['logged'])){
                 orientation: "left",
                 autoclose: true
             });
-            $('.timepicker-no-seconds').timepicker({
-                autoclose: true,
-                minuteStep: 5
-            });
 
 
             if (!jQuery().bootstrapWizard) {
                 return;
             }
 
-            function format(state) {
-                if (!state.id) return state.text; // optgroup
-                return "<img class='flag' src='../../assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
-            }
-
-            $("#country_list").select2({
-                placeholder: "Select",
-                allowClear: true,
-                formatResult: format,
-                formatSelection: format,
-                escapeMarkup: function (m) {
-                    return m;
-                }
-            });
 
             $('#new_location').validate({
                 errorElement: 'span', //default input error message container
@@ -978,13 +954,23 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#new_location').serialize(),
                         success: function(data) {
-                            $('#draggable').modal('hide')
+                            $('#draggable').modal('hide');
                             $('#new_location')[0].reset();
                             toastr.success("<strong>Logan says</strong>:<br/>That location has been added to this events record. Let me refresh the event for you, so you can see the changes.");
                             $.ajax({
-                                url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
-                                success: function(data) {
-                                    $('#page_content').html(data);
+                                url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>',
+                                type: 'POST',
+                                data: $('#submit_form').serialize(),
+                                success: function(d) {
+                                    $.ajax({
+                                        url: 'assets/pages/sub/profile_event_wizard.php?conf=<?php echo $event['event_token']; ?>',
+                                        success: function(data) {
+                                            $('#profile-content').html(data);
+                                        },
+                                        error: function() {
+                                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                        }
+                                    });
                                 },
                                 error: function() {
                                     toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
@@ -1040,19 +1026,6 @@ if(isset($_SESSION['logged'])){
                     }
                 },
 
-                messages: {
-
-                },
-
-                errorPlacement: function (error, element) { // render error placement for each input type
-                    if (element.attr("name") == "gender") { // for uniform radio buttons, insert the after the given container
-                        error.insertAfter("#form_gender_error");
-                    } else if (element.attr("name") == "payment[]") { // for uniform checkboxes, insert the after the given container
-                        error.insertAfter("#form_payment_error");
-                    } else {
-                        error.insertAfter(element); // for other inputs, just perform default behavior
-                    }
-                },
 
                 invalidHandler: function (event, validator) { //display error alert on form submit
                     success.hide();
@@ -1191,7 +1164,7 @@ if(isset($_SESSION['logged'])){
                         data: $('#submit_form').serialize(),
                         success: function(d) {
                             $.ajax({
-                                url: 'assets/pages/profile.php?uuid=<?php echo $_GET['uuid']; ?>',
+                                url: 'assets/pages/event.php?ev=<?php echo $event['event_token']; ?>',
                                 success: function(vat) {
                                     $('#page_content').html(vat);
                                 },
@@ -1207,37 +1180,107 @@ if(isset($_SESSION['logged'])){
                 });
             }).hide();
 
-            //apply validation on select2 dropdown value change, this only needed for chosen dropdown integration.
-            $('#country_list', form).change(function () {
-                form.validate().element($(this)); //revalidate the chosen dropdown value and show error or success message for the input
-            });
+            $(".img-check").click(function(){
+                $(this).toggleClass("red");
+                $(this).find('.fa').toggleClass("fa-check");
+                $(this).find('.hidden-checkbox').prop("checked", !$(this).find('.hidden-checkbox').prop("checked"));
+                var value = $(this).find('.hidden-checkbox').val();
+                if(!$(this).find('.hidden-checkbox').attr('checked')){
+                    $.ajax({
+                        url: 'assets/app/update_settings.php?update=ev_additions&t=r',
+                        type: 'POST',
+                        data: {
+                            value: value,
+                            ev: '<?php echo $event['event_token']; ?>'
+                        },
+                        success: function(){
+                            toastr.info(value+" removed.");
+                        },
+                        error: function(){
 
-            $('.doMath').on('change', function() {
-                var a = $(this).attr('data-a');
-                var b = $(this).attr('data-b');
-                var c = $(this).attr('data-c');
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: 'assets/app/update_settings.php?update=ev_additions&t=a',
+                        type: 'POST',
+                        data: {
+                            value: value,
+                            ev: '<?php echo $event['event_token']; ?>'
+                        },
+                        success: function(){
+                            toastr.info(value+" added.");
+                        },
+                        error: function(){
+
+                        }
+                    });
+                }
+            });
+            $('.edits').bind("DOMSubtreeModified",function() {
+                var a = $('#truckfee').attr('data-a');
+                var b = $('#laborrate').attr('data-b');
+                var c = $('#countyfee').attr('data-c');
                 $.ajax({
                     url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=doMath',
                     type: 'POST',
                     data: {
                         day: <?php echo date('N', strtotime($event['event_date_start'])); ?>,
-                        a: $(a).val(),
-                        b: $(b).val(),
-                        c: $(c).val()
+                        a: $(a).text(),
+                        b: $(b).text(),
+                        c: $(c).text()
                     },
                     success: function(d){
                         var e = JSON.parse(d);
-                        $("#ev_TR > span").html(e.truck_fee);
-                        $("#ev_TR").val(e.truck_fee);
-                        $("#ev_LR > span").html(e.total_labor_rate);
-                        $("#ev_LR").val(e.total_labor_rate);
-                        $("#ev_CR > span").html(e.county_fee);
-                        $('#ev_CR').val(e.county_fee);
+                        $("#TF").html(e.truck_fee);
+                        $("#LR").html(e.total_labor_rate);
+                        $("#CF").html(e.county_fee);
                     },
                     error: function(e){
 
                     }
                 })
+            });
+
+            $('.bol_comments').on('change', function(){
+                var comment = $(this).val();
+                $.ajax({
+                    url: 'assets/app/update_settings.php?update=ev_bol_comments',
+                    type: 'POST',
+                    data: {
+                        comment: comment,
+                        ev: '<?php echo $event['event_token']; ?>'
+                    },
+                    success: function(bol_cmts){
+                        toastr.success("<strong>Logan says:</strong><br/> BOL comments saved (see? told you). ")
+                    },
+                    error: function(){
+
+                    }
+                }) ;
+            });
+
+            var a = $('#truckfee').attr('data-a');
+            var b = $('#laborrate').attr('data-b');
+            var c = $('#countyfee').attr('data-c');
+            $.ajax({
+                url: 'assets/app/api/catcher.php?luid=<?php echo $event['event_location_token']; ?>&p=doMath',
+                type: 'POST',
+                data: {
+                    day: <?php echo date('N', strtotime($event['event_date_start'])); ?>,
+                    a: $(a).text(),
+                    b: $(b).text(),
+                    c: $(c).text()
+                },
+                success: function(d){
+                    var e = JSON.parse(d);
+                    $("#TF").html(e.truck_fee);
+                    $("#LR").html(e.total_labor_rate);
+                    $("#CF").html(e.county_fee);
+                },
+                error: function(e){
+
+                }
             });
         });
     </script>

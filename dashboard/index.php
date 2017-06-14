@@ -626,6 +626,11 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             var luid = $(this).attr('data-new-location');
             window.location.replace("//www.formoversonly.com/dashboard/index.php?uuid=<?php echo $_GET['uuid']; ?>&cuid=<?php echo $_GET['cuid']; ?>&luid="+luid);
         });
+        $(document).on('click', '.edit_inf', function(f) {
+            var inf = $(this).attr('data-edit');
+            f.stopPropagation();
+            $('#'+inf).editable('toggle');
+        });
         $(document).on('click', '.load_page', function(){
             var act = $(this).attr('data-act');
             if(act == 'breadcrumb'){
@@ -644,6 +649,25 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     success: function(data) {
                         $('#page_content').html(data);
                         document.title = tit+" - For Movers Only";
+                    },
+                    error: function() {
+                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    }
+                });
+            });
+        });
+        $(document).on('click', '.load_profile_tab', function(){
+            var act = $(this).attr('data-act');
+            var url = $(this).attr('data-href');
+            var tit = $(this).attr('data-page-title');
+            $(".active").removeClass("active");
+            $(this).parent().addClass("active");
+            Pace.track(function(){
+                $.ajax({
+                    url: url,
+                    success: function(data) {
+                        $('#profile-content').html(data);
+
                     },
                     error: function() {
                         toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
