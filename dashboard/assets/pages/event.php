@@ -11,7 +11,7 @@ include '../app/init.php';
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
     $event    = mysql_fetch_array(mysql_query("SELECT event_id, event_token, event_location_token, event_user_token, event_name, event_date_start, event_date_end, event_time, event_truckfee, event_laborrate, event_countyfee, event_status, event_email, event_phone, event_type, event_subtype, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
-    $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($event['event_location_token'])."'"));
+    $location = mysql_fetch_array(mysql_query("SELECT location_name, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($event['event_location_token'])."'"));
     $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lname, user_email, user_phone, user_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($event['event_user_token'])."'"));
     switch($event['event_status']){
         case 1: $status = "New Booking"; break;
@@ -942,6 +942,8 @@ if(isset($_SESSION['logged'])){
                                                                                     <option value="CREW LEADER">Crew Leader</option>
                                                                                     <option value="CREWMAN">Crewman</option>
                                                                                 </select>
+                                                                                <input type="text" class="hidden" value="<?php echo $event['event_date_start']; ?>" name="date">
+                                                                                <input type="text" class="hidden" value="<?php echo $event['event_time']; ?>" name="time">
                                                                             </td>
                                                                             <td>
                                                                                 <select class="form-control input-sm laborers" name="laborer">
@@ -1443,7 +1445,7 @@ if(isset($_SESSION['logged'])){
             $('.add_laborer').on('click', function(){
                 if($("#add_laborer").valid()){
                     $.ajax({
-                        url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $event['event_token']; ?>",
+                        url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $event['event_token']; ?>&luid=<?php echo $location['location_token']; ?>",
                         type: "POST",
                         data: $('#add_laborer').serialize(),
                         success: function(data) {

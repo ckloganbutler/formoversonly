@@ -13,10 +13,14 @@ if(isset($_GET['setting'])){
         $token          = $_GET['ev'];
         $role           = $_POST['role'];
         $laborer        = $_POST['laborer'];
-        $wage           = mysql_fetch_array(mysql_query("SELECT user_employer_rate FROM fmo_users WHERE user_token='".mysql_real_escape_string($laborer)."'"));
+        $wage           = mysql_fetch_array(mysql_query("SELECT user_employer_rate, user_phone FROM fmo_users WHERE user_token='".mysql_real_escape_string($laborer)."'"));
         $desc           = $_POST['desc'];
         $hp             = $_POST['hp'];
         $tip            = $_POST['tip'];
+
+        $date           = $_POST['date'];
+        $time           = explode("to", $_POST['time']);
+        $location       = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".$_GET['luid']."'"));
 
         mysql_query("INSERT INTO fmo_locations_events_laborers (laborer_event_token, laborer_user_token, laborer_rate, laborer_role, laborer_desc, laborer_hours_worked, laborer_tip, laborer_by_user_token) VALUES (
         '".mysql_real_escape_string($token)."',
@@ -27,6 +31,7 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($hp)."',
         '".mysql_real_escape_string($tip)."',
         '".mysql_real_escape_string($_SESSION['uuid'])."')");
+        _sendText($wage['user_phone'], "[Here To There]:\r\n".$location['location_name']." - ".$time[0]." on ".date("M d, Y", strtotime($date))."\r\nYou've been added to job, get to work!");
     }
     if($_GET['setting'] == 'usr_lic'){
         $token          = $_GET['uuid'];
