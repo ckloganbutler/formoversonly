@@ -108,7 +108,8 @@ if(isset($_SESSION['logged'])){
                     </div>
                     <div class="portlet-body">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">|</span> before noon</small></h3>
                                 <div class="todo-tasklist">
                                     <?php
                                     $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
@@ -117,8 +118,62 @@ if(isset($_SESSION['logged'])){
                                             if($event['event_status'] == 0){
                                                 continue;
                                             }
+                                            $times = explode("to", $event['event_time']);
+                                            if(strtotime($times[0]) >= strtotime("12:00PM")){
+                                                continue;
+                                            }
                                             ?>
-                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-6 col-xs-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                                <div class="todo-tasklist-item-title">
+                                                    <?php echo $event['event_name']; ?>
+                                                </div>
+                                                <div class="todo-tasklist-item-text">
+                                                    <strong>Start:</strong> Indianapolis <i class="fa fa-map"></i> <strong>End:</strong> Fishers
+                                                </div>
+                                                <div class="todo-tasklist-controls pull-left">
+                                                    <span class="todo-tasklist-date"><i class="fa fa-calendar"></i> <?php echo date('d M Y', strtotime($event['event_date_start'])); ?> - <?php echo date('d M Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?></span>
+                                                    <?php
+                                                    if(!empty($event['event_type'])){
+                                                        ?>
+                                                        <span class="todo-tasklist-badge badge badge-roundless"><?php echo $event['event_type']; ?></span>
+                                                        <?php
+                                                    }
+                                                    if(!empty($event['event_subtype'])){
+                                                        ?>
+                                                        <span class="todo-tasklist-badge badge badge-roundless"><?php echo $event['event_subtype']; ?></span>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                            <?php
+                                        }
+                                    } else {
+                                        ?>
+                                        <center>
+                                            <h3>No events found for today at this location.</h3>
+                                        </center>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">|</span> after noon</small></h3>
+                                <div class="todo-tasklist">
+                                    <?php
+                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+                                    if(mysql_num_rows($events) > 0){
+                                        while($event = mysql_fetch_assoc($events)){
+                                            if($event['event_status'] == 0){
+                                                continue;
+                                            }
+                                            $times = explode("to", $event['event_time']);
+                                            if(strtotime($times[0]) <= strtotime("12:00PM")){
+                                                continue;
+                                            }
+                                            ?>
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
                                                 <div class="todo-tasklist-item-title">
                                                     <?php echo $event['event_name']; ?>
                                                 </div>

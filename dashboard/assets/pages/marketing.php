@@ -363,10 +363,12 @@ if(isset($_SESSION['logged'])){
                 submitHandler: function (form) {
                     var group = $('#role').val();
                     $.ajax({
-                        url: 'assets/app/add_setting.php?setting=marketer',
+                        url: 'assets/app/add_setting.php?setting=marketer&luid=<?php echo $_GET['luid']; ?>',
                         type: "POST",
                         data: $('#new_marketers').serialize(),
                         success: function (data) {
+                            $('#new_marketers').modal('hide');
+                            grid.getDataTable().ajax.reload();
                             toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your marketer to the system, you will now be redirected to their profile.");
                         },
                         error: function () {

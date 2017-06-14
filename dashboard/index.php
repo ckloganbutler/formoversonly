@@ -5,7 +5,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 } else {
     include 'assets/app/init.php';
     $lastlocation = mysql_query("UPDATE fmo_users SET user_last_ext_location='".mysql_real_escape_string($_GET['luid'])."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_pic, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
+    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_employer, user_pic, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."' AND location_owner_company_token='".mysql_real_escape_string($_GET['cuid'])."'"));
 }
 ?>
@@ -334,7 +334,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                 <i class="fa fa-compass"></i>
                                                 <select class="form-control" name="location">
                                                     <?php
-                                                    $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_token='".$user['user_token']."' ORDER BY location_name ASC");
+                                                    $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_company_token='".$user['user_employer']."' ORDER BY location_name ASC");
                                                     if(mysql_num_rows($findLocations) > 0){
                                                         while($loc = mysql_fetch_assoc($findLocations)){
                                                             ?>

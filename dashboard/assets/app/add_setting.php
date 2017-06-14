@@ -42,6 +42,35 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($prefix)."',
         '".mysql_real_escape_string($number)."')");
     }
+    if($_GET['setting'] == 'marketer'){
+        $location       = $_GET['luid'];
+        $type           = $_POST['type'];
+        $contact        = $_POST['fullname'];
+        $phone          = $_POST['phone'];
+        $email          = $_POST['email'];
+        $address        = $_POST['address'];
+        $address2       = $_POST['address2'];
+        $city           = $_POST['city'];
+        $state          = $_POST['state'];
+        $apt            = $_POST['apt'];
+        $zip            = $_POST['zip'];
+        $company        = $_POST['company'];
+
+        mysql_query("INSERT INTO fmo_locations_marketers (marketer_location_token, marketer_type, marketer_contact, marketer_phone, marketer_email, marketer_address, marketer_address2, marketer_city, marketer_state, marketer_apt, marketer_zip, marketer_company, marketer_by_user_token) VALUES (
+        '".mysql_real_escape_string($location)."',
+        '".mysql_real_escape_string($type)."',
+        '".mysql_real_escape_string($contact)."',
+        '".mysql_real_escape_string($phone)."',
+        '".mysql_real_escape_string($email)."',
+        '".mysql_real_escape_string($address)."',
+        '".mysql_real_escape_string($address2)."',
+        '".mysql_real_escape_string($city)."',
+        '".mysql_real_escape_string($state)."',
+        '".mysql_real_escape_string($apt)."',
+        '".mysql_real_escape_string($zip)."',
+        '".mysql_real_escape_string($company)."',
+        '".mysql_real_escape_string($_SESSION['uuid'])."')") or die(mysql_error());
+    }
     if($_GET['setting'] == 'asset'){
         $token          = $_GET['luid'];
         $type           = $_POST['type'];
