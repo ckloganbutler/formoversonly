@@ -72,25 +72,25 @@ if(isset($_SESSION['logged'])){
                                         <th width="4.7%">
                                             <input type="checkbox" class="group-checkable"> Active
                                         </th>
-                                        <th width="9%">
+                                        <th>
                                             Vendor Name
                                         </th>
-                                        <th width="9%">
+                                        <th>
                                             Type
                                         </th>
-                                        <th width="9%">
+                                        <th >
                                             Phone
                                         </th>
-                                        <th width="9%">
+                                        <th >
                                             Contact Name
                                         </th>
-                                        <th width="9%">
+                                        <th>
                                             Account #
                                         </th>
-                                        <th width="9%">
+                                        <th>
                                             Extra Information
                                         </th>
-                                        <th width="9%">
+                                        <th width="5%">
                                             In-line Edit
                                         </th>
                                     </tr>
@@ -142,32 +142,6 @@ if(isset($_SESSION['logged'])){
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function(){
-            $(document).on('click', '.edit_line', function(){
-                var line = $(this).val();
-                $('.'+line).editable();
-                $('.'+line+'_taxable').editable({
-                    source: [
-                        {value: 0, text: 'Yes'},
-                        {value: 1, text: 'No'}
-                    ]
-                });
-                $('.'+line+'_commissionable').editable({
-                    source: [
-                        {value: 0, text: 'Yes'},
-                        {value: 1, text: 'No'}
-                    ]
-                });
-                $('.'+line+'_type').editable({
-                    source: [
-                        {value: 'Supplies', text: 'Supplies'},
-                        {value: 'Labor', text: 'Labor'},
-                        {value: 'Discount', text: 'Discount'},
-                        {value: 'Extras', text: 'Extras'},
-                        {value: 'Other', text: 'Other'}
-                    ]
-                });
-                toastr.info("<strong>Logan says</strong>:<br/>You can now edit that line. To edit, please click the blue underline under the value you'd like to update.")
-            });
             $("#add_vendor_contact").validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'font-red', // default input error message class
