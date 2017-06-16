@@ -588,7 +588,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 <script type="text/javascript" src="assets/global/plugins/select2/select2.min.js"></script>
 <script type="text/javascript" src="assets/global/plugins/jquery-mixitup/jquery.mixitup.min.js"></script>
 <script type="text/javascript" src="assets/global/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyBg2MfengOuhtRA-39qVbm8vA7n7pf5ES8&sensor=false" type="text/javascript"></script>
+<script async defer src="http://maps.google.com/maps/api/js?v=3.exp&key=AIzaSyBg2MfengOuhtRA-39qVbm8vA7n7pf5ES8&sensor=false" type="text/javascript">
 <script src="assets/global/plugins/gmaps/gmaps.min.js" type="text/javascript"></script>
 <script src="assets/global/scripts/metronic.js" type="text/javascript"></script>
 <script src="assets/admin/layout/scripts/layout.js" type="text/javascript"></script>

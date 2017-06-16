@@ -103,6 +103,15 @@ function locationName($token){
     }
 }
 
+function locationAddress($token){
+    $address = mysql_fetch_array(mysql_query("SELECT location_address, location_city, location_state, location_zip FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
+    if(!empty($address['location_address'])){
+        echo $address['location_address'].", ".$address['location_city'].", ".$address['location_state'].", ".$address['location_zip'];
+    } else {
+        return NULL;
+    }
+}
+
 function locationManagerPhone($token){
     $manager = mysql_fetch_array(mysql_query("SELECT location_manager FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
     if(!empty($manager['location_manager'])){

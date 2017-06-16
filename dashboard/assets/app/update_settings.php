@@ -162,8 +162,8 @@ if($_GET['update'] == 'event' && isset($_POST)){
         }
     }
 
-    _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." - ".$_POST['name']."\r\n / ".name($_SESSION['uuid'])."");
-    _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." - ".$_POST['name']."\r\n / ".name($_SESSION['uuid'])."");
+    _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
+    _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
 
     return false;
 }

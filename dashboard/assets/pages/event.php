@@ -475,6 +475,7 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-4">
                                 <div id="gmap_basic" class="gmaps" style="height: 450px;">
                                 </div>
+                                <div class="" id="results-map-panel"></div>
                             </div>
                             <div class="col-md-4">
                                 <div class="portlet">
@@ -587,6 +588,10 @@ if(isset($_SESSION['logged'])){
                                                     </div>
                                                 </div>
                                                 <?php
+                                                $ds_strt  = $dest['address_address'];
+                                                $ds_state = $dest['address_state'];
+                                                $ds_city  = $dest['address_city'];
+                                                $ds_zip   = $dest['address_zip'];
                                             }
                                         } else {
                                             ?>
@@ -1407,6 +1412,56 @@ if(isset($_SESSION['logged'])){
     </form>
     <script type="text/javascript">
         $(document).ready(function() {
+            function initMap() {
+                var directionsService = new google.maps.DirectionsService;
+                var directionsDisplay = new google.maps.DirectionsRenderer;
+                var map = new google.maps.Map(document.getElementById('gmap_basic'), {
+                    zoom: 6,
+                    center: {lat: 41.85, lng: -87.65}
+                });
+                directionsDisplay.setMap(map);
+                calculateAndDisplayRoute(directionsService, directionsDisplay);
+            }
+
+            function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+                var waypts = [];
+                waypts.push({
+                    location: "<?php echo $pk_strt; ?>, <?php echo $pk_city; ?>, <?php echo $pk_state; ?>, <?php echo $pk_zip; ?>",
+                    stopover: true
+                });
+
+                directionsService.route({
+                    origin: "<?php echo locationAddress($event['event_location_token']); ?>",
+                    destination: "<?php echo $ds_strt; ?>, <?php echo $ds_city; ?>, <?php echo $ds_state; ?>, <?php echo $ds_zip; ?>",
+                    waypoints: waypts,
+                    optimizeWaypoints: true,
+                    travelMode: 'DRIVING'
+                }, function(response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                        var route = response.routes[0];
+                        var summaryPanel = document.getElementById('results-map-panel');
+                        summaryPanel.innerHTML = '';
+                        // For each route, display summary information.
+                        for (var i = 0; i < route.legs.length; i++) {
+                            var routeSegment = i + 1;
+                             if(routeSegment == 1){
+                                 summaryPanel.innerHTML += 'From <strong>dispatch</strong> to <strong>there</strong> (' + route.legs[i].distance.text + '): ' + routeSegment +
+                                     '<br>';
+                             } else {
+                                 summaryPanel.innerHTML += 'From <strong>here</strong> to <strong>there</strong> (' + route.legs[i].distance.text + '): ' + routeSegment +
+                                     '<br>';
+                             }
+                            summaryPanel.innerHTML += route.legs[i].start_address + ' <strong>to</strong>  ';
+                            summaryPanel.innerHTML += route.legs[i].end_address + ' <br/><br/>';
+                        }
+                    } else {
+                        window.alert('Couldnt find directions for this event: ' + status);
+                    }
+                });
+            }
+
+            initMap();
             $(".laborers").select2({
                 placeholder: 'Select laborer..'
             }).on('change', function() {
@@ -1510,27 +1565,7 @@ if(isset($_SESSION['logged'])){
                 }
             });
 
-            var address = '<?php echo $pk_strt; ?>, <?php echo $pk_city; ?>, <?php echo $pk_state; ?>, <?php echo $pk_zip; ?>';
 
-            var map = new google.maps.Map(document.getElementById('gmap_basic'), {
-                mapTypeId: google.maps.MapTypeId.TERRAIN,
-                zoom: 12
-            });
-
-            var geocoder = new google.maps.Geocoder();
-
-            geocoder.geocode({
-                    'address': address
-                },
-                function(results, status) {
-                    if(status == google.maps.GeocoderStatus.OK) {
-                        new google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: map
-                        });
-                        map.setCenter(results[0].geometry.location);
-                    }
-                });
 
             $('#new_location').validate({
                 errorElement: 'span', //default input error message container
