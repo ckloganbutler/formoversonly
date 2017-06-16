@@ -606,13 +606,13 @@ if(isset($_SESSION['logged'])){
                                                     <div class="col-md-offset-3 col-md-9">
                                                         <button href="javascript:;" class="btn default button-previous">
                                                             <i class="m-icon-swapleft"></i> Back </button>
-                                                        <button href="javascript:;" class="btn yellow button-save" name="status" value="0">
+                                                        <button href="javascript:;" class="btn yellow button-save" type="submit" name="status" value="0">
                                                             Save for later <i class="fa fa-download"></i>
                                                         </button>
                                                         <button href="javascript:;" class="btn blue button-next">
                                                             Continue <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
-                                                        <button href="javascript:;" class="btn green button-submit" name="status" value="1">
+                                                        <button href="javascript:;" class="btn green button-submit" type="submit" name="status" value="1">
                                                             Submit <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
                                                     </div>
