@@ -5,7 +5,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 } else {
     include 'assets/app/init.php';
     $lastlocation = mysql_query("UPDATE fmo_users SET user_last_ext_location='".mysql_real_escape_string($_GET['luid'])."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_employer, user_pic, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
+    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_employer, user_pic, user_status, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."' AND location_owner_company_token='".mysql_real_escape_string($_GET['cuid'])."'"));
 }
 ?>
@@ -204,62 +204,68 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                 <span class="arrow "></span>
                             </a>
                         </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">
-                                <i class="icon-earphones-alt"></i>
-                                <span class="title">Employees</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/reports.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Reports">
-                                <i class="icon-layers"></i>
-                                <span class="title">Reports</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Assets">
-                                <i class="fa fa-truck"></i>
-                                <span class="title">Assets</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/vendors.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Vendors">
-                                <i class="icon-tag"></i>
-                                <span class="title">Vendors</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/inventory.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Inventory">
-                                <i class="icon-eye"></i>
-                                <span class="title">Inventory</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/resource.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Resource Library">
-                                <i class="icon-folder"></i>
-                                <span class="title">Resource Library</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
-                        <li class="">
-                            <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Location Settings">
-                                <i class="icon-settings"></i>
-                                <span class="title">Location Settings</span>
-                                <span class="selected"></span>
-                                <span class="arrow "></span>
-                            </a>
-                        </li>
+                        <?php
+                        if($user['user_group'] <= 2){
+                            ?>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">
+                                    <i class="icon-earphones-alt"></i>
+                                    <span class="title">Employees</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/reports.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Reports">
+                                    <i class="icon-layers"></i>
+                                    <span class="title">Reports</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Assets">
+                                    <i class="fa fa-truck"></i>
+                                    <span class="title">Assets</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/vendors.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Vendors">
+                                    <i class="icon-tag"></i>
+                                    <span class="title">Vendors</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/inventory.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Inventory">
+                                    <i class="icon-eye"></i>
+                                    <span class="title">Inventory</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/resource.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Resource Library">
+                                    <i class="icon-folder"></i>
+                                    <span class="title">Resource Library</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Location Settings">
+                                    <i class="icon-settings"></i>
+                                    <span class="title">Location Settings</span>
+                                    <span class="selected"></span>
+                                    <span class="arrow "></span>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                        ?>
                         <?php
                     } else {
                         ?>
@@ -613,6 +619,21 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         UIIdleTimeout.init();
         FormValidation.init();
         Index.init();
+        <?php
+        if($user['user_status'] == 0){
+            ?>
+        $.ajax({
+            url: 'assets/pages/reset_password.php',
+            success: function(data) {
+                $('#page_content').html(data);
+            },
+            error: function() {
+                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+            }
+        });
+            <?php
+        } else {
+            ?>
         $.ajax({
             url: 'assets/pages/<?php $url = explode('?', $user['user_last_location']); echo $url[0]; ?>?luid=<?php echo $_GET['luid']; if($url[0] == 'profile.php'){echo "&".$url[1];};?><?php if($url[0] == 'event.php'){echo "&".$url[1];};?>',
             success: function(data) {
@@ -622,6 +643,10 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
             }
         });
+            <?php
+        }
+        ?>
+
         $(document).on('click', '.change_location', function(){
             var luid = $(this).attr('data-new-location');
             window.location.replace("//www.formoversonly.com/dashboard/index.php?uuid=<?php echo $_GET['uuid']; ?>&cuid=<?php echo $_GET['cuid']; ?>&luid="+luid);

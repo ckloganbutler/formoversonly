@@ -15,7 +15,7 @@ if(isset($_SESSION['logged'])){
         $view     = 'editOnly';
     } else {$editable = false;$view='infoOnly';}
     if(isset($_GET['conf'])){
-        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
+        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments, event_booking FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
         $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
     } elseif(isset($_GET['n']) && $_GET['n'] == 'nekotwen'){
         $new_token      = struuid(true);
@@ -34,7 +34,7 @@ if(isset($_SESSION['logged'])){
         '".mysql_real_escape_string($new_name)."',
         '".mysql_real_escape_string($new_status)."')") or die(mysql_error());
         timeline_event($new_token, $_SESSION['uuid'], "Creation", name($_SESSION['uuid'])." created this event.");
-        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($new_token)."'"));
+        $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments, event_booking FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($new_token)."'"));
         $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
     }
 
@@ -113,9 +113,9 @@ if(isset($_SESSION['logged'])){
                                                                     <label class="control-label col-md-3">Start/end dates <span class="required">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <div class="input-group input-md date-picker input-daterange" data-date="10/11/2012" data-date-format="mm/dd/yyyy" style="width: 100% !important;">
-                                                                            <input type="text" class="form-control" name="startdate" value="<?php echo $event['event_date_start']; ?>">
+                                                                            <input type="text" class="form-control" name="startdate" value="<?php echo date("m/d/Y", strtotime($event['event_date_start'])); ?>">
                                                                             <span class="input-group-addon"> to </span>
-                                                                            <input type="text" class="form-control" name="enddate" value="<?php echo $event['event_date_end']; ?>">
+                                                                            <input type="text" class="form-control" name="enddate" value="<?php echo date("m/d/Y", strtotime($event['event_date_end'])); ?>">
                                                                         </div>
                                                                         <!-- /input-group -->
                                                                         <span class="help-block" for="startdate enddate">Select date range of the event </span>
@@ -560,20 +560,44 @@ if(isset($_SESSION['logged'])){
                                                                 <hr/>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12" id="booking_fee_success_maybe">
-                                                                <?php
-                                                                    echo $location['location_booking_fee_disclaimer'];
+                                                        <?php
+                                                            if($event['event_booking'] != 1){
                                                                 ?>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12 text-center">
-                                                                <div class="well">
-                                                                    <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
+                                                                <div class="row" id="booking_fee_success_maybe">
+                                                                    <div class="col-md-12">
+                                                                        <?php
+                                                                        echo $location['location_booking_fee_disclaimer'];
+                                                                        ?>
+                                                                    </div>
                                                                 </div>
-                                                             </div>
-                                                        </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 text-center">
+                                                                        <div class="well">
+                                                                            <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <?php
+                                                            } else {
+                                                                ?>
+                                                                <div class="row" style="margin-bottom: 50px;">
+                                                                    <div class="col-md-12 page-404">
+                                                                        <div class="number font-green" style="top: 20px !important;">
+                                                                            <i style="font-size: 100px;" class="icon-check"></i>
+                                                                        </div>
+                                                                        <div class="details">
+                                                                            <h3>Booking fee paid</h3>
+                                                                            <p>
+                                                                                Customer can pay bill however they choose to.<br>
+                                                                                <strong>stripe token? who authorized? idk</strong>.
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <?php
+                                                            }
+                                                        ?>
+
                                                     </div>
                                                 </div>
                                             </div>

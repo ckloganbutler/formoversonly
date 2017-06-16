@@ -36,11 +36,17 @@ if(isset($_SESSION['logged'])){
                             <i class="icon-earphones-alt theme-font bold"></i>
                             <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span>  <small>Employees</small>
                         </div>
-                        <div class="actions btn-set">
-                            <a class="btn default red-stripe" data-toggle="modal" href="#create_employees">
-                                <i class="fa fa-plus"></i> Add new employee
-                            </a>
-                        </div>
+                        <?php
+                        if($_SESSION['group'] <= 2){
+                            ?>
+                            <div class="actions btn-set">
+                                <a class="btn default red-stripe" data-toggle="modal" href="#create_employees">
+                                    <i class="fa fa-plus"></i> Add new employee
+                                </a>
+                            </div>
+                            <?php
+                        }
+                        ?>
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">

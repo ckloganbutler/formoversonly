@@ -1444,7 +1444,7 @@ if(isset($_SESSION['logged'])){
                         summaryPanel.innerHTML = '';
                         // For each route, display summary information.
                         for (var i = 0; i < route.legs.length; i++) {
-                            var routeSegment = i + 1;
+                            /*var routeSegment = i + 1;
                              if(routeSegment == 1){
                                  summaryPanel.innerHTML += 'From <strong>dispatch</strong> to <strong>there</strong> (' + route.legs[i].distance.text + '): ' + routeSegment +
                                      '<br>';
@@ -1453,7 +1453,7 @@ if(isset($_SESSION['logged'])){
                                      '<br>';
                              }
                             summaryPanel.innerHTML += route.legs[i].start_address + ' <strong>to</strong>  ';
-                            summaryPanel.innerHTML += route.legs[i].end_address + ' <br/><br/>';
+                            summaryPanel.innerHTML += route.legs[i].end_address + ' <br/><br/>';*/
                         }
                     } else {
                         window.alert('Couldnt find directions for this event: ' + status);

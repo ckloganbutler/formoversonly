@@ -13,10 +13,8 @@ if(isset($_POST) && !isset($_GET['disabled'])){
      */
 
     $name       = explode(" ", sentence_case($_POST['fullname']));
-
     $email      = $_POST['email'];
     $phone      = preg_replace('/[^A-Za-z0-9\-]/', '', $_POST['phone']);
-    $password   = md5($_POST['password']);
     $company    = sentence_case($_POST['company']);
     $address    = sentence_case($_POST['address']);
     $address2   = sentence_case($_POST['address2']);
@@ -44,7 +42,13 @@ if(isset($_POST) && !isset($_GET['disabled'])){
      *          5.3- Crewman/Other
      *      }
      */
-
+    //Lets generate their password
+    if(!empty($_POST['password'])){
+        $password   = md5($_POST['password']);
+    } else {
+        $pass       = struuid();
+        $password   = md5($pass);
+    }
     // Users name
     if(count($name) != 3){
         $fname = $name[0]; $lname = $name[1];
@@ -89,8 +93,13 @@ if(isset($_POST) && !isset($_GET['disabled'])){
         '".mysql_real_escape_string($pic)."',
         '".mysql_real_escape_string($last_ext)."')");
 
+        $id = mysql_insert_id();
+
         if($group != 1){
             timeline_log($uuid, $creator, "User creation", $fname." was registered to the system.");
+        }
+        if($group == 2 || $group >= 4) {
+            _sendText($phone, "Welcome to the company! https://www.formoversonly.com\r\nEmployee ID: ".$id."\r\nPassword: ".$pass."");
         }
         echo $uuid;
     }

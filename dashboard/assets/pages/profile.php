@@ -258,7 +258,7 @@ if(isset($_SESSION['logged'])){
                                         }
                                         ?>
                                         <?php
-                                        if($employee == true){
+                                        if($employee == true && $_SESSION['group'] <= 2){
                                             ?>
                                             <li>
                                                 <a href="#documents" data-toggle="tab">Documents</a>
@@ -384,7 +384,7 @@ if(isset($_SESSION['logged'])){
                                                 </div>
                                             </div>
                                             <?php
-                                                if($employee == true){
+                                                if($employee == true && $_SESSION['group'] <= 2){
                                                     ?>
                                                     <hr/>
                                                     <h3>Employee Information</h3>
