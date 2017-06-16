@@ -70,14 +70,7 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <br/><br/><br/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="customers_list">
-                                <div class="row">
+                                <div class="row" style="margin-top: 80px;">
                                     <div class="col-md-12">
                                         <div class="table-container">
                                             <table class="table table-striped table-bordered table-hover" id="customers">
