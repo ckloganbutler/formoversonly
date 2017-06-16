@@ -21,9 +21,4 @@ dashboard/assets/admin/pages/media/*
 <<<<<<< HEAD
 <<<<<<< HEAD
 dashboard/assets/app/twilio-php-master/*
-=======
-
->>>>>>> 89e4a3ebe432cbe748dab13bbb39f1ed5fc68515
-=======
-
->>>>>>> 89e4a3ebe432cbe748dab13bbb39f1ed5fc68515
+dashboard/assets/app/obj/stripe-php-master/*

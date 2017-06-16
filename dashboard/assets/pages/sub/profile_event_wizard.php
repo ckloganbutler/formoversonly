@@ -561,7 +561,7 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                         </div>
                                                         <div class="row">
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-12" id="booking_fee_success_maybe">
                                                                 <?php
                                                                     echo $location['location_booking_fee_disclaimer'];
                                                                 ?>
@@ -569,8 +569,10 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                         <div class="row">
                                                             <div class="col-md-12 text-center">
-                                                                <button id="pay" class="btn btn-block btn-xl btn-success">Securely pay <strong>$10.00</strong> booking fee</button>
-                                                            </div>
+                                                                <div class="well">
+                                                                    <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
+                                                                </div>
+                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -853,15 +855,29 @@ if(isset($_SESSION['logged'])){
                 locale: 'auto',
                 token: function(token) {
                     $.ajax({
-                        url: 'assets/app/api/charge.php',
+                        url: 'assets/app/charge.php',
                         type: 'POST',
                         data: {
                             stripeToken: token.id,
                             stripeEmail: token.email,
-                            stripeAmt: 300
+                            stripeAmt: 1000
                         },
                         success: function(data){
+                             $.ajax({
+                                url: 'assets/app/update_settings.php?update=event_fly',
+                                type: 'POST',
+                                data: {
+                                    name: 'event_booking',
+                                    value: 1,
+                                    pk: '<?php echo $event['event_token']; ?>'
+                                },
+                                success: function(s){
+                                    $('#booking_fee_success_maybe').html("<br/><br/><br/><center><h3><i class='fa fa-check text-success'></i> Booking fee paid</h3></center><br/><br/><br/>");
+                                },
+                                error: function(s){
 
+                                }
+                             });
                         },
                         error: function(e){
 
@@ -1159,7 +1175,7 @@ if(isset($_SESSION['logged'])){
             $('#form_wizard_1 .button-submit').click(function () {
                 Pace.track(function(){
                     $.ajax({
-                        url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>',
+                        url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>&luid=<?php echo $event['event_location_token']; ?>',
                         type: 'POST',
                         data: $('#submit_form').serialize(),
                         success: function(d) {

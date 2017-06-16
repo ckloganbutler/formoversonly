@@ -75,3 +75,44 @@ function phone($token){
         return clean_phone($phone['user_phone']);
     }
 }
+
+function companyPhone($cuid){
+    $phone = mysql_fetch_array(mysql_query("SELECT user_phone FROM fmo_users WHERE user_company_token='".mysql_real_escape_string($cuid)."'"));
+    if(!empty($phone['user_phone'])){
+        echo $phone['user_phone'];
+    } else {
+        return NULL;
+    }
+}
+
+function companyName($cuid){
+    $name = mysql_fetch_array(mysql_query("SELECT user_company_name FROM fmo_users WHERE user_company_token='".mysql_real_escape_string($cuid)."'"));
+    if(!empty($name['user_company_name'])){
+        echo $name['user_company_name'];
+    } else {
+        return NULL;
+    }
+}
+
+function locationName($token){
+    $name = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
+    if(!empty($name['location_name'])){
+        echo $name['location_name'];
+    } else {
+        return NULL;
+    }
+}
+
+function locationManagerPhone($token){
+    $manager = mysql_fetch_array(mysql_query("SELECT location_manager FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
+    if(!empty($manager['location_manager'])){
+        $phone = mysql_fetch_array(mysql_query("SELECT user_phone FROM fmo_users WHERE user_token='".mysql_real_escape_string($manager['location_manager'])."'"));
+        if(!empty($phone['user_phone'])){
+            echo $phone['user_phone'];
+        } else {
+            return NULL;
+        }
+    } else {
+        return NULL;
+    }
+}

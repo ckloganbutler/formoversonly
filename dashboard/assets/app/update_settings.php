@@ -154,13 +154,16 @@ if($_GET['update'] == 'change_type'){
 }
 if($_GET['update'] == 'event' && isset($_POST)){
     $pfield = array('event_status', 'event_date_start', 'event_date_end', 'event_time', 'event_name', 'event_type', 'event_subtype', 'event_email', 'event_phone', 'event_truckfee', 'event_laborrate', 'event_countyfee');
-    $pvalue = array(1, date('Y-m-d', strtotime($_POST['startdate'])), date('Y-m-d', strtotime($_POST['enddate'])), $_POST['time'], $_POST['name'], $_POST['type'], $_POST['subtype'], $_POST['email'], $_POST['phone'], $_POST['truckfee'], $_POST['laborrate'], $_POST['countyfee']);
+    $pvalue = array($_POST['status'], date('Y-m-d', strtotime($_POST['startdate'])), date('Y-m-d', strtotime($_POST['enddate'])), $_POST['time'], $_POST['name'], $_POST['type'], $_POST['subtype'], $_POST['email'], $_POST['phone'], $_POST['truckfee'], $_POST['laborrate'], $_POST['countyfee']);
     $ptoken = $_GET['e'];
     for ($k = 0; $k<count($pfield); $k++) {
         if(!empty($pvalue[$k])){
             mysql_loop($pfield[$k], $pvalue[$k], "fmo_locations_events", "event_token", $ptoken);
         }
     }
+
+    _sendText(companyPhone($_SESSION['cuid']), "[".companyName($_SESSION['cuid'])."]:\r\nNew ".locationName($_GET['luid'])." Booking/Event on ".date("m/d/Y", strtotime($_POST['startdate']))."\r\n".$_POST['name'].", ".clean_phone($_POST['phone'])."\r\nBooked by: ".name($_SESSION['uuid'])."");
+    _sendText(locationManagerPhone($_GET['luid']), "[".companyName($_SESSION['cuid'])."]:\r\nNew ".locationName($_GET['luid'])." Booking/Event on ".date("m/d/Y", strtotime($_POST['startdate']))."\r\n".$_POST['name'].", ".clean_phone($_POST['phone'])."\r\nBooked by: ".name($_SESSION['uuid'])."");
 
     return false;
 }

@@ -81,13 +81,13 @@ if(isset($_SESSION['logged'])){
         </div>
         <?php
         $broadcast = getBroadcast($_SESSION['cuid']);
-        if(!empty($broadcast['message']) && $broadcast['time'] <= strtotime('+ 2 days')){
+        if(!empty($broadcast['message']) && $broadcast['time'] > date('Y-m-d', strtotime($broadcast['time'].' + 2 days'))){
             ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="alert alert-warning">
                         <marquee>
-                            <?php echo $broadcast['time']; ?> | <strong class="text-danger" style="font-size: 16px;">
+                            Company broadcast | <strong class="text-danger" style="font-size: 16px;">
                                 <?php echo $broadcast['message']; ?>
                             </strong>
                         </marquee>
