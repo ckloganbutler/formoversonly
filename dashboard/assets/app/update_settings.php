@@ -162,8 +162,8 @@ if($_GET['update'] == 'event' && isset($_POST)){
         }
     }
 
-    _sendText(companyPhone($_SESSION['cuid']), "[".companyName($_SESSION['cuid'])."]:\r\nNew ".locationName($_GET['luid'])." Booking/Event on ".date("m/d/Y", strtotime($_POST['startdate']))."\r\n".$_POST['name'].", ".clean_phone($_POST['phone'])."\r\nBooked by: ".name($_SESSION['uuid'])."");
-    _sendText(locationManagerPhone($_GET['luid']), "[".companyName($_SESSION['cuid'])."]:\r\nNew ".locationName($_GET['luid'])." Booking/Event on ".date("m/d/Y", strtotime($_POST['startdate']))."\r\n".$_POST['name'].", ".clean_phone($_POST['phone'])."\r\nBooked by: ".name($_SESSION['uuid'])."");
+    _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." - ".$_POST['name']."\r\n / ".name($_SESSION['uuid'])."");
+    _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." - ".$_POST['name']."\r\n / ".name($_SESSION['uuid'])."");
 
     return false;
 }
