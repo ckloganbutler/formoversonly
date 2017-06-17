@@ -226,7 +226,9 @@ if(isset($_SESSION['logged'])){
                                                         Phone:
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo clean_phone($event['event_phone']);  ?>
+                                                        <a class="ev" style="color:#333333" data-name="event_phone" data-pk="<?php echo $event['event_token']; ?>" data-type="text" data-placement="right" data-title="Enter new event phone number.." data-url="assets/app/update_settings.php?update=event_fly">
+                                                            <?php echo clean_phone($event['event_phone']);  ?>
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <div class="row static-info">
@@ -234,7 +236,9 @@ if(isset($_SESSION['logged'])){
                                                         Email:
                                                     </div>
                                                     <div class="col-md-7 value">
-                                                        <?php echo $event['event_email']; ?>
+                                                        <a class="ev" style="color:#333333" data-name="event_email" data-pk="<?php echo $event['event_token']; ?>" data-type="email" data-placement="right" data-title="Enter new event email.." data-url="assets/app/update_settings.php?update=event_fly">
+                                                            <?php echo $event['event_email']; ?>
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <hr/>
@@ -1169,12 +1173,14 @@ if(isset($_SESSION['logged'])){
             <div class="modal-content box red">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h3 class="modal-title font-bold">Miscellenous tools for <?php echo $event['event_name']; ?></h3>
+                    <h3 class="modal-title font-bold">Miscellaneous tools for <?php echo $event['event_name']; ?></h3>
                 </div>
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
-
+                            <h4>Outbound texts to customer</h4><hr/>
+                            <button class="btn red-stripe fire" data-fire="review_link"><i class="fa fa-star"></i> Send event review link</button>
+                            <button class="btn blue-stripe fire" data-fire="claim_link"><i class="fa fa-exclamation-triangle"></i> Send claim form link</button>
                         </div>
                     </div>
                 </div>
@@ -1790,6 +1796,23 @@ if(isset($_SESSION['logged'])){
             );
 
             $('#dashboard-report-range').show();
+
+            $('.fire').click(function(f){
+                var fire = $(this).attr('data-fire');
+                $.ajax({
+                    url: 'assets/app/texting.php?txt='+fire,
+                    type: 'POST',
+                    data: {
+                        ev: '<?php echo $event['event_token']; ?>'
+                    },
+                    success: function(f){
+                        toastr.success("<strong>Logan says:</strong><br/>Message was sent to the phone number associated with the event. They should recieve it momentarily. ");
+                    },
+                    error: function(f){
+
+                    }
+                })
+            });
         });
     </script>
     <?php

@@ -71,6 +71,9 @@ if($_GET['update'] == 'event_fly'){
     $field = $_POST['name'];
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
+    if($field == 'event_phone'){
+        $value = preg_replace('/[^A-Za-z0-9\-]/', '', $value);
+    }
     mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($pk)."'");
     timeline_event($pk, $_SESSION['uuid'], "Information update", "'".$field."' was changed to: ".$value);
 }

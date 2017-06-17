@@ -9,6 +9,9 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'claim'){
+        
+    }
     if($_GET['setting'] == 'laborer'){
         $token          = $_GET['ev'];
         $role           = $_POST['role'];
