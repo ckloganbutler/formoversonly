@@ -1138,7 +1138,33 @@ if(isset($_SESSION['logged'])){
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
+                            <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=claims&ev=<?php echo $event['event_token']; ?>">
+                                <thead>
+                                <tr role="row" class="heading">
+                                    <th width="12%">
+                                        Claim Timestamp
+                                    </th>
+                                    <th>
+                                        Item
+                                    </th>
+                                    <th>
+                                        Padding
+                                    </th>
+                                    <th>
+                                        Weight
+                                    </th>
+                                    <th>
+                                        Comments
+                                    </th>
+                                    <th>
+                                        Actions
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1158,7 +1184,30 @@ if(isset($_SESSION['logged'])){
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
+                            <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=reviews&ev=<?php echo $event['event_token']; ?>">
+                                <thead>
+                                    <tr role="row" class="heading">
+                                        <th width="12%">
+                                            Review Timestamp
+                                        </th>
+                                        <th>
+                                            Rating
+                                        </th>
+                                        <th>
+                                            Comments
+                                        </th>
+                                        <th>
+                                            By
+                                        </th>
+                                        <th width="12%">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

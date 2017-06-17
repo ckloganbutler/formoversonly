@@ -2,11 +2,15 @@
 <!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
 <!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
 <!--[if !IE]><!-->
+<?php
+require '../app/init.php';
+$event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+?>
 <html lang="en">
 <!--<![endif]-->
 <head>
     <meta charset="utf-8"/>
-    <title>Login [+] For Movers Only</title>
+    <title>Claim form | <?php echo $event['event_name']; ?></title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta content="For Movers Only UI Description" name="description">
@@ -42,7 +46,7 @@
 </div>
 <div class="content">
     <div class="login-form">
-        <h3 class="form-title"><strong>Claim</strong> form</h3>
+        <h3 class="form-title"><strong>Claim</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
         <form class="claim-form" action="../app/login.php?t=aXn" method="POST">
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Item that was damaged</label>
@@ -70,7 +74,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments"></textarea>
+                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
             </div>
             <div class="form-actions">
                 <label class="checkbox">
@@ -80,6 +84,12 @@
                 </button>
             </div>
         </form>
+    </div>
+    <div class="login-form" id="success" style="display: none;">
+        <center>
+            <h3 class="form-title"><i class="fa fa-check" style="font-size: 25px;"></i><strong>Claim</strong> submitted.</h3>
+            <small>You will be contacted by a customer service representative regarding this claim. <br/><br/> <span class="badge badge-success"><?php echo $event['event_name']; ?></span></small> <br/><br/><br/>
+        </center>
     </div>
 </div>
 <!-- END LOGIN -->
@@ -120,7 +130,7 @@
                     required: true
                 },
                 weight: {
-                    required: false
+                    required: true
                 }
             },
 
@@ -152,11 +162,12 @@
 
             submitHandler: function(form) {
                 $.ajax({
-                    url: '../app/add_setting.php?setting=claim',
+                    url: '../app/add_setting.php?setting=claim&ev=<?php echo $_GET['ev']; ?>',
                     type: 'POST',
                     data: $('.claim-form').serialize(),
                     success: function(c){
-
+                        $('.login-form').hide();
+                        $('#success').show();
                     },
                     error: function(c){
 

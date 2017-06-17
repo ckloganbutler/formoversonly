@@ -9,8 +9,35 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'review'){
+        $token          = $_GET['ev'];
+        $rating         = $_POST['rating'];
+        $comments       = $_POST['comments'];
+        $name           = $_POST['name'];
+        $anonymous      = $_POST['anonymous'];
+
+        mysql_query("INSERT INTO fmo_locations_events_reviews (review_event_token, review_rating, review_comments, review_name, review_anonymous) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($rating)."',
+        '".mysql_real_escape_string($comments)."',
+        '".mysql_real_escape_string($name)."',
+        '".mysql_real_escape_string($anonymous)."')");
+    }
     if($_GET['setting'] == 'claim'){
-        
+        $token          = $_GET['ev'];
+        $item           = $_POST['item'];
+        $padded         = $_POST['padded'];
+        $weight         = $_POST['weight'];
+        $comments       = $_POST['comments'];
+        $remote_ip      = $_SERVER['REMOTE_ADDR'];
+
+        mysql_query("INSERT INTO fmo_locations_events_claims (claim_event_token, claim_item, claim_padded, claim_weight, claim_comments, claim_remote_addr) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($item)."',
+        '".mysql_real_escape_string($padded)."',
+        '".mysql_real_escape_string($weight)."',
+        '".mysql_real_escape_string($comments)."',
+        '".mysql_real_escape_string($remote_ip)."')");
     }
     if($_GET['setting'] == 'laborer'){
         $token          = $_GET['ev'];

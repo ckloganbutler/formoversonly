@@ -75,6 +75,68 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
     echo json_encode($records);
 }
 
+if(isset($_GET) && $_GET['type'] == 'reviews'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findReviews = mysql_query("SELECT review_rating, review_comments, review_name, review_timestamp FROM fmo_locations_events_reviews WHERE review_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $iTotalRecords = mysql_num_rows($findReviews);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($rv = mysql_fetch_assoc($findReviews)) {
+        $records["data"][] = array(
+            ''.$rv['review_timestamp'].'',
+            ''.$rv['review_rating'].' stars',
+            ''.$rv['review_comments'].'',
+            ''.$rv['review_name'].'',
+            '<a class="btn default btn-xs red-stripe"><i class="fa fa-times"></i> Delete</a>'
+        );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+
+if(isset($_GET) && $_GET['type'] == 'claims'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findClaims = mysql_query("SELECT claim_timestamp, claim_item, claim_padded, claim_weight, claim_comments FROM fmo_locations_events_claims WHERE claim_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $iTotalRecords = mysql_num_rows($findClaims);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($cl = mysql_fetch_assoc($findClaims)) {
+        if($cl['claim_padded'] == 'No'){
+            $label = "label-danger";
+        } else {
+            $label = "label-success";
+        }
+        $records["data"][] = array(
+            ''.$cl['claim_timestamp'].'',
+            ''.$cl['claim_item'].'',
+            '<span class="label '.$label.'">'.$cl['claim_padded'].'</span>',
+            ''.$cl['claim_weight'].'',
+            ''.$cl['claim_comments'].'',
+            '<a class="btn default btn-xs red-stripe"><i class="fa fa-times"></i> Delete</a>'
+        );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+
 if(isset($_GET) && $_GET['type'] == 'timeline'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
