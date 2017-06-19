@@ -9,6 +9,23 @@ session_start();
 include 'init.php';
 
 if(isset($_GET['setting'])){
+    if($_GET['setting'] == 'claimImage'){
+        $fileName  = struuid();
+        $file_ext = substr($_FILES['file']['name'], strripos($_FILES['file']['name'], '.'));
+        $uploaddir = '../upload/claims/';
+        $uploadfile = $uploaddir . $fileName;
+
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile . $file_ext);
+        $link = "//www.formoversonly.com/dashboard/assets/upload/claims/". $fileName . $file_ext;
+
+
+        mysql_query("INSERT INTO fmo_locations_events_claims_images (
+        image_event_token, 
+        image_link
+        ) VALUES (
+        '" . mysql_real_escape_string($_GET['ev']) . "',
+        '" . mysql_real_escape_string($link) . "')") or die(mysql_error());
+    }
     if($_GET['setting'] == 'review'){
         $token          = $_GET['ev'];
         $rating         = $_POST['rating'];

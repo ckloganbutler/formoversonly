@@ -28,6 +28,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
     <link href="../global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
     <link href="../global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
+    <link href="../global/plugins/dropzone/css/dropzone.css" rel="stylesheet"/>
     <link href="../admin/pages/css/login3.css" rel="stylesheet" type="text/css"/>
     <link href="../global/css/components.css" id="style_components" rel="stylesheet" type="text/css"/>
     <link href="../global/css/plugins.css" rel="stylesheet" type="text/css"/>
@@ -45,52 +46,77 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <div class="menu-toggler sidebar-toggler">
 </div>
 <div class="content">
-    <div class="login-form">
-        <h3 class="form-title"><strong>Claim</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
-        <form class="claim-form" action="../app/login.php?t=aXn" method="POST">
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">Item that was damaged</label>
-                <div class="input-icon">
-                    <i class="fa fa-chain-broken"></i>
-                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Item that was damaged" name="item"/>
-                </div>
+    <?php
+        $claim = mysql_fetch_array(mysql_query("SELECT claim_item, claim_padded, claim_weight, claim_comments FROM fmo_locations_events_claims WHERE claim_event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+        if(!empty($claim['claim_item'])){
+            ?>
+            <div class="login-form">
+                <center>
+                    <h3 class="form-title"><i class="fa fa-check" style="font-size: 25px;"></i><strong>Claim</strong> submitted.</h3>
+                    <small>
+                        Below, you can review information about your claim & add photographs for our customer service represenatives to view.
+                        <br/><br/>
+                        <span class="badge badge-danger"><?php echo $event['event_name']; ?></span>
+                        <br/>
+                        <strong>Item: </strong> <?php echo $claim['claim_item']; ?> <br/>
+                        <strong>Item Padded: </strong> <?php echo $claim['claim_padded']; ?> <br/>
+                        <strong>Item Weight (lbs): </strong> <?php echo $claim['claim_weight']; ?> <br/>
+                        <br/>
+                        <strong>Comments: </strong> <br/>
+                        <?php echo $claim['claim_comments']; ?>
+                    </small>
+                    <br/>
+                </center>
+                <form action="../app/add_setting.php?setting=claimImage&ev=<?php echo $_GET['ev']; ?>" method="POST" class="dropzone" id="my-dropzone">
+                    <div class="dz-message text-center" data-dz-message><span class="badge badge-danger">Click here to upload</span></div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">Was the item padded?</label>
-                <div class="input-icon">
-                    <i class="fa fa-hospital-o"></i>
-                    <select class="form-control placeholder-no-fix" name="padded">
-                        <option disabled selected value="">Was the item padded?</option>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </div>
+            <?php
+        } else {
+            ?>
+            <div class="login-form">
+                <h3 class="form-title"><strong>Claim</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
+                <form class="claim-form" action="../app/login.php?t=aXn" method="POST">
+                    <div class="form-group">
+                        <label class="control-label visible-ie8 visible-ie9">Item that was damaged</label>
+                        <div class="input-icon">
+                            <i class="fa fa-chain-broken"></i>
+                            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Item that was damaged" name="item"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label visible-ie8 visible-ie9">Was the item padded?</label>
+                        <div class="input-icon">
+                            <i class="fa fa-hospital-o"></i>
+                            <select class="form-control placeholder-no-fix" name="padded">
+                                <option disabled selected value="">Was the item padded?</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label visible-ie8 visible-ie9">Approximate Weight (LBs)</label>
+                        <div class="input-icon">
+                            <i class="fa fa-cube"></i>
+                            <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Approximate Weight (Lbs)" name="weight"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <label class="checkbox">
+                            <input type="checkbox" name="remember" value="1"/> Urgent claim </label>
+                        <button type="submit" class="btn red pull-right">
+                            Submit <i class="m-icon-swapright m-icon-white"></i>
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">Approximate Weight (LBs)</label>
-                <div class="input-icon">
-                    <i class="fa fa-cube"></i>
-                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Approximate Weight (Lbs)" name="weight"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
-            </div>
-            <div class="form-actions">
-                <label class="checkbox">
-                    <input type="checkbox" name="remember" value="1"/> Urgent claim </label>
-                <button type="submit" class="btn red pull-right">
-                    Submit <i class="m-icon-swapright m-icon-white"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-    <div class="login-form" id="success" style="display: none;">
-        <center>
-            <h3 class="form-title"><i class="fa fa-check" style="font-size: 25px;"></i><strong>Claim</strong> submitted.</h3>
-            <small>You will be contacted by a customer service representative regarding this claim. <br/><br/> <span class="badge badge-success"><?php echo $event['event_name']; ?></span></small> <br/><br/><br/>
-        </center>
-    </div>
+            <?php
+        }
+    ?>
 </div>
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
@@ -108,6 +134,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <script src="../global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <script src="../global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="../global/plugins/dropzone/dropzone.js"></script>
 <script type="text/javascript" src="../global/plugins/select2/select2.min.js"></script>
 <script src="../global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../admin/layout/scripts/layout.js" type="text/javascript"></script>
@@ -117,6 +144,40 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
         Metronic.init();
         Layout.init();
         Login.init();
+
+        <?php
+        if(!empty($claim['claim_item'])){
+            ?>
+            Dropzone.options.myDropzone = {
+                init: function() {
+                    this.on("addedfile", function(file) {
+                        // Create the remove button
+                        var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-block'>Remove file</button>");
+
+                        // Capture the Dropzone instance as closure.
+                        var _this = this;
+
+                        // Listen to the click event
+                        removeButton.addEventListener("click", function(e) {
+                            // Make sure the button click doesn't submit the form:
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            // Remove the file preview.
+                            _this.removeFile(file);
+                            // If you want to the delete the file on the server as well,
+                            // you can do the AJAX request here.
+                        });
+
+                        // Add the button to the file preview element.
+                        file.previewElement.appendChild(removeButton);
+                    });
+                }
+            };
+            <?php
+        }
+        ?>
+
 
         $('.claim-form').validate({
             errorElement: 'span', //default input error message container
