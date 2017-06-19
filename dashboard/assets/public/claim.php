@@ -68,7 +68,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                     <br/>
                 </center>
                 <form action="../app/add_setting.php?setting=claimImage&ev=<?php echo $_GET['ev']; ?>" method="POST" class="dropzone" id="my-dropzone">
-                    <div class="dz-message text-center" data-dz-message><span class="badge badge-danger">Click here to upload</span></div>
+                    <div class="dz-message text-center" data-dz-message><span class="badge badge-danger">Click here to upload images</span></div>
                 </form>
             </div>
             <?php
@@ -106,8 +106,6 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                         <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
                     </div>
                     <div class="form-actions">
-                        <label class="checkbox">
-                            <input type="checkbox" name="remember" value="1"/> Urgent claim </label>
                         <button type="submit" class="btn red pull-right">
                             Submit <i class="m-icon-swapright m-icon-white"></i>
                         </button>
@@ -227,8 +225,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                     type: 'POST',
                     data: $('.claim-form').serialize(),
                     success: function(c){
-                        $('.login-form').hide();
-                        $('#success').show();
+                        window.location.reload();
                     },
                     error: function(c){
 

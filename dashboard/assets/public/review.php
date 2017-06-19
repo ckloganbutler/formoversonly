@@ -26,7 +26,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
     <link href="../global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
     <link href="../global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
     <link href="../global/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="../global/plugins/bootstrap-star-rating/css/star-rating.min.css" type="text/css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
     <link href="../global/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css"/>
     <link href="../global/plugins/select2/select2.css" rel="stylesheet" type="text/css"/>
     <link href="../admin/pages/css/login3.css" rel="stylesheet" type="text/css"/>
@@ -50,28 +50,36 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
     <div class="login-form">
         <h3 class="form-title"><strong>Review</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
         <form class="review-form" action="../app/login.php?t=aXn" method="POST">
-            <div class="form-group">
-                <input id="rating" name="rating" class="rating rating-loading" data-show-clear="false" data-show-caption="true">
+            <div class="form-group text-center">
+                <div id="rateYo" style="margin: auto !important;"> </div>
+                <input class="hidden" name="rating" id="rating">
             </div>
             <div class="form-group">
-                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
+                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="your review" name="comments"></textarea>
             </div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Your Name</label>
                 <div class="input-icon">
-                    <i class="fa fa-cube"></i>
-                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Your name" name="name"/>
+                    <i class="fa fa-user"></i>
+                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="your name" name="name"/>
                 </div>
             </div>
 
             <div class="form-actions">
-                <label class="checkbox">
-                    <input type="checkbox" name="anonymous" value="1"/> Remain Anonymous </label>
                 <button type="submit" class="btn red pull-right">
                     Submit <i class="m-icon-swapright m-icon-white"></i>
-                </button>
+                </button><br/><br/>
             </div>
+
         </form>
+        <div class="forget-password">
+            <h4>Need to file a <strong>claim</strong>?</h4>
+            <p>
+                no worries, click <a href="claim.php?ev=<?php echo $_GET['ev']; ?>" id="forget-password">
+                    here </a>
+                to begin the process.
+            </p>
+        </div>
     </div>
     <div class="login-form" id="success" style="display: none;">
         <center>
@@ -96,7 +104,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <script src="../global/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
 <script src="../global/plugins/jquery.cokie.min.js" type="text/javascript"></script>
 <script src="../global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="../global/plugins/bootstrap-star-rating/js/star-rating.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
 <script type="text/javascript" src="../global/plugins/select2/select2.min.js"></script>
 <script src="../global/scripts/metronic.js" type="text/javascript"></script>
 <script src="../admin/layout/scripts/layout.js" type="text/javascript"></script>
@@ -107,7 +115,12 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
         Layout.init();
         Login.init();
 
-        $("#rating").rating();
+        $("#rateYo").rateYo({
+            halfStar: true,
+            onChange: function(rating, rateYoInstance){
+                $('#rating').attr('value', rating);
+            }
+        });
 
         $('.review-form').validate({
             errorElement: 'span', //default input error message container

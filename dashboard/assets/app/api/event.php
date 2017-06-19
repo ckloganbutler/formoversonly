@@ -87,11 +87,9 @@ if(isset($_GET) && $_GET['type'] == 'reviews'){
 
     while($rv = mysql_fetch_assoc($findReviews)) {
         $records["data"][] = array(
-            ''.$rv['review_timestamp'].'',
             ''.$rv['review_rating'].' stars',
             ''.$rv['review_comments'].'',
             ''.$rv['review_name'].'',
-            '<a class="btn default btn-xs red-stripe"><i class="fa fa-times"></i> Delete</a>'
         );
     }
 

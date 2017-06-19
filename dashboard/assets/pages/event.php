@@ -1138,7 +1138,48 @@ if(isset($_SESSION['logged'])){
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
-                            
+                            <?php
+                            $claims = mysql_query("SELECT claim_id, claim_item, claim_padded, claim_weight, claim_comments FROM fmo_locations_events_claims WHERE claim_event_token='".mysql_real_escape_string($event['event_token'])."'");
+                            if(mysql_num_rows($claims) > 0){
+                                $claim = mysql_fetch_array($claims);
+                                ?>
+                                <h6>Claim #<?php echo $claim['claim_id']; ?></h6>
+                                <div class="alert alert-danger">
+                                    <h4><strong><?php echo $claim['claim_item']; ?></strong></h4>
+                                    <p>
+                                        Padded: <strong><?php echo $claim['claim_padded']; ?></strong> | Weight (Lbs): <strong><?php echo $claim['claim_weight']; ?></strong> <br/>
+                                        Comments: <strong><?php if(empty($claim['claim_comments'])){echo "N/A";} else {echo $claim['claim_comments'];} ?></strong>
+                                    </p>
+                                </div>
+                                <h6>Images</h6>
+                                <div class="well">
+                                    <div class="row">
+                                        <?php
+                                        $claimimgs = mysql_query("SELECT image_link FROM fmo_locations_events_claims_images WHERE image_event_token='".mysql_real_escape_string($event['event_token'])."'");
+                                        if(mysql_num_rows($claimimgs) > 0){
+                                            while($img = mysql_fetch_assoc($claimimgs)){
+                                                ?>
+                                                <img class="col-md-4 img-responsive" src="<?php echo $img['image_link']; ?>" alt="claim image"/>
+                                                <?php
+                                            }
+                                        } else {
+                                            ?>
+                                            <center>
+                                                <strong>No images are associated with this claim yet.</strong>
+                                            </center>
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
+                                <?php
+                            } else {
+                                ?>
+
+
+                                <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -1161,9 +1202,6 @@ if(isset($_SESSION['logged'])){
                             <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=reviews&ev=<?php echo $event['event_token']; ?>">
                                 <thead>
                                     <tr role="row" class="heading">
-                                        <th width="12%">
-                                            Review Timestamp
-                                        </th>
                                         <th>
                                             Rating
                                         </th>
@@ -1172,9 +1210,6 @@ if(isset($_SESSION['logged'])){
                                         </th>
                                         <th>
                                             By
-                                        </th>
-                                        <th width="12%">
-                                            Actions
                                         </th>
                                     </tr>
                                 </thead>
