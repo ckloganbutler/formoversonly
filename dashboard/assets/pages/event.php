@@ -855,11 +855,11 @@ if(isset($_SESSION['logged'])){
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#claims_only">
                                                                     <i class="fa fa-exclamation-triangle"></i>
-                                                                    <span class="hidden-480">View <strong>customer claims</strong></span>
+                                                                    <span class="hidden-480">View <strong>customer claims</strong> (<?php echo mysql_num_rows(mysql_query("SELECT claim_id FROM fmo_locations_events_claims WHERE claim_event_token='".mysql_real_escape_string($event['event_token'])."'")); ?>)</span>
                                                                 </a>
-                                                                <a class="btn default red-stripe" data-toggle="modal" href="#reviews_only">
+                                                                <a class="btn default red-stripe ratings" data-toggle="modal" href="#reviews_only">
                                                                     <i class="fa fa-book"></i>
-                                                                    <span class="hidden-480">View <strong>customer reviews</strong> </span>
+                                                                    <span class="hidden-480">View <strong>customer reviews</strong> (<?php echo mysql_num_rows(mysql_query("SELECT review_id FROM fmo_locations_events_reviews WHERE review_event_token='".mysql_real_escape_string($event['event_token'])."'")); ?>)</span>
                                                                 </a>
                                                                 <a class="btn default red-stripe" data-toggle="modal" href="#tools_only">
                                                                     <i class="fa fa-external-link"></i>
@@ -1133,7 +1133,7 @@ if(isset($_SESSION['logged'])){
             <div class="modal-content box red">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h3 class="modal-title font-bold">Customer claims for <?php echo $event['event_name']; ?></h3>
+                    <h3 class="modal-title font-bold">Claim for <?php echo $event['event_name']; ?></h3>
                 </div>
                 <div class="modal-body">
                     <div class="portlet">
@@ -1143,7 +1143,6 @@ if(isset($_SESSION['logged'])){
                             if(mysql_num_rows($claims) > 0){
                                 $claim = mysql_fetch_array($claims);
                                 ?>
-                                <h6>Claim #<?php echo $claim['claim_id']; ?></h6>
                                 <div class="alert alert-danger">
                                     <h4><strong><?php echo $claim['claim_item']; ?></strong></h4>
                                     <p>
@@ -1151,7 +1150,7 @@ if(isset($_SESSION['logged'])){
                                         Comments: <strong><?php if(empty($claim['claim_comments'])){echo "N/A";} else {echo $claim['claim_comments'];} ?></strong>
                                     </p>
                                 </div>
-                                <h6>Images</h6>
+                                <h6>Images for <strong><?php echo $claim['claim_item']; ?></strong></h6>
                                 <div class="well">
                                     <div class="row">
                                         <?php
@@ -1175,8 +1174,9 @@ if(isset($_SESSION['logged'])){
                                 <?php
                             } else {
                                 ?>
-
-
+                                <div class="alert alert-warning">
+                                    <strong>There is no claim associated with this event.</strong>
+                                </div>
                                 <?php
                             }
                             ?>
@@ -1194,29 +1194,31 @@ if(isset($_SESSION['logged'])){
             <div class="modal-content box red">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h3 class="modal-title font-bold">Customer reviews for <?php echo $event['event_name']; ?></h3>
+                    <h3 class="modal-title font-bold">Review for <?php echo $event['event_name']; ?></h3>
                 </div>
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
-                            <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=reviews&ev=<?php echo $event['event_token']; ?>">
-                                <thead>
-                                    <tr role="row" class="heading">
-                                        <th>
-                                            Rating
-                                        </th>
-                                        <th>
-                                            Comments
-                                        </th>
-                                        <th>
-                                            By
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                            <?php
+                            $review = mysql_query("SELECT review_rating, review_comments FROM fmo_locations_events_reviews WHERE review_event_token='".mysql_real_escape_string($event['event_token'])."'");
+                            if(mysql_num_rows($review) > 0){
+                                $review = mysql_fetch_array($review);
+                                ?>
+                                <center>
+                                    <br/><br/>
+                                    <div class="rateYo" data-rateyo-rating="<?php echo $review['review_rating']; ?>"></div><br/><br/>
+                                    <p style="font-size: 24px"><?php echo $review['review_comments']; ?></p>
+                                    <small>by <strong><?php echo name($event['event_user_token']); ?></strong></small>
+                                </center>
+                                <?php
+                            } else {
+                                ?>
+                                <div class="alert alert-warning">
+                                    <strong>There is no review associated with this event.</strong>
+                                </div>
+                                <?php
+                            }
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -1257,7 +1259,7 @@ if(isset($_SESSION['logged'])){
                         <h3 class="modal-title font-bold">Add event location</h3>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
+                        <div class="row hidden">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Location Type</label>
@@ -1273,7 +1275,7 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Street Address</label>
-                                    <input type="text" class="form-control" name="address" placeholder="1220 Example Rd">
+                                    <input type="text" class="form-control" name="address" placeholder="Street">
                                 </div>
                             </div>
                         </div>
@@ -1295,7 +1297,7 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <input type="text" class="form-control" name="city" placeholder="Sincity">
+                                    <input type="text" class="form-control" name="city" placeholder="City">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -1360,7 +1362,7 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Zip Code</label>
-                                    <input type="text" class="form-control" name="zip">
+                                    <input type="number" class="form-control" name="zip">
                                 </div>
                             </div>
                         </div>
@@ -1651,7 +1653,16 @@ if(isset($_SESSION['logged'])){
                     },
                     zip: {
                         required: true,
-                        number: true
+                        number: true,
+                        maxlength: 5,
+                        minlength: 5
+                    }
+                },
+
+                messages: {
+                    zip: {
+                        min: "Please enter a 5 digit zipcode.",
+                        max: "Please enter a 5 digit zipcode."
                     }
                 },
 
@@ -1854,6 +1865,7 @@ if(isset($_SESSION['logged'])){
             );
 
             $('#dashboard-report-range').show();
+            $('.range_inputs').prepend( "<div>Test</div>" );
 
             $('.fire').click(function(f){
                 var fire = $(this).attr('data-fire');
@@ -1870,6 +1882,20 @@ if(isset($_SESSION['logged'])){
 
                     }
                 })
+            });
+
+            $(".rateYo").rateYo({
+                readOnly: true,
+                halfStar: true
+            });
+
+            $('#draggable').on('show.bs.modal', function(e) {
+
+                //get data-id attribute of the clicked element
+                var type = $(e.relatedTarget).data('location-type');
+
+                //populate the textbox
+                $('#type option[value="'+type+'"]').attr("selected", "selected");
             });
         });
     </script>

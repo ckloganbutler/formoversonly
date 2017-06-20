@@ -27,6 +27,29 @@ if(isset($_SESSION['logged'])){
                     <a class="load_page" data-href="assets/pages/dashboard.php?luid=<?php echo $_GET['luid']; ?>">Dashboard</a>
                 </li>
             </ul>
+            <div class="page-toolbar">
+                <?php
+                $ratings = 0; $rating_avg = 0; $rating_amt = 0;
+                $events = mysql_query("SELECT event_token FROM fmo_locations_events WHERE event_location_token='".$_GET['luid']."'");
+                if(mysql_num_rows($events) > 0){
+                    $start = date('Y-m-d', strtotime("-365 days"));
+                    $end   = date('Y-m-d');
+                    while($evt = mysql_fetch_assoc($events)){
+                        $reviews = mysql_query("SELECT review_rating FROM fmo_locations_events_reviews WHERE review_event_token='".$evt['event_token']."'");
+                        if(mysql_num_rows($reviews) > 0){
+                            $review  = mysql_fetch_array($reviews);
+                            $ratings+= $review['review_rating'];
+                            $rating_amt++;
+                        }
+                    }
+                    $rating_avg = $ratings / $rating_amt;
+                }
+                ?>
+                <div class="pull-right btn red btn-fit-height"><strong><?php echo number_format($rating_avg, 1); ?></strong> Average Rating</div>
+                <div class="pull-right" data-toggle="modal" href="#avg_rating">
+                    <div class="rateYoDash" data-rateyo-rating="<?php echo number_format($rating_avg, 1); ?>"></div>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -1494,6 +1517,10 @@ if(isset($_SESSION['logged'])){
                 }
             );
 
+            $('.rateYoDash').rateYo({
+                halfStar: true,
+                readOnly: true
+            });
             $('#dashboard-report-range').show();
         });
     </script>

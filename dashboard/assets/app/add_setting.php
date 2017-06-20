@@ -33,12 +33,15 @@ if(isset($_GET['setting'])){
         $name           = $_POST['name'];
         $anonymous      = $_POST['anonymous'];
 
+        $event_user = mysql_fetch_array(mysql_query("SELECT event_user_token FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+
         mysql_query("INSERT INTO fmo_locations_events_reviews (review_event_token, review_rating, review_comments, review_name, review_anonymous) VALUES (
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($rating)."',
         '".mysql_real_escape_string($comments)."',
         '".mysql_real_escape_string($name)."',
         '".mysql_real_escape_string($anonymous)."')");
+        timeline_event($token, $event_user['event_user_token'], "Review", "<strong>".name($event_user['event_user_token'])."</strong> submitted a new review.");
     }
     if($_GET['setting'] == 'claim'){
         $token          = $_GET['ev'];
@@ -48,6 +51,8 @@ if(isset($_GET['setting'])){
         $comments       = $_POST['comments'];
         $remote_ip      = $_SERVER['REMOTE_ADDR'];
 
+        $event_user = mysql_fetch_array(mysql_query("SELECT event_user_token FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+
         mysql_query("INSERT INTO fmo_locations_events_claims (claim_event_token, claim_item, claim_padded, claim_weight, claim_comments, claim_remote_addr) VALUES (
         '".mysql_real_escape_string($token)."',
         '".mysql_real_escape_string($item)."',
@@ -55,6 +60,7 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($weight)."',
         '".mysql_real_escape_string($comments)."',
         '".mysql_real_escape_string($remote_ip)."')");
+        timeline_event($token, $event_user['event_user_token'], "Claim", "<strong>".name($event_user['event_user_token'])."</strong> submitted a new claim.");
     }
     if($_GET['setting'] == 'laborer'){
         $token          = $_GET['ev'];

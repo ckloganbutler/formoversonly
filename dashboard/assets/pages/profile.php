@@ -430,16 +430,7 @@ if(isset($_SESSION['logged'])){
                                                         <div class="col-md-7 value">
                                                             $<a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_employer_rate" data-pk="<?php echo $profile['user_token']; ?>" data-type="number" data-inputclass="form-control" data-placement="right" data-title="Enter new rate.." data-url="assets/app/update_settings.php?update=usr_prf">
                                                                 <?php echo $profile['user_employer_rate']; ?>
-                                                            </a>-
-                                                            <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_employer_salary" data-pk="<?php echo $profile['user_token']; ?>" data-type="select" data-source="[{value: 1, text: 'Hourly'},{value: 2, text: 'Weekly'}]" data-placement="right" data-title="Select new salary type.." data-url="assets/app/update_settings.php?update=usr_prf">
-                                                                <?php
-                                                                if($profile['user_employer_salary'] == 1){
-                                                                    echo "Hourly";
-                                                                } elseif($profile['user_employer_salary'] == 2){
-                                                                    echo "Weekly";
-                                                                }
-                                                                ?>
-                                                            </a>
+                                                            </a>- ($<?php echo number_format($profile['user_employer_rate'] * 2080, 2); ?> / year)
                                                         </div>
                                                     </div>
                                                     <div class="row static-info">

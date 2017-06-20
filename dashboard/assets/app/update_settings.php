@@ -75,7 +75,6 @@ if($_GET['update'] == 'event_fly'){
         $value = preg_replace('/[^A-Za-z0-9\-]/', '', $value);
     }
     mysql_query("UPDATE fmo_locations_events SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($pk)."'");
-    timeline_event($pk, $_SESSION['uuid'], "Information update", "'".$field."' was changed to: ".$value);
 }
 if($_GET['update'] == 'event_date'){
     $startDate = $_POST['dateStart'];
@@ -206,6 +205,12 @@ if($_GET['update'] == 'location_services'){
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
     mysql_query("UPDATE fmo_services SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE services_id='".mysql_real_escape_string($pk)."'");
+}
+if($_GET['update'] == 'location_eventtype'){
+    $field = $_POST['name'];
+    $value = $_POST['value'];
+    $pk    = $_POST['pk'];
+    mysql_query("UPDATE fmo_locations_eventtypes SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE eventtype_id='".mysql_real_escape_string($pk)."'");
 }
 if($_GET['update'] == 'location_storage'){
     $field = $_POST['name'];

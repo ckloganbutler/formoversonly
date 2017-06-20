@@ -47,46 +47,65 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <div class="menu-toggler sidebar-toggler">
 </div>
 <div class="content">
-    <div class="login-form">
-        <h3 class="form-title"><strong>Review</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
-        <form class="review-form" action="../app/login.php?t=aXn" method="POST">
-            <div class="form-group text-center">
-                <div id="rateYo" style="margin: auto !important;"> </div>
-                <input class="hidden" name="rating" id="rating">
-            </div>
-            <div class="form-group">
-                <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="your review" name="comments"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">Your Name</label>
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="your name" name="name"/>
-                </div>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn red pull-right">
-                    Submit <i class="m-icon-swapright m-icon-white"></i>
-                </button><br/><br/>
-            </div>
-
-        </form>
-        <div class="forget-password">
-            <h4>Need to file a <strong>claim</strong>?</h4>
-            <p>
-                no worries, click <a href="claim.php?ev=<?php echo $_GET['ev']; ?>" id="forget-password">
-                    here </a>
-                to begin the process.
-            </p>
+    <?php
+    $review = mysql_query("SELECT review_rating, review_comments FROM fmo_locations_events_reviews WHERE review_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    if(mysql_num_rows($review) > 0){
+        $review = mysql_fetch_array($review);
+        ?>
+        <div class="login-form">
+            <center>
+                <h3 class="form-title"><i class="fa fa-check" style="font-size: 25px;"></i><strong>Review</strong> submitted.</h3>
+                <small>
+                    Thank you for submitting a review for your event.
+                    <br/><br/>
+                    <span class="badge badge-success"><?php echo $event['event_name']; ?></span> <br/> <br/>
+                </small>
+                <div class="rateYo" data-rateyo-rating="<?php echo $review['review_rating']; ?>"></div> <br/>
+                <p><?php echo $review['review_comments']; ?></p>
+                <br/>
+            </center>
         </div>
-    </div>
-    <div class="login-form" id="success" style="display: none;">
-        <center>
-            <h3 class="form-title"><i class="fa fa-check" style="font-size: 25px;"></i><strong>Review</strong> submitted.</h3>
-            <small>Thank you for submitting a review for your event. <br/><br/> <span class="badge badge-success"><?php echo $event['event_name']; ?></span>.</small> <br/><br/><br/>
-        </center>
-    </div>
+        <?php
+    } else {
+        ?>
+        <div class="login-form">
+            <h3 class="form-title"><strong>Review</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
+            <form class="review-form" action="../app/login.php?t=aXn" method="POST">
+                <div class="form-group text-center">
+                    <div id="rateYo" style="margin: auto !important;"> </div>
+                    <input class="hidden" name="rating" id="rating">
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="your review" name="comments"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">Your Name</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="your name" name="name"/>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn red pull-right">
+                        Submit <i class="m-icon-swapright m-icon-white"></i>
+                    </button><br/><br/>
+                </div>
+
+            </form>
+            <div class="forget-password">
+                <h4>Need to file a <strong>claim</strong>?</h4>
+                <p>
+                    no worries, click <a href="claim.php?ev=<?php echo $_GET['ev']; ?>" id="forget-password">
+                        here </a>
+                    to begin the process.
+                </p>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+
 </div>
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
@@ -115,12 +134,26 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
         Layout.init();
         Login.init();
 
+        <?php
+        if(!empty($review['review_rating'])){
+            ?>
+        $(".rateYo").rateYo({
+            halfStar: true,
+            readOnly: true
+        });
+            <?php
+        } else {
+            ?>
         $("#rateYo").rateYo({
             halfStar: true,
             onChange: function(rating, rateYoInstance){
                 $('#rating').attr('value', rating);
             }
         });
+            <?php
+        }
+        ?>
+
 
         $('.review-form').validate({
             errorElement: 'span', //default input error message container
@@ -170,8 +203,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                     type: 'POST',
                     data: $('.review-form').serialize(),
                     success: function(c){
-                        $('.login-form').hide();
-                        $('#success').show();
+                        window.location.reload();
                     },
                     error: function(c){
 

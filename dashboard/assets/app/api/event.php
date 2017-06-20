@@ -87,7 +87,7 @@ if(isset($_GET) && $_GET['type'] == 'reviews'){
 
     while($rv = mysql_fetch_assoc($findReviews)) {
         $records["data"][] = array(
-            ''.$rv['review_rating'].' stars',
+            '<div class="rateYo" data-rateyo-rating="'.number_format($rv['review_rating'], 1).'"></div>',
             ''.$rv['review_comments'].'',
             ''.$rv['review_name'].'',
         );
