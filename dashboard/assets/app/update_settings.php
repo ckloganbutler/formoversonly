@@ -137,20 +137,25 @@ if($_GET['update'] == 'change_type'){
     if(isset($_POST['type']) && $_POST['type'] == 'status'){
         $value = $_POST['value'];
         $token  = $_GET['ev'];
+        if($value == 1){ $status = 'New Booking'; }
+        if($value == 2){ $status = 'Confirmed'; }
+        if($value == 3){ $status = 'Left Message';}
+        if($value == 4){ $status = 'On Hold';}
+        if($value == 5){ $status = 'Cancelled';}
         mysql_query("UPDATE fmo_locations_events SET event_status='".mysql_real_escape_string($value)."' WHERE event_token='".mysql_real_escape_string($token)."'");
-        timeline_event($token, $_SESSION['uuid'], "Status update", "Status was changed to _________");
+        timeline_event($token, $_SESSION['uuid'], "Status update", "Status was changed to <strong>".$status."</strong>");
         echo true;
     } elseif(isset($_POST['type']) && $_POST['type'] == 'eventtype'){
         $type = $_POST['value'];
         $token  = $_GET['ev'];
         mysql_query("UPDATE fmo_locations_events SET event_type='".mysql_real_escape_string($type)."' WHERE event_token='".mysql_real_escape_string($token)."'");
-        timeline_event($token, $_SESSION['uuid'], "Type update", "Event type was changed to __________");
+        timeline_event($token, $_SESSION['uuid'], "Type update", "Event type was changed to <strong>".$value."</strong>");
         echo true;
     } elseif(isset($_POST['type']) && $_POST['type'] == 'subtype'){
         $subtype = $_POST['value'];
         $token   = $_GET['ev'];
         mysql_query("UPDATE fmo_locations_events SET event_subtype='".mysql_real_escape_string($subtype)."' WHERE event_token='".mysql_real_escape_string($token)."'");
-        timeline_event($token, $_SESSION['uuid'], "Subtype update", "Event subtype was changed to _________");
+        timeline_event($token, $_SESSION['uuid'], "Subtype update", "Event subtype was changed to <strong>".$value."</strong>");
         echo true;
     }
 }

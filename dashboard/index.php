@@ -702,6 +702,29 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 });
             });
         });
+        $(document).on('click', '.load_reports_pull', function(){
+            var typ = $(this).attr('data-type');
+            var url = $(this).attr('data-href');
+            var tit = $(this).attr('data-page-title');
+            var ext = $(this).attr('data-ext');
+            Pace.track(function(){
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        type: typ,
+                        ext: ext
+                    },
+                    success: function(data) {
+                        $('#reports-content').html(data);
+                        document.title = tit;
+                    },
+                    error: function() {
+                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    }
+                });
+            });
+        });
         $(document).on('click', '.update_settings', function(){
             var url = $(this).attr("data-form");
             var id  = $(this).attr("data-id");

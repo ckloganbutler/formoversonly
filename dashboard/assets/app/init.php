@@ -32,6 +32,10 @@ function name($token){
     $name = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
     return $name['user_fname']." ".$name['user_lname'];
 }
+function nameByLast($token){
+    $name = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
+    return $name['user_lname'].", ".$name['user_fname'];
+}
 
 function decimalHours($time){
     $hms = explode(":", $time);
@@ -98,6 +102,14 @@ function locationName($token){
     $name = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
     if(!empty($name['location_name'])){
         echo $name['location_name'];
+    } else {
+        return NULL;
+    }
+}
+function locationName2($token){
+    $name = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($token)."'"));
+    if(!empty($name['location_name'])){
+        return $name['location_name'];
     } else {
         return NULL;
     }
