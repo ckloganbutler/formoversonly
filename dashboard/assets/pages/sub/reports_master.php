@@ -71,6 +71,11 @@ if(isset($_SESSION['logged'])){
                         if($_SESSION['group'] <= 2){
                             ?>
                             <div class="tab-pane <?php if($_SESSION['group'] != 1){echo "active";} ?> prnt" id="payrollsummary">
+                                <center>
+                                    <h3>
+                                        <i class="fa fa-bar-chart-o"></i> Payroll Summary | <strong><?php echo date('m-d-Y', strtotime($range[0])); ?></strong> - <strong><?php echo date('m-d-Y', strtotime($range[1])); ?></strong>
+                                    </h3><br/>
+                                </center>
                                 <?php
                                 /*
                                  *
@@ -253,6 +258,11 @@ if(isset($_SESSION['logged'])){
                         if($_SESSION['group'] == 1){
                             ?>
                             <div class="tab-pane active" id="payrollsummary_admin">
+                                <center>
+                                    <h3>
+                                        <i class="fa fa-bar-chart-o"></i> Payroll Summary (Admin) | <strong><?php echo date('m-d-Y', strtotime($range[0])); ?></strong> - <strong><?php echo date('m-d-Y', strtotime($range[1])); ?></strong>
+                                    </h3> <br/>
+                                </center>
                                 <?php
                                 /*
                                  *
