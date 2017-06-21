@@ -12,27 +12,37 @@ if(isset($_SESSION['logged'])){
     if($_POST['type'] == 'pryl'){
         $range = explode(" - ", $_POST['ext']);
         ?>
+        <style type="text/css">
+            @media print
+            {
+                table { page-break-after:auto }
+                tr    { page-break-inside:avoid; page-break-after:auto }
+                td    { page-break-inside:avoid; page-break-after:auto }
+                thead { display:table-header-group }
+                tfoot { display:table-footer-group }
+            }
+        </style>
         <div class="col-md-12">
             <div class="portlet">
                 <div class="portlet-title tabbable-line">
                     <div class="caption caption-md">
                         <i class="fa fa-bar-chart-o theme-font bold"></i>
-                        <span class="caption-subject font-red bold uppercase">PAYROLL</span> <span class="font-red">|</span> <button class="btn btn-xs red-stripe"><i class="fa fa-print"></i> Print current tab</button>
+                        <span class="caption-subject font-red bold uppercase">PAYROLL</span> <span class="font-red">|</span> <button class="btn btn-xs red-stripe print" data-print="<?php if($_SESSION['group'] == 1){echo "#payrollsummary_admin";}else{echo"#payrollsummary";} ?>"><i class="fa fa-print"></i> Print</button>
                     </div>
                     <ul class="nav nav-tabs">
                         <li class="">
-                            <a href="#timesheets" data-toggle="tab" aria-expanded="false" style="color: black;">
+                            <a href="#timesheets" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#timesheets">
                                 Time Sheets</a>
                         </li>
                         <li class="">
-                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;">
+                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#timesheets">
                                 Deductions</a>
                         </li>
                         <?php
                         if($_SESSION['group'] <= 2){
                             ?>
                             <li <?php if($_SESSION['group'] != 1){echo "class='active'";} ?>>
-                                <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;">
+                                <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#timesheets">
                                     Payroll Summary</a>
                             </li>
                             <?php
@@ -40,7 +50,7 @@ if(isset($_SESSION['logged'])){
                         if($_SESSION['group'] == 1){
                             ?>
                             <li class="active">
-                                <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;">
+                                <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#timesheets">
                                     Payroll Summary (Admin)</a>
                             </li>
                             <?php
@@ -60,7 +70,7 @@ if(isset($_SESSION['logged'])){
                         <?php
                         if($_SESSION['group'] <= 2){
                             ?>
-                            <div class="tab-pane <?php if($_SESSION['group'] != 1){echo "active";} ?>" id="payrollsummary">
+                            <div class="tab-pane <?php if($_SESSION['group'] != 1){echo "active";} ?> prnt" id="payrollsummary">
                                 <?php
                                 /*
                                  *
@@ -97,7 +107,7 @@ if(isset($_SESSION['logged'])){
                                                             '<strong>EVENT: </strong>'.$event['event_name'].' - <strong>BOL #:</strong> '.$event['event_id'].'',
                                                             ''.$labor['laborer_hours_worked'].'hrs',
                                                             '$'.$labor['laborer_rate'].'/hr',
-                                                            '$'.number_format($pay - $labor['laborer_tip'], 2).'',
+                                                            '$'.number_format($pay, 2).'',
                                                             '$'.number_format($labor['laborer_tip'], 2).''
                                                         );
                                                     }
@@ -155,7 +165,7 @@ if(isset($_SESSION['logged'])){
                                             <table class="table table-striped table-hover datatable">
                                                 <thead>
                                                 <tr>
-                                                    <th width="8%">
+                                                    <th style="width: 140px;">
                                                         Date
                                                     </th>
                                                     <th style="padding-right: 8px;">
@@ -279,7 +289,7 @@ if(isset($_SESSION['logged'])){
                                                             '<strong>EVENT: </strong>'.$event['event_name'].' - <strong>BOL #:</strong> '.$event['event_id'].'',
                                                             ''.$labor['laborer_hours_worked'].'hrs',
                                                             '$'.$labor['laborer_rate'].'/hr',
-                                                            '$'.number_format($pay - $labor['laborer_tip'], 2).'',
+                                                            '$'.number_format($pay, 2).'',
                                                             '$'.number_format($labor['laborer_tip'], 2).''
                                                         );
                                                     }
@@ -433,8 +443,10 @@ if(isset($_SESSION['logged'])){
                     "order": [[ 0, "asc" ]],
                     "bFilter" : false,
                     "bLengthChange": false,
-                    "bPaginate": false
+                    "bPaginate": false,
+                    "info": false
                 });
+
             });
         </script>
         <?php

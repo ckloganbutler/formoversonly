@@ -76,6 +76,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         .popover-title {
             color: black !important;
         }
+
     </style>
 
 </head>
@@ -596,6 +597,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 <script type="text/javascript" src="assets/global/plugins/select2/select2.min.js"></script>
 <script type="text/javascript" src="assets/global/plugins/jquery-mixitup/jquery.mixitup.min.js"></script>
 <script type="text/javascript" src="assets/global/plugins/fancybox/source/jquery.fancybox.pack.js"></script>
+<script type="text/javascript" src="assets/global/plugins/printThis/printThis.js"></script>
 <script async defer src="http://maps.google.com/maps/api/js?v=3.exp&key=AIzaSyBg2MfengOuhtRA-39qVbm8vA7n7pf5ES8&sensor=false" type="text/javascript">
 <script src="assets/global/plugins/gmaps/gmaps.min.js" type="text/javascript"></script>
 <script src="assets/global/scripts/metronic.js" type="text/javascript"></script>
@@ -648,7 +650,14 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             <?php
         }
         ?>
-
+        $(document).on('click', '.tab_print', function(t){
+            var p = $(this).data('print');
+            $('.print').attr('data-print', p);
+        });
+        $(document).on('click', '.print', function(p){
+            var id = $(this).data('print');
+            $(id).printThis();
+        });
         $(document).on('click', '.change_location', function(){
             var luid = $(this).attr('data-new-location');
             window.location.replace("//www.formoversonly.com/dashboard/index.php?uuid=<?php echo $_GET['uuid']; ?>&cuid=<?php echo $_GET['cuid']; ?>&luid="+luid);
