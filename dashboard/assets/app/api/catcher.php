@@ -13,7 +13,7 @@ if(isset($_SESSION['uuid'])){
 
     }
     if($_GET['p'] == 'jre'){
-        $customers = mysql_query("SELECT user_token, user_phone, user_lname, user_fname FROM fmo_users WHERE user_phone='".mysql_real_escape_string(preg_replace('/[^A-Za-z0-9]/', '', $_POST['phone']))."' LIMIT 1");
+        $customers = mysql_query("SELECT user_token, user_phone, user_lname, user_fname FROM fmo_users WHERE user_phone='".mysql_real_escape_string(preg_replace('/[^A-Za-z0-9]/', '', $_POST['phone']))."' AND user_group=3 LIMIT 1");
         if(mysql_num_rows($customers) > 0){
             $customer = mysql_fetch_array($customers); echo $customer['user_token'];
         } else {

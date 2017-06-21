@@ -498,7 +498,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                         </div>
                                         <div id="submit" class="form-group catcher-items-hide" style="display: none; padding-top: 15px;">
                                             <a href="javascript:;" class="btn default red-stripe pull-left create_event">Create Event </a>
-                                            <a href="javascript:;" class="btn default blue-stripe pull-right create_event">Hot Lead </a>
+                                            <a href="javascript:;" class="btn default blue-stripe pull-right hot_lead">Hot Lead </a>
                                         </div>
                                         <br/>
                                         <hr style="background-color: grey;"/>
@@ -778,7 +778,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             var dat = $(this).attr('data-uuid');
             var ev  = $(this).attr('data-ev');
             $.ajax({
-                url: 'assets/pages/profile.php?uuid='+dat,
+                url: 'assets/pages/profile.php?uuid='+dat+'&luid=<?php echo $_GET['luid']; ?>',
                 success: function(vat) {
                     $('#page_content').html(vat);
                     $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
@@ -962,7 +962,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                             data: $('#catcher').serialize(),
                                                                                                                             success: function(ev){
                                                                                                                                 $.ajax({
-                                                                                                                                    url: 'assets/pages/profile.php?uuid='+dat,
+                                                                                                                                    url: 'assets/pages/profile.php?uuid='+dat+'&luid='+luid,
                                                                                                                                     success: function(vat) {
                                                                                                                                         $('#page_content').html(vat);
                                                                                                                                         $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
@@ -970,14 +970,8 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                             url: 'assets/pages/sub/profile_event_wizard.php?&conf='+ev+'&uuid='+dat,
                                                                                                                                             success: function(data) {
                                                                                                                                                 $('#profile-content').html(data);
-                                                                                                                                                /*$('input[name="startdate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
-                                                                                                                                                 $('input[name="enddate"]').val($.datepicker.formatDate("mm/dd/yy", new Date(date)));
-                                                                                                                                                 $('input[name="email"]').val($("#catcher_email").val());
-                                                                                                                                                 $('input[name="phone"]').val($("#catcher_phone").val());
-                                                                                                                                                 $('#ev_TR').val($("#TR").val()); $('input[name="event_truckfee"]').val($("#catcher_truckfee").val()); $('#ev_TR > span').html($("#TR").val());
-                                                                                                                                                 $('#ev_LR').val($("#LR").val()); $('input[name="event_laborrate"]').val($("#catcher_laborrate").val()); $('#ev_LR > span').html($("#LR").val());
-                                                                                                                                                 $('#ev_CR').val($("#CR").val()); $('input[name="event_countyfee"]').val($("#catcher_countyfee").val()); $('#ev_CR > span').html($("#CR").val());*/
                                                                                                                                                 $('#catcher')[0].reset();
+                                                                                                                                                $('.catcher-items-hide').hide();
                                                                                                                                             },
                                                                                                                                             error: function() {
                                                                                                                                                 toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
@@ -997,28 +991,47 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                     }
                                                                                                                 });
                                                                                                             });
-                                                                                                            $('.hot_lead').on('click', function() {
+                                                                                                            $('.hot_lead').click(function(eh) {
+                                                                                                                var me = $(this);
+                                                                                                                eh.preventDefault();
+
+                                                                                                                if ( me.data('requestRunning') ) {
+                                                                                                                    return;
+                                                                                                                }
+
+                                                                                                                me.data('requestRunning', true);
                                                                                                                 var truckfee = $("#catcher_truckfee");
                                                                                                                 $.ajax({
                                                                                                                     url: 'assets/app/register.php?gr=3&c=<?php echo $_SESSION['cuid']; ?>',
                                                                                                                     type: 'POST',
                                                                                                                     data: {
-                                                                                                                        fullname: $('input[name="catcher_name"').val(),
-                                                                                                                        phone: $('input[name="catcher_phone"]').val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
-                                                                                                                        email: $('input[name="catcher_email"]').val(),
+                                                                                                                        fullname: $('input[id="catcher_name"').val(),
+                                                                                                                        phone: $('input[id="catcher_phone"]').val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, ''),
+                                                                                                                        email: $('input[id="catcher_email"]').val(),
                                                                                                                         luid: luid
                                                                                                                     },
                                                                                                                     success: function(dat){
-                                                                                                                        toastr.success("Customer has been added to our database, you can now further configure their booking.");
+                                                                                                                        $('#date').val(date.toISOString().slice(0,10));
+                                                                                                                        me.data('requestRunning', false);
+                                                                                                                        toastr.success("Customer has been added to our database, I'm showing you the hot lead on their profile now..");
                                                                                                                         $.ajax({
-                                                                                                                            url: 'assets/pages/profile.php?uuid='+dat,
-                                                                                                                            success: function(vat) {
-                                                                                                                                $('#page_content').html(vat);
-                                                                                                                                $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
-
+                                                                                                                            url: 'assets/app/add_event.php?ev=plk&uuid='+dat+'&luid='+luid+'&e=<?php echo struuid(true); ?>',
+                                                                                                                            type: 'POST',
+                                                                                                                            data: $('#catcher').serialize(),
+                                                                                                                            success: function(ev){
+                                                                                                                                $.ajax({
+                                                                                                                                    url: 'assets/pages/profile.php?uuid='+dat+'&luid='+luid,
+                                                                                                                                    success: function(vat) {
+                                                                                                                                        $('#page_content').html(vat);
+                                                                                                                                        $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
+                                                                                                                                    },
+                                                                                                                                    error: function() {
+                                                                                                                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                    }
+                                                                                                                                });
                                                                                                                             },
-                                                                                                                            error: function() {
-                                                                                                                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                            error: function(){
+
                                                                                                                             }
                                                                                                                         });
                                                                                                                     }

@@ -245,18 +245,18 @@ if(isset($_SESSION['logged'])){
                             <div class="portlet light">
                                 <div class="portlet-title tabbable-line">
                                     <ul class="nav nav-tabs nav-justified">
-                                        <li class="active">
-                                            <a href="#about" data-toggle="tab">About <?php echo $profile['user_fname']; ?></a>
-                                        </li>
                                         <?php
                                         if($profile['user_group'] == 3){
                                             ?>
-                                            <li>
+                                            <li class="active">
                                                 <a href="#bookings" data-toggle="tab">Bookings</a>
                                             </li>
                                             <?php
                                         }
                                         ?>
+                                        <li <?php if($profile['user_group'] != 3){ ?>class="active"<?php } ?>>
+                                            <a href="#about" data-toggle="tab">About <?php echo $profile['user_fname']; ?></a>
+                                        </li>
                                         <?php
                                         if($employee == true && $_SESSION['group'] <= 2){
                                             ?>
@@ -276,7 +276,7 @@ if(isset($_SESSION['logged'])){
                                 </div>
                                 <div class="portlet-body">
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="about">
+                                        <div class="tab-pane <?php if($profile['user_group'] != 3){ ?>active<?php } ?>" id="about">
                                             <h3>Personal Information</h3>
                                             <div class="row static-info" style="margin-top: 20px;">
                                                 <div class="col-md-5 name">
@@ -534,7 +534,7 @@ if(isset($_SESSION['logged'])){
                                         <?php
                                         if($profile['user_group'] == 3){
                                             ?>
-                                            <div class="tab-pane" id="bookings">
+                                            <div class="tab-pane active" id="bookings">
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="todo-tasklist">
