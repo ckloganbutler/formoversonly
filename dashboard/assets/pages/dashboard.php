@@ -51,7 +51,7 @@ if(isset($_SESSION['logged'])){
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row hidden-xs">
             <div class="col-md-12">
                 <div class="portlet light">
                     <div class="portlet-title tabbable-line">
@@ -152,6 +152,14 @@ if(isset($_SESSION['logged'])){
                                     if(mysql_num_rows($events) > 0){
                                         $morningCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
+                                            switch($event['event_status']){
+                                                case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
+                                                case 2: $status = "Confirmed"; $color = "green"; $badge = "badge-success"; break;
+                                                case 3: $status = "Left Message"; $color = "red"; $badge = "badge-danger"; break;
+                                                case 4: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
+                                                case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
+                                                default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
+                                            }
                                             if($event['event_status'] == 0){
                                                 continue;
                                             }
@@ -162,9 +170,9 @@ if(isset($_SESSION['logged'])){
                                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                                             ?>
-                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-<?php echo $color; ?> load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
                                                 <div class="todo-tasklist-item-title">
-                                                    <?php echo $event['event_name']; ?> <span class="text-danger">|</span> <small><i class="fa fa-truck"></i> Trucks: <?php echo $event['event_truckfee']; ?> + <i class="fa fa-users"></i> Crew size: <?php echo $event['event_laborrate']; ?></small>
+                                                    <?php echo $event['event_name']; ?> <span class="font-<?php echo $color; ?>">|</span> <small><i class="fa fa-truck"></i> Trucks: <?php echo $event['event_truckfee']; ?> + <i class="fa fa-users"></i> Crew size: <?php echo $event['event_laborrate']; ?></small> <span class="font-<?php echo $color; ?>">|</span> <span class="badge badge-roundless <?php echo $badge; ?>"><?php echo $status; ?></span>
                                                 </div>
                                                 <div class="todo-tasklist-item-text">
                                                     <?php
@@ -224,6 +232,14 @@ if(isset($_SESSION['logged'])){
                                     if(mysql_num_rows($events) > 0){
                                         $afternoonCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
+                                            switch($event['event_status']){
+                                                case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
+                                                case 2: $status = "Confirmed"; $color = "green"; $badge = "badge-success"; break;
+                                                case 3: $status = "Left Message"; $color = "red"; $badge = "badge-danger"; break;
+                                                case 4: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
+                                                case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
+                                                default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
+                                            }
                                             if($event['event_status'] == 0){
                                                 continue;
                                             }
@@ -234,9 +250,9 @@ if(isset($_SESSION['logged'])){
                                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                                             ?>
-                                            <div class="todo-tasklist-item todo-tasklist-item-border-red load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
+                                            <div class="todo-tasklist-item todo-tasklist-item-border-<?php echo $color; ?> load_page col-md-12" data-href="assets/pages/event.php?ev=<?php echo $event['event_token']; ?>" data-page-title="<?php echo $event['event_name']; ?>">
                                                 <div class="todo-tasklist-item-title">
-                                                    <?php echo $event['event_name']; ?> <span class="text-danger">|</span> <small><i class="fa fa-truck"></i> Trucks: <?php echo $event['event_truckfee']; ?> + <i class="fa fa-users"></i> Crew size: <?php echo $event['event_laborrate']; ?></small>
+                                                    <?php echo $event['event_name']; ?> <span class="font-<?php echo $color; ?>">|</span> <small><i class="fa fa-truck"></i> Trucks: <?php echo $event['event_truckfee']; ?> + <i class="fa fa-users"></i> Crew size: <?php echo $event['event_laborrate']; ?></small> <span class="font-<?php echo $color; ?>">|</span> <span class="badge badge-roundless <?php echo $badge; ?>"><?php echo $status; ?></span>
                                                 </div>
                                                 <div class="todo-tasklist-item-text">
                                                     <?php
