@@ -32,8 +32,8 @@ if(isset($_SESSION['logged'])){
                         if($_SESSION['group'] == 1){
                             ?>
                             <li class="active">
-                                <a href="#ownersummary" data-toggle="tab" aria-expanded="true" style="color: black;">
-                                    Owner Summary</a>
+                                <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;">
+                                    Payroll Summary</a>
                             </li>
                             <?php
                         }
@@ -52,7 +52,7 @@ if(isset($_SESSION['logged'])){
                         <?php
                         if($_SESSION['group'] == 1){
                             ?>
-                            <div class="tab-pane active" id="ownersummary">
+                            <div class="tab-pane active" id="payrollsummary">
                                 <?php
                                 /*
                                  *
@@ -64,6 +64,10 @@ if(isset($_SESSION['logged'])){
                                 $employees = mysql_query("SELECT user_token, user_id, user_last_ext_location, user_employer_rate FROM fmo_users WHERE user_employer='".mysql_real_escape_string($_GET['cuid'])."' ORDER BY user_lname ASC");
                                 if(mysql_num_rows($employees) > 0){
                                     while($employee = mysql_fetch_assoc($employees)){
+                                        $gross = 0;
+                                        $hours = 0;
+                                        $advs  = 0;
+                                        $other = 0;
                                         $os['users'][$employee['user_token']]['info'] = array(
                                             ''.nameByLast($employee['user_token']).'',
                                             ''.locationName2($employee['user_last_ext_location']).'',
@@ -72,20 +76,21 @@ if(isset($_SESSION['logged'])){
                                         );
                                         $laborers  = mysql_query("SELECT laborer_user_token, laborer_event_token, laborer_rate, laborer_hours_worked, laborer_tip FROM fmo_locations_events_laborers WHERE laborer_user_token='".mysql_real_escape_string($employee['user_token'])."'");
                                         if(mysql_num_rows($laborers) > 0){
-                                            $pay = 0; $gross = 0;
                                             while($labor = mysql_fetch_assoc($laborers)){
                                                 $events = mysql_query("SELECT event_date_start, event_name, event_id FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($labor['laborer_event_token'])."' AND (event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<'".mysql_real_escape_string($range[1])."')");
                                                 if(mysql_num_rows($events) > 0){
                                                     while($event = mysql_fetch_assoc($events)){
-                                                        $pay   =  ($labor['laborer_rate'] * $labor['laborer_hours_worked']) + $labor['laborer_tip'];
+                                                        $pay   =  $labor['laborer_rate'] * $labor['laborer_hours_worked'];
                                                         $gross += $pay;
+                                                        $hours += $labor['laborer_hours_worked'];
+                                                        $other += $labor['laborer_tip'];
                                                         $os['users'][$employee['user_token']]['events'][] = array(
                                                             ''.date('m-d-Y', strtotime($event['event_date_start'])).'',
-                                                            ''.$event['event_name'].' - <strong>BOL #:</strong> '.$event['event_id'].'',
+                                                            '<strong>EVENT: </strong>'.$event['event_name'].' - <strong>BOL #:</strong> '.$event['event_id'].'',
                                                             ''.$labor['laborer_hours_worked'].'hrs',
                                                             '$'.$labor['laborer_rate'].'/hr',
-                                                            '$'.number_format($pay - $labor['laborer_tip']).'',
-                                                            '$'.number_format($labor['laborer_tip']).''
+                                                            '$'.number_format($pay - $labor['laborer_tip'], 2).'',
+                                                            '$'.number_format($labor['laborer_tip'], 2).''
                                                         );
                                                     }
                                                 } else {
@@ -93,21 +98,36 @@ if(isset($_SESSION['logged'])){
                                                 }
                                             }
                                         }
-                                        $hrs = 0;
                                         $timeclock = mysql_query("SELECT timeclock_id, timeclock_clockin, timeclock_clockout, timeclock_hours, timeclock_timestamp FROM fmo_users_employee_timeclock WHERE timeclock_user='".mysql_real_escape_string($employee['user_token'])."' AND (timeclock_clockout>='".mysql_real_escape_string($range[0])."' AND timeclock_clockout<'".mysql_real_escape_string($range[1])."') ORDER BY timeclock_timestamp DESC");
                                         if(mysql_num_rows($timeclock) > 0){
                                             while($tc = mysql_fetch_assoc($timeclock)){
+                                                $gross += $tc['timeclock_hours'] * $employee['user_employer_rate'];
+                                                $hours += $tc['timeclock_hours'];
                                                 $os['users'][$employee['user_token']]['clock'][] = array(
-                                                    'Timeclock/Office',
+                                                    '<strong>TIMECLOCK: </strong>Used clock in/out to track hours',
                                                     ''.date('m-d-Y', strtotime($tc['timeclock_timestamp'])).'',
                                                     ''.$tc['timeclock_hours'].'hrs',
-                                                    ''.$employee['user_employer_rate'].'',
+                                                    '$'.$employee['user_employer_rate'].'/hr',
                                                     '$'.number_format($tc['timeclock_hours'] * $employee['user_employer_rate'], 2).'',
                                                 );
                                             }
                                         }
-                                        $os['users'][$employee['user_token']]['gross'] = array(
-                                            ''.number_format($gross, 2).''
+                                        $loans = mysql_query("SELECT advance_requested, advance_timestamp, advance_reason FROM fmo_users_employee_advances WHERE (advance_timestamp>='".mysql_real_escape_string($range[0])."' AND advance_timestamp<'".mysql_real_escape_string($range[1])."') AND advance_user_token='".mysql_real_escape_string($employee['user_token'])."'");
+                                        if(mysql_num_rows($loans) > 0){
+                                            while($loan = mysql_fetch_assoc($loans)){
+                                                $advs += $loan['advance_requested'] + $loan['advance_requested'] * .10;
+                                                $os['users'][$employee['user_token']]['loans'][] = array(
+                                                    '$'.number_format($loan['advance_requested'] + $loan['advance_requested'] * .10, 2).'',
+                                                    ''.date('m-d-Y', strtotime($loan['advance_timestamp'])).'',
+                                                    '<strong>LOAN: </strong>'.$loan['advance_reason'].'',
+                                                );
+                                            }
+                                        }
+                                        $os['users'][$employee['user_token']]['totals'] = array(
+                                            '$'.number_format($gross, 2).'',
+                                            ''.number_format($hours, 2).'hrs',
+                                            '$'.number_format($advs, 2).'',
+                                            '$'.number_format($other, 2).'',
                                         );
                                         if(mysql_num_rows($laborers) <= 0 && mysql_num_rows($timeclock) <= 0){
                                             unset($os['users'][$employee['user_token']]);
@@ -124,25 +144,31 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                         </div>
                                         <div class="portlet-body" style="padding-top: 0px;">
-                                            <table class="table table-striped table-hover">
+                                            <table class="table table-striped table-hover datatable">
                                                 <thead>
                                                 <tr>
                                                     <th width="8%">
                                                         Date
                                                     </th>
-                                                    <th>
-                                                        Worked On/In
+                                                    <th style="padding-right: 8px;">
+                                                        <?php
+                                                        if(!empty($user['loans'])){
+                                                            ?>
+                                                            <strong class="text-danger pull-right">Loans</strong>
+                                                            <?php
+                                                        }
+                                                        ?>
                                                     </th>
-                                                    <th width="8%" class="text-right">
+                                                    <th style="padding-right: 8px;" width="8%" class="text-right">
                                                         Hours
                                                     </th>
-                                                    <th width="8%" class="text-right">
+                                                    <th style="padding-right: 8px;" width="8%" class="text-right">
                                                         Rate
                                                     </th>
-                                                    <th width="8%" class="text-right">
+                                                    <th style="padding-right: 8px;" width="8%" class="text-right">
                                                         <strong>Pay</strong>
                                                     </th>
-                                                    <th width="8%" class="text-right">
+                                                    <th style="padding-right: 8px;" width="8%" class="text-right">
                                                         Other Pay
                                                     </th>
                                                 </tr>
@@ -169,11 +195,34 @@ if(isset($_SESSION['logged'])){
                                                             <td class="text-right"><?php echo $clock[2]; ?></td>
                                                             <td class="text-right"><?php echo $clock[3]; ?></td>
                                                             <td class="text-right"><?php echo $clock[4]; ?></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                    foreach($user['loans'] as $loan){
+                                                        ?>
+                                                        <tr class="text-danger">
+                                                            <td><?php echo $loan[1]; ?></td>
+                                                            <td><?php echo $loan[2]; ?> <span class="pull-right"><?php echo $loan[0]; ?></span></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td class="text-right"></td>
+                                                            <td class="text-right"></td>
                                                         </tr>
                                                         <?php
                                                     }
                                                     ?>
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td><strong>TOTALS <i class="fa fa-arrow-right"></i></strong></td>
+                                                        <td class="text-right"><?php if(!empty($user['loans'])){ ?><strong class="text-danger"><?php echo $user['totals'][2]; ?></strong><?php } ?></td>
+                                                        <td class="text-right"><strong><?php echo $user['totals'][1]; ?></strong></td>
+                                                        <td class="text-right"></td>
+                                                        <td class="text-right"><strong><?php echo $user['totals'][0]; ?></strong></td>
+                                                        <td class="text-right"><strong><?php echo $user['totals'][3]; ?></strong></td>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -188,6 +237,16 @@ if(isset($_SESSION['logged'])){
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function(e){
+                $('.datatable').dataTable({
+                    "order": [[ 0, "asc" ]],
+                    "bFilter" : false,
+                    "bLengthChange": false,
+                    "bPaginate": false
+                });
+            });
+        </script>
         <?php
     }
 } else {
