@@ -411,31 +411,31 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
-                                                <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
+                                                <img src="assets/global/img/catcher/hottub.gif" alt="..." class="img-thumbnail img-che che" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Hot Tub <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
                                                 <input type="checkbox" name="addition[]" id="hot_tub" value="hot_tub" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
-                                                <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
+                                                <img src="assets/global/img/catcher/babygrand.gif" alt="..." class="img-thumbnail img-che che" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Piano <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
                                                 <input type="checkbox" name="addition[]" id="piano" value="piano" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
-                                                <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
+                                                <img src="assets/global/img/catcher/pooltable.gif" alt="..." class="img-thumbnail img-che che" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Pool Table <br/>$398<br/>$350 w/ move <br/> <small>click image <br/>to add</small> </label>
                                                 <input type="checkbox" name="addition[]" id="pool_table" value="pool_table" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
-                                                <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
+                                                <img src="assets/global/img/catcher/playset.gif" alt="..." class="img-thumbnail img-che che" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Play Set <br/>$378<br/>$300 w/ move <br/> <small>click image <br/>to add</small> </label>
                                                 <input type="checkbox" name="addition[]" id="play_set" value="play_set" class="hidden" autocomplete="off">
                                             </label>
                                             <br/>
                                             <label class="btn btn-block">
-                                                <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-check check" style="vertical-align: top;">
+                                                <img src="assets/global/img/catcher/safe.gif" alt="..." class="img-thumbnail img-che che" style="vertical-align: top;">
                                                 <label style="padding-top: 5px;">Safe <br/>$298<br/>$200 w/ move <br/> <small>click image <br/>to add</small> </label>
                                                 <input type="checkbox" name="addition[]" id="safe" value="safe" class="hidden" autocomplete="off">
                                             </label>
@@ -930,8 +930,8 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                     $('#email').show(function(){
                                                                                         $('#catcher_email').focusout(function(){
                                                                                             $('#other_options').show(function(){
-                                                                                                $(".img-check").click(function(){
-                                                                                                    $(this).toggleClass("check");
+                                                                                                $(".img-che").click(function(){
+                                                                                                    $(this).toggleClass("che");
                                                                                                     $(this).parent().toggleClass("red");
                                                                                                 });
                                                                                             });

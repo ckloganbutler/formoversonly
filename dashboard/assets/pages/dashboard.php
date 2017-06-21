@@ -136,19 +136,19 @@ if(isset($_SESSION['logged'])){
                                 <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
                                     <i class="icon-calendar"></i>&nbsp;
                                     <span class="bold uppercase visible-lg-inline-block">
-                                        <?php echo date('M d, Y'); ?> - <?php echo date('M d, Y'); ?>
+                                        <?php echo date('m-d-Y'); ?> - <?php echo date('m-d-Y'); ?>
                                     </span>&nbsp; <i class="fa fa-angle-down"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
-                    <div class="portlet-body">
+                    <div class="portlet-body" id="dashboard_events">
                         <div class="row">
                             <div class="col-md-6">
                                 <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">|</span> before noon</small></h3>
                                 <div class="todo-tasklist">
                                     <?php
-                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."')");
                                     if(mysql_num_rows($events) > 0){
                                         $morningCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
@@ -228,7 +228,7 @@ if(isset($_SESSION['logged'])){
                                 <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">|</span> after noon</small></h3>
                                 <div class="todo-tasklist">
                                     <?php
-                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."')");
                                     if(mysql_num_rows($events) > 0){
                                         $afternoonCount = mysql_num_rows($events);
                                         while($event = mysql_fetch_assoc($events)){
@@ -1528,8 +1528,20 @@ if(isset($_SESSION['logged'])){
                     }
                 },
                 function (start, end) {
-                    $('#dashboard-report-range span').html(start.format('YYYY-DD-MM') + ' - ' + end.format('YYYY-DD-MM'));
+                    $('#dashboard-report-range span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
+                    $.ajax({
+                        url: 'assets/pages/sub/dashboard_master.php?t=dash_evs&luid=<?php echo $_GET['luid']; ?>',
+                        type: 'POST',
+                        data: {
+                            range: ''+start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD')+''
+                        },
+                        success: function(events){
+                            $('#dashboard_events').html(events);
+                        },
+                        error: function(error){
 
+                        }
+                    })
                 }
             );
 
