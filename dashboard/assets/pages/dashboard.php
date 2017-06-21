@@ -77,8 +77,8 @@ if(isset($_SESSION['logged'])){
                                                     <img class="media-object" src="<?php echo picture($location['location_manager']); ?>" alt="64x64" data-src="holder.js/64x64" style="width: 160px; height: 160px;">
                                                 </a>
                                                 <div class="media-body">
-                                                    <textarea style="height: 110px;" class="form-control txt-message" id="ttm_msg" placeholder="Send <?php echo name($location['location_manager']); ?> a message.."></textarea> <br/>
-                                                    <h4 class="media-heading pull-left"><strong><?php echo name($location['location_manager']); ?></strong> - <?php echo phone($location['location_manager']); ?> </h4>
+                                                    <textarea style="height: 110px;" class="form-control txt-message" id="ttm_msg" placeholder="Write <?php echo name($location['location_manager']); ?> a message here.."></textarea> <br/>
+                                                    <h4 class="media-heading pull-left" style="margin-top: -8px"><strong><?php echo name($location['location_manager']); ?></strong><br/> <small><?php echo phone($location['location_manager']); ?> </small></h4>
                                                     <button type="button" class="btn red pull-right ttm" style="margin-top: -7px; margin-left: 15px;">Send message</button>
                                                     <small class="pull-right" style="margin-top: -6px;"><span class="txt-countdown"></span> <br/> <a data-toggle="modal" href="#recent_texts"><i class="fa fa-external-link fa-1x"></i> view recent messages</a></small>
                                                 </div>

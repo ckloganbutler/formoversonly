@@ -23,7 +23,7 @@ if(isset($_SESSION['logged'])){
         $new_user_token = $profile['user_token'];
         $new_start      = date('Y-m-d');
         $new_end        = date('Y-m-d');
-        $new_name       = $profile['user_fname']." ".$profile['user_lname']."'s move";
+        $new_name       = $profile['user_fname']." ".$profile['user_lname']."";
         $new_status     = 0;
         mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_name, event_status) VALUES (
         '".mysql_real_escape_string($new_token)."',
@@ -91,7 +91,7 @@ if(isset($_SESSION['logged'])){
                                                         <button class="close" data-dismiss="alert"></button>
                                                         You have some form errors. Please check below.
                                                     </div>
-                                                    <div class="tab-pane active" id="tab1">
+                                                    <div class="tab-pane" id="tab1">
                                                         <div class="row">
                                                             <div class="col-md-12">
                                                                 <h3 style="margin-top: 0;">Event Information</h3><small>Below, we will need basic information about the event. Once you've completed this section, you will be able to move onto the next. All fields marked with a <strong>red star</strong> ( <span class="text-danger">*</span> ) are <strong>required</strong>!</small>
@@ -104,7 +104,7 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="form-group">
                                                                     <label class="control-label col-md-3">Event Name <span class="required">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <input type="text" class="form-control" name="name" value="<?php echo $event['event_name']; ?>">
+                                                                        <input type="text" class="form-control" name="name" value="<?php echo $event['event_name']; ?>'s move">
                                                                         <span class="help-block">
 																        This should something like the homeowner's name, or their business name (if applicable) </span>
                                                                     </div>
@@ -563,17 +563,19 @@ if(isset($_SESSION['logged'])){
                                                         <?php
                                                             if($event['event_booking'] != 1){
                                                                 ?>
-                                                                <div class="row" id="booking_fee_success_maybe">
-                                                                    <div class="col-md-12">
-                                                                        <?php
-                                                                        echo $location['location_booking_fee_disclaimer'];
-                                                                        ?>
+                                                                <div id="booking_fee_success_maybe">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <?php
+                                                                            echo $location['location_booking_fee_disclaimer'];
+                                                                            ?>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-md-12 text-center">
-                                                                        <div class="well">
-                                                                            <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 text-center">
+                                                                            <div class="well">
+                                                                                <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -998,12 +1000,12 @@ if(isset($_SESSION['logged'])){
                             $('#new_location')[0].reset();
                             toastr.success("<strong>Logan says</strong>:<br/>That location has been added to this events record. Let me refresh the event for you, so you can see the changes.");
                             $.ajax({
-                                url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>',
+                                url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>&s=0',
                                 type: 'POST',
                                 data: $('#submit_form').serialize(),
                                 success: function(d) {
                                     $.ajax({
-                                        url: 'assets/pages/sub/profile_event_wizard.php?conf=<?php echo $event['event_token']; ?>',
+                                        url: 'assets/pages/sub/profile_event_wizard.php?conf=<?php echo $event['event_token']; ?>&loc_added=true',
                                         success: function(data) {
                                             $('#profile-content').html(data);
                                         },
@@ -1199,7 +1201,7 @@ if(isset($_SESSION['logged'])){
             $('#form_wizard_1 .button-submit').click(function () {
                 Pace.track(function(){
                     $.ajax({
-                        url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>&luid=<?php echo $event['event_location_token']; ?>',
+                        url: 'assets/app/update_settings.php?update=event&e=<?php echo $event['event_token']; ?>&luid=<?php echo $event['event_location_token']; ?>&s=1',
                         type: 'POST',
                         data: $('#submit_form').serialize(),
                         success: function(d) {
@@ -1219,6 +1221,14 @@ if(isset($_SESSION['logged'])){
                     });
                 });
             }).hide();
+
+            <?php
+            if(isset($_GET['loc_added'])){
+                ?>
+                $('.button-next').trigger('click');
+                <?php
+            }
+            ?>
 
             $(".img-check").click(function(){
                 $(this).toggleClass("red");

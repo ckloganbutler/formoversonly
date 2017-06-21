@@ -161,7 +161,7 @@ if($_GET['update'] == 'change_type'){
 }
 if($_GET['update'] == 'event' && isset($_POST)){
     $pfield = array('event_status', 'event_date_start', 'event_date_end', 'event_time', 'event_name', 'event_type', 'event_subtype', 'event_email', 'event_phone', 'event_truckfee', 'event_laborrate', 'event_countyfee');
-    $pvalue = array(1, date('Y-m-d', strtotime($_POST['startdate'])), date('Y-m-d', strtotime($_POST['enddate'])), $_POST['time'], $_POST['name'], $_POST['type'], $_POST['subtype'], $_POST['email'], $_POST['phone'], $_POST['truckfee'], $_POST['laborrate'], $_POST['countyfee']);
+    $pvalue = array($_GET['s'], date('Y-m-d', strtotime($_POST['startdate'])), date('Y-m-d', strtotime($_POST['enddate'])), $_POST['time'], $_POST['name'], $_POST['type'], $_POST['subtype'], $_POST['email'], $_POST['phone'], $_POST['truckfee'], $_POST['laborrate'], $_POST['countyfee']);
     $ptoken = $_GET['e'];
     for ($k = 0; $k<count($pfield); $k++) {
         if(!empty($pvalue[$k])){
@@ -169,8 +169,10 @@ if($_GET['update'] == 'event' && isset($_POST)){
         }
     }
 
-    _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
-    _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
+    if($_GET['s'] == 1){
+        _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
+        _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
+    }
 
     return false;
 }
