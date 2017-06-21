@@ -35,14 +35,14 @@ if(isset($_SESSION['logged'])){
                                 Time Sheets</a>
                         </li>
                         <li class="">
-                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#timesheets">
+                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#deductions">
                                 Deductions</a>
                         </li>
                         <?php
                         if($_SESSION['group'] <= 2){
                             ?>
                             <li <?php if($_SESSION['group'] != 1){echo "class='active'";} ?>>
-                                <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#timesheets">
+                                <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#payrollsummary">
                                     Payroll Summary</a>
                             </li>
                             <?php
@@ -50,7 +50,7 @@ if(isset($_SESSION['logged'])){
                         if($_SESSION['group'] == 1){
                             ?>
                             <li class="active">
-                                <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#timesheets">
+                                <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#payrollsummary_admin">
                                     Payroll Summary (Admin)</a>
                             </li>
                             <?php
@@ -70,7 +70,7 @@ if(isset($_SESSION['logged'])){
                         <?php
                         if($_SESSION['group'] <= 2){
                             ?>
-                            <div class="tab-pane <?php if($_SESSION['group'] != 1){echo "active";} ?> prnt" id="payrollsummary">
+                            <div class="tab-pane <?php if($_SESSION['group'] != 1){echo "active";} ?>" id="payrollsummary">
                                 <center>
                                     <h3>
                                         <i class="fa fa-bar-chart-o"></i> Payroll Summary | <strong><?php echo date('m-d-Y', strtotime($range[0])); ?></strong> - <strong><?php echo date('m-d-Y', strtotime($range[1])); ?></strong>
