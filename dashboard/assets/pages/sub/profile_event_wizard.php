@@ -970,7 +970,7 @@ if(isset($_SESSION['logged'])){
                     },
                     zip: {
                         required: true,
-                        number: true
+                        number: true,
                         minlength: 5,
                         maxlength: 5
                     }
