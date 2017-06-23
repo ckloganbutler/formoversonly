@@ -605,16 +605,16 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <div class="form-actions">
                                                 <div class="row">
-                                                    <div class="col-md-offset-3 col-md-9">
-                                                        <button href="javascript:;" class="btn default button-previous">
+                                                    <div class="col-md-12">
+                                                        <button href="javascript:;" class="btn default button-previous pull-left">
                                                             <i class="m-icon-swapleft"></i> Back </button>
-                                                        <button href="javascript:;" class="btn yellow button-save" type="submit" name="status" value="0">
+                                                        <button href="javascript:;" class="btn yellow button-save pull-left" type="submit" name="status" value="0">
                                                             Save for later <i class="fa fa-download"></i>
                                                         </button>
-                                                        <button href="javascript:;" class="btn blue button-next">
+                                                        <button href="javascript:;" class="btn blue button-next pull-right">
                                                             Continue <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
-                                                        <button href="javascript:;" class="btn green button-submit" type="submit" name="status" value="1">
+                                                        <button href="javascript:;" class="btn green button-submit pull-right" type="submit" name="status" value="1">
                                                             Submit <i class="m-icon-swapright m-icon-white"></i>
                                                         </button>
                                                     </div>
@@ -655,7 +655,7 @@ if(isset($_SESSION['logged'])){
                         <h3 class="modal-title font-bold">Add event location</h3>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
+                        <div class="row hidden">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Location Type</label>
@@ -666,12 +666,11 @@ if(isset($_SESSION['logged'])){
                                 </div>
                             </div>
                         </div>
-                        <hr/>
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Street Address</label>
-                                    <input type="text" class="form-control" name="address" placeholder="1220 Example Rd">
+                                    <input type="text" class="form-control" name="address" placeholder="Street Address">
                                 </div>
                             </div>
                         </div>
@@ -693,7 +692,7 @@ if(isset($_SESSION['logged'])){
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>City</label>
-                                    <input type="text" class="form-control" name="city" placeholder="Sincity">
+                                    <input type="text" class="form-control" name="city" placeholder="City">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -972,6 +971,8 @@ if(isset($_SESSION['logged'])){
                     zip: {
                         required: true,
                         number: true
+                        minlength: 5,
+                        maxlength: 5
                     }
                 },
 
@@ -1331,6 +1332,15 @@ if(isset($_SESSION['logged'])){
                 error: function(e){
 
                 }
+            });
+
+            $('#new_location').on('show.bs.modal', function(e) {
+
+                //get data-id attribute of the clicked element
+                var type = $(e.relatedTarget).data('location-type');
+
+                //populate the textbox
+                $('#type option[value="'+type+'"]').attr("selected", "selected");
             });
         });
     </script>
