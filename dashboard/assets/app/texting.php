@@ -28,12 +28,8 @@ if(isset($_GET['txt'])){
         }
         $msg = $_POST['msg'];
 
-        if(_sendText($phone, $msg)){
-            echo "success";
-        } else {
-            echo "failed | ".$phone." | ".$msg;
-
-        }
+        _sendText($phone, $msg);
+        
     }
     if($_GET['txt'] == 'claim_link'){
         $event = mysql_fetch_array(mysql_query("SELECT event_phone FROM fmo_locations_events WHERE event_token='".$_POST['ev']."'"));

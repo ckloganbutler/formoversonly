@@ -27,6 +27,13 @@ if(isset($_SESSION['logged'])){
         <h3 class="page-title">
             <strong>Reports</strong>
         </h3>
+        <style>
+            @media print {
+                .no_print {
+                    display: none;
+                }
+            }
+        </style>
         <div class="page-bar">
             <ul class="page-breadcrumb">
                 <li>
@@ -143,10 +150,93 @@ if(isset($_SESSION['logged'])){
                         </div>
                         <hr/>
                         <div class="row" id="reports-content">
-                            <div class="col-md-12 text-center" style="margin-top: 80px; margin-bottom: 80px;">
-                                <h1 style="margin-top: 0;">Please select a report to view.</h1>
-                                <small>A report based on the date range <strong class="range"> <?php echo date('m-d-Y', strtotime($start)); ?> - <?php echo date('m-d-Y', strtotime($end)); ?></strong> will be generated here. (payroll only working)</small>
-                            </div>
+                            <?php
+                            if($_SESSION['group'] == 1.0 || $_SESSION['group'] == 2.0){
+                                ?>
+                                <div class="col-md-12">
+                                    <div class="portlet">
+                                        <div class="portlet-title tabbable-line">
+                                            <div class="caption caption-md">
+                                                <i class="fa fa-users theme-font"></i>
+                                                <span class="caption-subject font-red bold uppercase">COMPANY SNAPSHOT</span> <span class="font-red">|</span> <button class="btn btn-xs red-stripe print" data-print="#reportsStuff"><i class="fa fa-print"></i> Print</button>
+                                            </div>
+                                            <ul class="nav nav-tabs">
+
+                                            </ul>
+                                        </div>
+                                        <div class="portlet-body" id="reportsStuff">
+                                            <center>
+                                                <h3>
+                                                    <i class="fa fa-users"></i> Company Snapshot | <strong class="range"><?php echo date('m-d-Y', strtotime($start)); ?> - <?php echo date('m-d-Y', strtotime($end)); ?></strong>
+                                                </h3><br/>
+                                            </center>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="stats" class="chart" style="height: 170px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-left: 10px; margin-right: 10px; margin-top: 30px;">
+                                                <?php
+                                                $locations = mysql_query("SELECT location_name, location_token, location_address, location_city, location_state, location_zip FROM fmo_locations WHERE location_owner_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
+
+                                                if(mysql_num_rows($locations) > 0){
+                                                    while($loc = mysql_fetch_assoc($locations)){
+                                                        ?>
+                                                        <div class="portfolio-block">
+                                                            <div class="col-md-5" style="padding-left: 0;">
+                                                                <div class="portfolio-text">
+                                                                    <img src="assets/admin/pages/media/gallery/image3.jpg" alt="" height="81px" width="81px">
+                                                                    <div class="portfolio-text-info">
+                                                                        <h4><?php echo $loc['location_name']; ?></h4>
+                                                                        <p>
+                                                                            <?php echo $loc['location_address'].", ".$loc['location_city'].", ".$loc['location_state']." - ".$loc['location_zip']; ?>
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 portfolio-stat" style="margin-top: 8px;">
+                                                                <div class="portfolio-info">
+                                                                    New Bookings <span>0 </span>
+                                                                </div>
+                                                                <div class="portfolio-info">
+                                                                    Booking Fees Paid <span>0 </span>
+                                                                </div>
+                                                                <div class="portfolio-info">
+                                                                    NET Sales <span>0 </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-2 no-print" style="padding-right: 0;">
+                                                                <div class="portfolio-btn">
+                                                                    <a class="btn bigicn-only load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $loc['location_token']; ?>" data-page-title="<?php echo $loc['location_name']; ?>">
+                                                                        <span>Manage </span>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php
+                                                    }
+                                                } else {
+                                                    ?>
+                                                    <h3 class="text-center">No locations found for your company yet. Would you like to <a class="load_page" data-href="assets/pages/create_location.php">create one</a>?</h3>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                            } else {
+                                ?>
+                                <div class="col-md-12 text-center" style="margin-top: 80px; margin-bottom: 80px;">
+                                    <h1 style="margin-top: 0;">Please select a report to view.</h1>
+                                    <small>A report based on the date range <strong class="range"> <?php echo date('m-d-Y', strtotime($start)); ?> - <?php echo date('m-d-Y', strtotime($end)); ?></strong> will be generated here. (payroll only working)</small>
+                                </div>
+                                <?php
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -185,6 +275,164 @@ if(isset($_SESSION['logged'])){
                     $('.load_reports_pull').attr('data-ext', start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
                 }
             );
+
+            var pageviews = [
+                [1, 2],
+                [2, 2],
+                [3, 2],
+                [4, 3],
+                [5, 5],
+                [6, 10],
+                [7, 15],
+                [8, 20],
+                [9, 25],
+                [10, 30],
+                [11, 35],
+                [12, 25],
+                [13, 15],
+                [14, 20],
+                [15, 45],
+                [16, 50],
+                [17, 65],
+                [18, 70],
+                [19, 85],
+                [20, 80],
+                [21, 75],
+                [22, 80],
+                [23, 75],
+                [24, 70],
+                [25, 65],
+                [26, 75],
+                [27, 80],
+                [28, 85],
+                [29, 90],
+                [30, 95]
+            ];
+            var visitors = [
+                [1, 2],
+                [2, 2],
+                [3, 2],
+                [4, 6],
+                [5, 5],
+                [6, 20],
+                [7, 25],
+                [8, 36],
+                [9, 26],
+                [10, 38],
+                [11, 39],
+                [12, 50],
+                [13, 51],
+                [14, 12],
+                [15, 13],
+                [16, 14],
+                [17, 15],
+                [18, 15],
+                [19, 16],
+                [20, 17],
+                [21, 18],
+                [22, 19],
+                [23, 20],
+                [24, 21],
+                [25, 14],
+                [26, 24],
+                [27, 25],
+                [28, 26],
+                [29, 27],
+                [30, 31]
+            ];
+
+            var plot = $.plot($("#stats"), [{
+                data: pageviews,
+                label: "New Bookings",
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+
+            }, {
+                data: visitors,
+                label: "New Customers",
+                lines: {
+                    lineWidth: 1,
+                },
+                shadowSize: 0
+            }], {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 2,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 0.05
+                            }, {
+                                opacity: 0.01
+                            }]
+                        }
+                    },
+                    points: {
+                        show: true,
+                        radius: 3,
+                        lineWidth: 1
+                    },
+                    shadowSize: 2
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#eee",
+                    borderColor: "#eee",
+                    borderWidth: 1
+                },
+                colors: ["#d12610", "#37b7f3", "#52e136"],
+                xaxis: {
+                    ticks: 11,
+                    tickDecimals: 0,
+                    tickColor: "#eee",
+                },
+                yaxis: {
+                    ticks: 11,
+                    tickDecimals: 0,
+                    tickColor: "#eee",
+                }
+            });
+
+
+            function showTooltip(x, y, contents) {
+                $('<div id="tooltip">' + contents + '</div>').css({
+                    position: 'absolute',
+                    display: 'none',
+                    top: y + 5,
+                    left: x + 15,
+                    border: '1px solid #333',
+                    padding: '4px',
+                    color: '#fff',
+                    'border-radius': '3px',
+                    'background-color': '#333',
+                    opacity: 0.80
+                }).appendTo("body").fadeIn(200);
+            }
+
+            var previousPoint = null;
+            $("#stats").bind("plothover", function(event, pos, item) {
+                $("#x").text(pos.x.toFixed(2));
+                $("#y").text(pos.y.toFixed(2));
+
+                if (item) {
+                    if (previousPoint != item.dataIndex) {
+                        previousPoint = item.dataIndex;
+
+                        $("#tooltip").remove();
+                        var x = item.datapoint[0].toFixed(2),
+                            y = item.datapoint[1].toFixed(2);
+
+                        showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+                    }
+                } else {
+                    $("#tooltip").remove();
+                    previousPoint = null;
+                }
+            });
 
             $('#dashboard-report-range').show();
 

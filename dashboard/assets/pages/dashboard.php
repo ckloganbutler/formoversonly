@@ -1332,81 +1332,44 @@ if(isset($_SESSION['logged'])){
             });
 
             var pageviews = [
-                [1, 2],
-                [2, 2],
-                [3, 2],
-                [4, 3],
-                [5, 5],
-                [6, 10],
-                [7, 15],
-                [8, 20],
-                [9, 25],
-                [10, 30],
-                [11, 35],
-                [12, 25],
-                [13, 15],
-                [14, 20],
-                [15, 45],
-                [16, 50],
-                [17, 65],
-                [18, 70],
-                [19, 85],
-                [20, 80],
-                [21, 75],
-                [22, 80],
-                [23, 75],
-                [24, 70],
-                [25, 65],
-                [26, 75],
-                [27, 80],
-                [28, 85],
-                [29, 90],
-                [30, 95]
+                [1, 31297],
+                [2, 32871],
+                [3, 31361],
+                [4, 29378],
+                [5, 35999],
+                [6, 36177],
+                [7, 42000],
+                [8, 56000],
+                [9, 44877],
+                [10, 38000],
+                [11, 34992],
+                [12, 31884]
             ];
             var visitors = [
-                [1, 2],
-                [2, 2],
-                [3, 2],
-                [4, 6],
-                [5, 5],
-                [6, 20],
-                [7, 25],
-                [8, 36],
-                [9, 26],
-                [10, 38],
-                [11, 39],
-                [12, 50],
-                [13, 51],
-                [14, 12],
-                [15, 13],
-                [16, 14],
-                [17, 15],
-                [18, 15],
-                [19, 16],
-                [20, 17],
-                [21, 18],
-                [22, 19],
-                [23, 20],
-                [24, 21],
-                [25, 14],
-                [26, 24],
-                [27, 25],
-                [28, 26],
-                [29, 27],
-                [30, 31]
+                [1, 36993],
+                [2, 43847],
+                [3, 49266],
+                [4, 52488],
+                [5, 58199],
+                [6, 61848],
+                [7, 0],
+                [8, 0],
+                [9, 0],
+                [10, 0],
+                [11, 0],
+                [12, 0]
             ];
 
             var plot = $.plot($("#stats"), [{
                 data: pageviews,
-                label: "New Bookings",
+                label: "<?php echo date('Y', strtotime("-1 year")); ?> NET Sales",
                 lines: {
                     lineWidth: 1,
                 },
                 shadowSize: 0
-
             }, {
                 data: visitors,
-                label: "New Customers",
+                label: "<?php echo date('Y'); ?> NET Sales",
                 lines: {
                     lineWidth: 1,
                 },
@@ -1441,9 +1404,20 @@ if(isset($_SESSION['logged'])){
                 },
                 colors: ["#d12610", "#37b7f3", "#52e136"],
                 xaxis: {
-                    ticks: 11,
-                    tickDecimals: 0,
-                    tickColor: "#eee",
+                    ticks: [
+                        [1, "Jan"],
+                        [2, "Feb"],
+                        [3, "Mar"],
+                        [4, "Apr"],
+                        [5, "May"],
+                        [6, "Jun"],
+                        [7, "Jul"],
+                        [8, "Aug"],
+                        [9, "Sep"],
+                        [10, "Oct"],
+                        [11, "Nov"],
+                        [12, "Dec"]
+                    ]
                 },
                 yaxis: {
                     ticks: 11,
@@ -1481,7 +1455,7 @@ if(isset($_SESSION['logged'])){
                         var x = item.datapoint[0].toFixed(2),
                             y = item.datapoint[1].toFixed(2);
 
-                        showTooltip(item.pageX, item.pageY, item.series.label + " of " + x + " = " + y);
+                        showTooltip(item.pageX, item.pageY, item.series.label + " for month: " + x + " made: " + y);
                     }
                 } else {
                     $("#tooltip").remove();
