@@ -14,12 +14,12 @@ if(isset($_SESSION['logged'])) {
         ?>
         <div class="row">
             <div class="col-md-6">
-                <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">|</span></small></h3>
+                <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">| <span id="morning"></span> event(s)</span></small></h3>
                 <div class="todo-tasklist">
                     <?php
-                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<='".mysql_real_escape_string($range[1])."')");
+                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<='".mysql_real_escape_string($range[1])."') AND NOT event_status=0");
                     if(mysql_num_rows($events) > 0){
-                        $morningCount = mysql_num_rows($events);
+                        $eventsCount = 0;
                         while($event = mysql_fetch_assoc($events)){
                             switch($event['event_status']){
                                 case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
@@ -29,13 +29,11 @@ if(isset($_SESSION['logged'])) {
                                 case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
                                 default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
                             }
-                            if($event['event_status'] == 0){
-                                continue;
-                            }
                             $times = explode("to", $event['event_time']);
                             if(strtotime($times[0]) >= strtotime("12:00PM")){
                                 continue;
                             }
+                            $eventsCount++;
                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                             ?>
@@ -83,10 +81,14 @@ if(isset($_SESSION['logged'])) {
                             </div>
                             <?php
                         }
+                        ?>
+                        <span id="morningCount" class="hidden"><?php echo $eventsCount; ?></span>
+                        <?php
                     } else {
                         ?>
                         <center>
                             <h3>No events found for today at this location.</h3>
+                            <span id="morningCount" class="hidden">0</span>
                         </center>
                         <?php
                     }
@@ -94,12 +96,12 @@ if(isset($_SESSION['logged'])) {
                 </div>
             </div>
             <div class="col-md-6">
-                <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">|</span></small></h3>
+                <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">| <span id="afternoon"></span> event(s)</span></small></h3>
                 <div class="todo-tasklist">
                     <?php
-                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".$range[0]."' AND event_date_end<='".$range[1]."')");
+                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".$range[0]."' AND event_date_end<='".$range[1]."') AND NOT event_status=0");
                     if(mysql_num_rows($events) > 0){
-                        $afternoonCount = mysql_num_rows($events);
+                        $eventsCount = 0;
                         while($event = mysql_fetch_assoc($events)){
                             switch($event['event_status']){
                                 case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
@@ -109,13 +111,11 @@ if(isset($_SESSION['logged'])) {
                                 case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
                                 default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
                             }
-                            if($event['event_status'] == 0){
-                                continue;
-                            }
                             $times = explode("to", $event['event_time']);
                             if(strtotime($times[0]) <= strtotime("12:00PM")){
                                 continue;
                             }
+                            $eventsCount++;
                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                             ?>
@@ -163,10 +163,14 @@ if(isset($_SESSION['logged'])) {
                             </div>
                             <?php
                         }
+                        ?>
+                        <span id="afternoonCount" class="hidden"><?php echo $eventsCount; ?></span>
+                        <?php
                     } else {
                         ?>
                         <center>
                             <h3>No events found for today at this location.</h3>
+                            <span id="afternoonCount" class="hidden">0</span>
                         </center>
                         <?php
                     }
@@ -174,6 +178,12 @@ if(isset($_SESSION['logged'])) {
                 </div>
             </div>
         </div>
+        <script>
+            $(document).ready(function(){
+                $('#afternoon').html(document.getElementById("afternoonCount").innerText);
+                $('#morning').html(document.getElementById("morningCount").innerText);
+            });
+        </script>
         <?php
     }
 }

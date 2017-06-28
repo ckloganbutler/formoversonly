@@ -134,9 +134,9 @@ if(isset($_SESSION['logged'])){
                             </div>
                             <div class="btn-group">
                                 <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
-                                    <i class="icon-calendar"></i>&nbsp;
+                                    <i class="icon-calendar"></i>&nbsp;Events for:
                                     <span class="bold uppercase visible-lg-inline-block">
-                                        <?php echo date('m-d-Y'); ?> - <?php echo date('m-d-Y'); ?>
+                                        <?php echo date('m-d-Y'); ?>
                                     </span>&nbsp; <i class="fa fa-angle-down"></i>
                                 </a>
                             </div>
@@ -145,12 +145,14 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-body" id="dashboard_events">
                         <div class="row">
                             <div class="col-md-6">
-                                <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">|</span> before noon</small></h3>
+                                <?php
+                                $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."') AND NOT event_status=0");
+                                ?>
+                                <h3 style="margin-top: 0px;">Morning <small class="hidden-sm"><span class="text-danger">| <span id="morning"></span> event(s)</span></small></h3>
                                 <div class="todo-tasklist">
                                     <?php
-                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."')");
                                     if(mysql_num_rows($events) > 0){
-                                        $morningCount = mysql_num_rows($events);
+                                        $eventsCount = 0;
                                         while($event = mysql_fetch_assoc($events)){
                                             switch($event['event_status']){
                                                 case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
@@ -160,13 +162,11 @@ if(isset($_SESSION['logged'])){
                                                 case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
                                                 default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
                                             }
-                                            if($event['event_status'] == 0){
-                                                continue;
-                                            }
                                             $times = explode("to", $event['event_time']);
                                             if(strtotime($times[0]) >= strtotime("12:00PM")){
                                                 continue;
                                             }
+                                            $eventsCount++;
                                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                                             ?>
@@ -214,10 +214,14 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <?php
                                         }
+                                        ?>
+                                        <span id="morningCount" class="hidden"><?php echo number_format($eventsCount, 0); ?></span>
+                                        <?php
                                     } else {
                                         ?>
                                         <center>
                                             <h3>No events found for today at this location.</h3>
+                                            <span id="morningCount" class="hidden">0</span>
                                         </center>
                                         <?php
                                     }
@@ -225,12 +229,14 @@ if(isset($_SESSION['logged'])){
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">|</span> after noon</small></h3>
+                                <?php
+                                $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."') AND NOT event_status=0");
+                                ?>
+                                <h3 style="margin-top: 0px">Afternoon <small class="hidden-sm"><span class="text-danger">| <span id="afternoon"></span> event(s)</span></small></h3>
                                 <div class="todo-tasklist">
                                     <?php
-                                    $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".date('Y-m-d')."' AND event_date_end<='".date('Y-m-d')."')");
                                     if(mysql_num_rows($events) > 0){
-                                        $afternoonCount = mysql_num_rows($events);
+                                        $eventsCount = 0;
                                         while($event = mysql_fetch_assoc($events)){
                                             switch($event['event_status']){
                                                 case 1: $status = "New Booking"; $color = "blue"; $badge = "badge-info"; break;
@@ -240,13 +246,11 @@ if(isset($_SESSION['logged'])){
                                                 case 5: $status = "Cancelled"; $color = "red"; $badge = "badge-danger"; break;
                                                 default: $status = "On Hold"; $color = "red"; $badge = "badge-danger"; break;
                                             }
-                                            if($event['event_status'] == 0){
-                                                continue;
-                                            }
                                             $times = explode("to", $event['event_time']);
                                             if(strtotime($times[0]) <= strtotime("12:00PM")){
                                                 continue;
                                             }
+                                            $eventsCount++;
                                             $start = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=1"));
                                             $end   = mysql_fetch_array(mysql_query("SELECT address_address, address_city FROM fmo_locations_events_addresses WHERE address_event_token='".$event['event_token']."' AND address_type=2"));
                                             ?>
@@ -294,10 +298,14 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <?php
                                         }
+                                        ?>
+                                        <span id="afternoonCount" class="hidden"><?php echo number_format($eventsCount, 0); ?></span>
+                                        <?php
                                     } else {
                                         ?>
                                         <center>
                                             <h3>No events found for today at this location.</h3>
+                                            <span id="afternoonCount" class="hidden">0</span>
                                         </center>
                                         <?php
                                     }
@@ -1317,13 +1325,7 @@ if(isset($_SESSION['logged'])){
     </div>
     <script type="text/javascript">
         jQuery(document).ready(function(){
-            function updateCountdown() {
-                var remaining = 160 - $('.txt-message').val().length;
-                $('.txt-countdown').text(remaining + ' characters remaining.');
-            }
-            updateCountdown();
-            $('.txt-message').change(updateCountdown);
-            $('.txt-message').keyup(updateCountdown);
+
 
             $('.scroller').slimScroll({
                 height: 300
@@ -1487,6 +1489,14 @@ if(isset($_SESSION['logged'])){
                 }
             });
 
+            function updateCountdown() {
+                var remaining = 160 - $('.txt-message').val().length;
+                $('.txt-countdown').text(remaining + ' characters remaining.');
+            }
+            updateCountdown();
+            $('.txt-message').change(updateCountdown);
+            $('.txt-message').keyup(updateCountdown);
+
             $('.ttm').click(function() {
                var uuid = "<?php echo $location['location_manager']; ?>";
                $.ajax({
@@ -1497,18 +1507,24 @@ if(isset($_SESSION['logged'])){
                    },
                    success: function(e){
                        toastr.success("<strong>Logan says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
+                       $('#ttm_msg').val('');
+                       updateCountdown();
                    },
                    error: function(e){
                        toastr.error("<strong>Logan says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
                    }
                })
             });
+
+
+
             $('#dashboard-report-range').daterangepicker({
                     opens: (Metronic.isRTL() ? 'right' : 'left'),
                     startDate: "<?php echo date('Y-m-d') ?>",
                     endDate: "<?php echo date('Y-m-d'); ?>",
                     showDropdowns: false,
                     showWeekNumbers: true,
+                    singleDatePicker: true,
                     timePicker: false,
                     timePickerIncrement: 1,
                     timePicker12Hour: true,
@@ -1528,7 +1544,7 @@ if(isset($_SESSION['logged'])){
                     }
                 },
                 function (start, end) {
-                    $('#dashboard-report-range span').html(start.format('MM-DD-YYYY') + ' - ' + end.format('MM-DD-YYYY'));
+                    $('#dashboard-report-range span').html(start.format('MM-DD-YYYY'));
                     $.ajax({
                         url: 'assets/pages/sub/dashboard_master.php?t=dash_evs&luid=<?php echo $_GET['luid']; ?>',
                         type: 'POST',
@@ -1550,6 +1566,8 @@ if(isset($_SESSION['logged'])){
                 readOnly: true
             });
             $('#dashboard-report-range').show();
+            $('#afternoon').html(document.getElementById("afternoonCount").innerText);
+            $('#morning').html(document.getElementById("morningCount").innerText);
         });
     </script>
     <?php

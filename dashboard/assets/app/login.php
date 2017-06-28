@@ -17,6 +17,7 @@ if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
             $checkInfo = mysql_fetch_array($checkEmail);
             session_start();
             _sendText("3172018875", "[FMO] Successful Login:\r\n".$checkInfo['user_fname']." ".$checkInfo['user_lname']."\r\n".date('m/d/Y h:i A')."\r\n".$_SERVER['REMOTE_ADDR']);
+            _sendText("3176716774", "[FMO] Successful Login:\r\n".$checkInfo['user_fname']." ".$checkInfo['user_lname']."\r\n".date('m/d/Y h:i A')."\r\n".$_SERVER['REMOTE_ADDR']);
             $_SESSION['logged'] = true;
             $_SESSION['uuid']   = $checkInfo['user_token'];
             $_SESSION['group']  = $checkInfo['user_group'];
