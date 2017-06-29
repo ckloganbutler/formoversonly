@@ -1542,7 +1542,7 @@ if(isset($_SESSION['logged'])){
                             summaryPanel.innerHTML += route.legs[i].end_address + ' <br/><br/>';*/
                         }
                     } else {
-                        window.alert('Couldnt find directions for this event: ' + status);
+                        toastr.error("<strong>Logan says:</strong><br/>There is not enough information to route the trip. Please add at least 1 pickup and destination location.")
                     }
                 });
             }

@@ -176,7 +176,7 @@ if($_GET['update'] == 'event' && isset($_POST)){
         $confirm = $googer->shorten("https://www.formoversonly.com/dashboard/assets/public/conf.php?ev=".$_POST['ev']);
         _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
         _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
-        _sendText($_GET['phone'], "Thanks for booking with us! Confirm your move using the link below.\r\n".$confirm);
+        _sendText($_POST['phone'], "Thanks for booking with us! Confirm your move using the link below.\r\n".$confirm);
     }
 
     return false;
