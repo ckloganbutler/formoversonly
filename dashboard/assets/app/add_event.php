@@ -48,7 +48,7 @@ if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
     '".mysql_real_escape_string($comments)."',
     '".mysql_real_escape_string($additions)."',
     '".mysql_real_escape_string(0)."')") or die(mysql_error());
-    timeline_event($token, $_SESSION['uuid'], "Creation", name($_SESSION['uuid'])." created this event.");
+    timeline_event($token, $_SESSION['uuid'], "Creation", name($_SESSION['uuid'])." created this event, estimated to need <strong>".$truckfee."</strong> truck(s), and <strong>".$laborrate."</strong> crewmen.");
     echo $token;
 }
 if(isset($_GET['ev']) && $_GET['ev'] == 'pmk'){

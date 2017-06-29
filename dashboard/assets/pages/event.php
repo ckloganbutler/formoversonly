@@ -621,6 +621,8 @@ if(isset($_SESSION['logged'])){
                                         <?php
                                         $timelines = mysql_num_rows(mysql_query("SELECT timeline_id FROM fmo_locations_events_timelines WHERE timeline_event_token='".mysql_real_escape_string($event['event_token'])."'"));
                                         $laborers = mysql_num_rows(mysql_query("SELECT laborer_id FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($event['event_token'])."'"));
+                                        $documents = mysql_num_rows(mysql_query("SELECT document_id FROM fmo_locations_events_documents WHERE document_event_token='".mysql_real_escape_string($event['event_token'])."'"));
+                                        $items = mysql_num_rows(mysql_query("SELECT item_id FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($event['event_token'])."'"));
                                         ?>
                                         <li class="active">
                                             <a href="#comments" data-toggle="tab"> Timeline
@@ -634,8 +636,25 @@ if(isset($_SESSION['logged'])){
                                             </a>
                                         </li>
                                         <li>
+                                            <a href="#documents" data-toggle="tab">Documents
+                                                <?php
+                                                if($documents > 0){
+                                                    ?>
+                                                    <span class="badge badge-danger"> <?php echo $documents; ?> </span>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="#invoices" data-toggle="tab">Invoicing
-                                                <span class="badge badge-danger"> 4 </span>
+                                                <?php
+                                                if($items > 0){
+                                                    ?>
+                                                    <span class="badge badge-danger"> <?php echo $items; ?> </span>
+                                                    <?php
+                                                }
+                                                ?>
                                             </a>
                                         </li>
                                         <li>
@@ -650,9 +669,6 @@ if(isset($_SESSION['logged'])){
                                                 ?> /
                                                 Assets
                                             </a>
-                                        </li>
-                                        <li>
-                                            <a href="#documents" data-toggle="tab">Documents </a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">

@@ -11,6 +11,9 @@ function mysql_loop($field, $value, $db, $where, $token) {
     mysql_query("UPDATE " . mysql_real_escape_string($db) . " SET `" . mysql_real_escape_string($field) . "`='" . mysql_real_escape_string($value) . "' WHERE $where='" . mysql_real_escape_string($token) . "'") or die(mysql_error());
 }
 
+$key = 'AIzaSyDxLua1UKdf-637NvG5NgBuhb0DYVQ77cg';
+$googer = new GoogleUrlApi($key);
+
 if($_GET['update'] == 'event_laborers'){
     $field = $_POST['name'];
     $value = $_POST['value'];
@@ -170,8 +173,10 @@ if($_GET['update'] == 'event' && isset($_POST)){
     }
 
     if($_GET['s'] == 1){
+        $confirm = $googer->shorten("https://www.formoversonly.com/dashboard/assets/public/conf.php?ev=".$_POST['ev']);
         _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
         _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
+        _sendText($_GET['phone'], "Thanks for booking with us! Confirm your move using the link below.\r\n".$confirm);
     }
 
     return false;
