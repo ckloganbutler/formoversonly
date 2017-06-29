@@ -21,15 +21,21 @@ if(isset($_GET['txt'])){
         _sendText($who, $msg);
     }
     if($_GET['txt'] == 'ttm'){
+        $owner   = mysql_fetch_array(mysql_query("SELECT user_phone FROM fmo_users WHERE user_company_token='".mysql_real_escape_string($_SESSION['cuid'])."'"));
         $manager = mysql_query("SELECT user_phone FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'");
         if(mysql_num_rows($manager) > 0){
             $number = mysql_fetch_array($manager);
             $phone  = $number['user_phone'];
         }
-        $msg = $_POST['msg'];
+        $name = explode (" ", name($_SESSION['uuid']));
+        $msg = $name[0]." said: ".$_POST['msg'];
 
         _sendText($phone, $msg);
-        
+        _sendText($owner['user_phone'], $msg);
+        mysql_query("INSERT INTO fmo_locations_text_records (text_location_token, text_text, text_by_user_token) VALUES (
+        '".mysql_real_escape_string($_GET['luid'])."',
+        '".mysql_real_escape_string($msg)."',
+        '".mysql_real_escape_string($_SESSION['uuid'])."')");
     }
     if($_GET['txt'] == 'claim_link'){
         $event = mysql_fetch_array(mysql_query("SELECT event_phone FROM fmo_locations_events WHERE event_token='".$_POST['ev']."'"));

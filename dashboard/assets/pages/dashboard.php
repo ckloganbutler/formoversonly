@@ -14,7 +14,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <strong>Dashboard</strong>
+            <strong><?php echo $location['location_name']; ?>'s Dashboard</strong>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -54,12 +54,22 @@ if(isset($_SESSION['logged'])){
         <div class="row hidden-xs">
             <div class="col-md-12">
                 <div class="portlet light">
-                    <div class="portlet-title tabbable-line">
-                        <div class="caption caption-md">
-                            <i class="icon-home theme-font bold"></i>
-                            <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span> <small>Welcome back to <?php echo $location['location_name']; ?>'s dashboard, <strong><?php echo $_SESSION['fname']; ?></strong>. I collected information for you on today's current activity below.</small>
+                    <?php
+                    $broadcast = getBroadcast($_SESSION['cuid']);
+                    if(!empty($broadcast['message']) && $broadcast['time'] <= date('Y-m-d', strtotime($broadcast['time'].' + 2 days'))){
+                        ?>
+                        <div class="portlet-title">
+                            <div class="caption caption-md col-md-12">
+                                <marquee>
+                                    <i class="fa fa-bullhorn"></i> Company broadcast | <strong class="text-danger" style="font-size: 16px;">
+                                        <em><?php echo $broadcast['message']; ?></em>
+                                    </strong>
+                                </marquee>
+                            </div>
                         </div>
-                    </div>
+                        <?php
+                    }
+                    ?>
                     <div class="portlet-body">
                         <div class="row">
                             <div class="col-md-6">
@@ -102,24 +112,7 @@ if(isset($_SESSION['logged'])){
                 </div>
             </div>
         </div>
-        <?php
-        $broadcast = getBroadcast($_SESSION['cuid']);
-        if(!empty($broadcast['message']) && $broadcast['time'] > date('Y-m-d', strtotime($broadcast['time'].' + 2 days'))){
-            ?>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="alert alert-warning">
-                        <marquee>
-                            Company broadcast | <strong class="text-danger" style="font-size: 16px;">
-                                <?php echo $broadcast['message']; ?>
-                            </strong>
-                        </marquee>
-                    </div>
-                </div>
-            </div>
-            <?php
-        }
-        ?>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="portlet light">
@@ -1313,7 +1306,24 @@ if(isset($_SESSION['logged'])){
                 <div class="modal-body">
                     <div class="portlet">
                         <div class="portlet-body">
+                            <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/dashboard.php?type=ttm&luid=<?php echo $_GET['luid']; ?>">
+                                <thead>
+                                <tr role="row" class="heading">
+                                    <th>
+                                        Text Timestamp
+                                    </th>
+                                    <th>
+                                        Text
+                                    </th>
+                                    <th>
+                                        Sent by
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
 
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1473,21 +1483,26 @@ if(isset($_SESSION['logged'])){
 
             $('.ttm').click(function() {
                var uuid = "<?php echo $location['location_manager']; ?>";
-               $.ajax({
-                   url: 'assets/app/texting.php?txt=ttm&uuid='+uuid,
-                   type: 'POST',
-                   data: {
-                       msg: $('#ttm_msg').val()
-                   },
-                   success: function(e){
-                       toastr.success("<strong>Logan says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
-                       $('#ttm_msg').val('');
-                       updateCountdown();
-                   },
-                   error: function(e){
-                       toastr.error("<strong>Logan says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
-                   }
-               })
+               if($('#ttm_msg').val().length > 0){
+                   $.ajax({
+                       url: 'assets/app/texting.php?txt=ttm&uuid='+uuid+'&luid=<?php echo $_GET['luid']; ?>',
+                       type: 'POST',
+                       data: {
+                           msg: $('#ttm_msg').val()
+                       },
+                       success: function(e){
+                           toastr.success("<strong>Logan says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
+                           $('#ttm_msg').val('');
+                           updateCountdown();
+                       },
+                       error: function(e){
+                           toastr.error("<strong>Logan says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
+                       }
+                   })
+               } else {
+                   toastr.error("<strong>Logan says:</strong><br/>You need to type up a message first, silly! I can't send <strong><i>nothing</i></strong>!")
+               }
+
             });
 
 
@@ -1534,6 +1549,23 @@ if(isset($_SESSION['logged'])){
                     })
                 }
             );
+
+            $('.datatable').each(function(){
+                var url = $(this).attr('data-src');
+                $(this).dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "order": [[ 0, "asc" ]],
+                    "bFilter" : false,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "info": true,
+                    "ajax": {
+                        "url": url // ajax source
+                    }
+                });
+            });
+
 
             $('.rateYoDash').rateYo({
                 halfStar: true,

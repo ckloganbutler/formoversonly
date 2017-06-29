@@ -673,7 +673,7 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                         <div class="portlet-body">
                                                             <div class="table-container">
-                                                                <form role="form" id="add_service_rate">
+                                                                <form role="form" id="add_documents">
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=documents&ev=<?php echo $event['event_token']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
@@ -688,12 +688,16 @@ if(isset($_SESSION['logged'])){
                                                                             </th>
                                                                         </tr>
                                                                         <tr role="row" class="filter" style="display: none;" id="add_document">
-                                                                            <td><input type="text" class="form-control form-filter input-sm" name="item"></td>
-                                                                            <td></td>
+                                                                            <td><input type="file" class="form-control form-filter input-sm" name="file"></td>
                                                                             <td>
-                                                                                <div class="margin-bottom-5">
-                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_service_rate"><i class="fa fa-download"></i> Save</button> <button class="btn btn-sm default filter-cancel"><i class="fa fa-times"></i> Reset</button>
+                                                                                <div class="form-group">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text" class="form-control form-filter input-sm" name="file_desc">
+                                                                                    </div>
                                                                                 </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
                                                                             </td>
                                                                         </tr>
                                                                         </thead>
@@ -1723,6 +1727,24 @@ if(isset($_SESSION['logged'])){
                         data: $('#add_comt').serialize(),
                         success: function(data) {
                             toastr.info('<strong>Logan says</strong>:<br/>Comment has been added to events comment history.');
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                        }
+                    });
+                }
+            });
+            $('.add_document').on('click', function(){
+                if($("#add_documents").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=ev_document&ev=<?php echo $event['event_token']; ?>",
+                        type: "POST",
+                        data: new FormData($('#add_documents')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>Document has been added to users documents table.');
+                            $("#add_documents")[0].reset();
                         },
                         error: function() {
                             toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');

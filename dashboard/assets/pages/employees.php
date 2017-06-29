@@ -270,45 +270,18 @@ if(isset($_SESSION['logged'])){
     </form>
     <script type="text/javascript">
         $(document).ready(function() {
-            var grid = new Datatable();
-
-            grid.init({
-                src: $("#employees"),
-                onSuccess: function (grid) {
-                    // execute some code after table records loaded
-                },
-                onError: function (grid) {
-                    // execute some code on network or other general error
-                },
-                onDataLoad: function(grid) {
-
-                },
-                loadingMessage: 'Loading...',
-                dataTable: {
-                    "processing": true,
-                    "serverSide": true,
-                    "dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
-                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
-                    "bPaginate": false,
-                    "ajax": {
-                        "url": "assets/app/api/employees.php?luid=<?php echo $_GET['luid']; ?>", // ajax source
-                    },
-                    "language": {
-                        "aria": {
-                            "sortAscending": ": activate to sort column ascending",
-                            "sortDescending": ": activate to sort column descending"
-                        },
-                        "emptyTable": "No data available in table",
-                        "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-                        "infoEmpty": "No entries found",
-                        "infoFiltered": "(filtered1 from _MAX_ total entries)",
-                        "lengthMenu": "Show _MENU_ entries",
-                        "search": "Search:",
-                        "zeroRecords": "No matching records found"
-                    },
+            $("#employees").dataTable({
+                "processing": true,
+                "serverSide": true,
+                "order": [[ 0, "asc" ]],
+                "bFilter" : true,
+                "bLengthChange": false,
+                "bPaginate": false,
+                "info": true,
+                "ajax": {
+                    "url": "assets/app/api/employees.php?luid=<?php echo $_GET['luid']; ?>" // ajax source
                 }
             });
-
             $('#create_employee').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class

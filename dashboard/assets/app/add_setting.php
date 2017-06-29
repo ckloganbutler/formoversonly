@@ -177,6 +177,25 @@ if(isset($_GET['setting'])){
         '".mysql_real_escape_string($last_dot_inspec)."',
         '".mysql_real_escape_string($by)."')") or die(mysql_error());
     }
+    if($_GET['setting'] == 'ev_document'){
+        $token = $_GET['ev'];
+        $type  = $_POST['file_type'];
+        $desc  = $_POST['file_desc'];
+        $by    = $_SESSION['uuid'];
+        $fileName  = struuid();
+        $file_ext = substr($_FILES['file']['name'], strripos($_FILES['file']['name'], '.'));
+        $uploaddir = '../upload/ev_documents/';
+        $uploadfile = $uploaddir . $fileName;
+
+        move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile . $file_ext);
+        $link = "//www.formoversonly.com/dashboard/assets/upload/ev_documents/". $fileName . $file_ext;
+
+        mysql_query("INSERT INTO fmo_locations_events_documents (document_event_token, document_desc, document_link, document_by_user_token) VALUES (
+        '".mysql_real_escape_string($token)."',
+        '".mysql_real_escape_string($desc)."',
+        '".mysql_real_escape_string($link)."',
+        '".mysql_real_escape_string($by)."')") or die(mysql_error());
+    }
     if($_GET['setting'] == 'document'){
         $token = $_GET['uuid'];
         $type  = $_POST['file_type'];

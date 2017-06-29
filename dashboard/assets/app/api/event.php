@@ -38,32 +38,17 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
-    $iTotalRecords = mysql_num_rows($findRates);
+    $findDocuments = mysql_query("SELECT document_id, document_link, document_desc, document_by_user_token FROM fmo_locations_events_documents WHERE document_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $iTotalRecords = mysql_num_rows($findDocuments);
 
     $records = array();
     $records["data"] = array();
 
-    while($services = mysql_fetch_assoc($findRates)) {
-        if($services['services_taxable'] == 0) {
-            $taxable_tag = '<span class="label label-sm label-danger">NO</span>';
-        } else {
-            $taxable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_commissionable'] == 0) {
-            $commissionable_tag = '<span class="label label-sm label-danger">NO</span>';
-        }  else  {
-            $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_status'] == 0) {
-            $status_tag = '<span class="label label-sm label-danger">DISABLED</span>';
-        } else {
-            $status_tag = '<span class="label label-sm label-success">ACTIVE</span>';
-        }
+    while($doc = mysql_fetch_assoc($findDocuments)) {
         $records["data"][] = array(
-            '<input type="checkbox" name="pk" value="'.$services['services_id'].'"> '.$status_tag.'',
-            'desc',
-            '<button type="button" value="editable_item_'.$services['services_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
+            '<img height="150" width="100%" src="'.$doc['document_link'].'"/><br/><center>'.$doc['document_type'].'</center>',
+            'File Type: <strong>Event Document</strong><br/> File Description: <strong>'.$doc['document_desc'].'</strong>',
+            ''.name($doc['document_by_user_token']).'',
         );
     }
 

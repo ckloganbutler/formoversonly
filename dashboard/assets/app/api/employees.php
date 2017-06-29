@@ -24,7 +24,8 @@ if(isset($_SESSION['uuid'])){
         }
         if($emp['user_fname'] == 'Logan'){
             $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
-        } else {$warning = NULL;}
+            $new     = '<span class="label label-sm label-warning">NEW HIRE</span>';
+        } else {$warning = NULL; $new = NULL;}
         if($emp['user_group'] == 1) {
             $status_tag = '<span class="label label-sm label-danger">ADMINISTRATOR</span>';
             $num        = '<span class="label label-sm label-danger"><strong>#'.$emp['user_id'].'</strong></span>';
@@ -53,7 +54,7 @@ if(isset($_SESSION['uuid'])){
         }
         $records["data"][] = array(
             '<input type="checkbox" name="pk" value="'.$emp['user_token'].'"> '.$status_tag.'',
-            ''.$emp['user_lname'].', '.$emp['user_fname'].' '.$num.' '.$warning.'',
+            ''.$emp['user_lname'].', '.$emp['user_fname'].' '.$num.' '.$warning.' '.$new.'',
             ''.clean_phone($emp['user_phone']).'',
             ''.secret_mail($emp['user_email']).'',
             '<a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid='.$emp['user_token'].'&luid='.$emp['user_employer_location'].'" data-page-title="'.$emp["user_fname"].' '.$profile["user_lname"].'"><i class="fa fa-edit"></i> View profile</a>'
