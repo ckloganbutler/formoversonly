@@ -58,7 +58,7 @@ if(isset($_SESSION['logged'])){
                     <?php
                 } elseif ($event['event_booking'] == 0){
                     ?>
-                    <div class="pull-right tooltips btn btn-fit-height grey-salt">
+                    <div class="pull-right tooltips btn btn-fit-height grey-salt" id="pay">
                         <i class="fa fa-credit-card text-danger"></i>&nbsp; <span class="thin uppercase visible-lg-inline-block text-danger">BOOKING FEE UNPAID <i class="fa fa-arrow-right"></i> CLICK TO PAY</span>
                     </div>
                     <?php
@@ -1498,6 +1498,76 @@ if(isset($_SESSION['logged'])){
     </form>
     <script type="text/javascript">
         $(document).ready(function() {
+
+            var handler = StripeCheckout.configure({
+                key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
+                image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                locale: 'auto',
+                token: function(token) {
+                    $.ajax({
+                        url: 'assets/app/charge.php',
+                        type: 'POST',
+                        data: {
+                            stripeToken: token.id,
+                            stripeEmail: token.email,
+                            stripeAmt: 1000
+                        },
+                        success: function(data){
+                            $.ajax({
+                                url: 'assets/app/update_settings.php?update=event_fly',
+                                type: 'POST',
+                                data: {
+                                    name: 'event_booking',
+                                    value: 1,
+                                    pk: '<?php echo $event['event_token']; ?>'
+                                },
+                                success: function(s){
+                                    $.ajax({
+                                        url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                                        success: function(data) {
+                                            $('#page_content').html(data);
+                                        },
+                                        error: function() {
+                                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                        }
+                                    });
+                                    toastr.success("<strong>Logan says:</strong><br/>Booking fee paid, 10$ has been charged to the card you provided.");
+                                },
+                                error: function(s){
+
+                                }
+                            });
+                        },
+                        error: function(e){
+
+                        }
+                    })
+                }
+            });
+
+            $('#pay').click(function(e) {
+                // Open Checkout with further options:
+                handler.open({
+                    name: 'Booking Fee',
+                    description: 'Allows customer to use card/check to pay later.',
+                    amount: 1000,
+                    <?php
+                    if(!empty($event['event_email'])){
+                    ?>
+                    email: '<?php echo $event['event_email']; ?>'
+                    <?php
+                    }
+                    ?>
+
+                });
+                e.preventDefault();
+            });
+
+            // Close Checkout on page navigation:
+            window.addEventListener('popstate', function() {
+                handler.close();
+            });
+
             function initMap() {
                 var directionsService = new google.maps.DirectionsService;
                 var directionsDisplay = new google.maps.DirectionsRenderer;
