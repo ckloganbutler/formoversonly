@@ -32,12 +32,15 @@ if(isset($_SESSION['logged'])){
                 </a>
                 <ul class="dropdown-menu pull-right">
                     <?php
-                    $types = mysql_query("SELECT eventtype_name FROM fmo_locations_eventtypes WHERE eventtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
-                    if(mysql_num_rows($types) > 0){
-                        while($type = mysql_fetch_assoc($types)){
+                    $timeOptions = mysql_query("SELECT time_start, time_end FROM fmo_locations_times WHERE time_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                    if(mysql_num_rows($timeOptions) > 0){
+                        while($t = mysql_fetch_assoc($timeOptions)){
+                            if(empty($t['time_end'])){
+                                $t['time_end'] = "finish";
+                            }
                             ?>
                             <li>
-                                <a class="change_type" data-id="<?php echo $type['eventtype_name']; ?>" data-type="eventtype"><?php echo $type['eventtype_name']; ?></a>
+                                <a class="change_type" data-id="<?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?>" data-type="eventtime"><?php echo $t['time_start']; ?> to <?php echo $t['time_end']; ?></a>
                             </li>
                             <?php
                         }
@@ -1992,7 +1995,6 @@ if(isset($_SESSION['logged'])){
             );
 
             $('#dashboard-report-range').show();
-            $('.range_inputs').prepend( "<div>Test</div>" );
 
             $('.fire').click(function(f){
                 var fire = $(this).attr('data-fire');
