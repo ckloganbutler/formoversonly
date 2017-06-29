@@ -823,6 +823,9 @@ if(isset($_SESSION['logged'])){
                                                                                         <th>
                                                                                             Total
                                                                                         </th>
+                                                                                        <th>
+                                                                                            Actions
+                                                                                        </th>
                                                                                     </tr>
                                                                                     </thead>
                                                                                     <tbody>

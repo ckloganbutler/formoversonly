@@ -230,7 +230,8 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
             '<a>'.$items['item_desc'].'</a>',
             '<a>'.$items['item_qty'].'</a>',
             '<a>'.$items['item_cost'].'</a>',
-            '<a>'.$items['item_total'].'</a>'
+            '<a>'.$items['item_total'].'</a>',
+            '<a class="btn default btn-xs red-stripe edit" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete" data-delete="item_'.$items['laborer_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
         );
     }
 
