@@ -26,10 +26,29 @@ if(isset($_SESSION['logged'])){
         <h3 class="page-title">
             <strong><?php echo $event['event_name']; ?></strong> | <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
 
+            <div class="btn-group pull-right">
+                <a class="btn red dropdown-toggle" href="javascript:;" data-toggle="dropdown">
+                    <i class="fa fa-clock-o"></i> Event Time: <strong><?php echo $event['event_time']; ?></strong> <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <?php
+                    $types = mysql_query("SELECT eventtype_name FROM fmo_locations_eventtypes WHERE eventtype_location_token='".mysql_real_escape_string($event['event_location_token'])."'");
+                    if(mysql_num_rows($types) > 0){
+                        while($type = mysql_fetch_assoc($types)){
+                            ?>
+                            <li>
+                                <a class="change_type" data-id="<?php echo $type['eventtype_name']; ?>" data-type="eventtype"><?php echo $type['eventtype_name']; ?></a>
+                            </li>
+                            <?php
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
             <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
                 <i class="icon-calendar"></i>&nbsp;
                 <span class="bold uppercase visible-lg-inline-block">
-                    <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?> @ <?php echo $event['event_time']; ?>
+                    <?php echo date('M d, Y', strtotime($event['event_date_start'])); ?> - <?php echo date('M d, Y', strtotime($event['event_date_end'])); ?>
                 </span>&nbsp; <i class="fa fa-angle-down"></i>
             </a>
         </h3>
