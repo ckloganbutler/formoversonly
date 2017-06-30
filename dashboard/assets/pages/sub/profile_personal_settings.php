@@ -9,30 +9,32 @@ session_start();
 include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_id, user_company_name, user_company_token, user_pic, user_fname, user_lname, user_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2 FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_id, user_company_name, user_company_token, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2 FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if(!empty($profile['user_employer']) && !empty($profile['user_employer_location'])) {
         $employee = true;
         $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
-    } else {$employee = false;$location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));}
-
+    } else {
+        $employee = false;
+        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    }
     ?>
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light">
                 <div class="portlet-title tabbable-line">
                     <ul class="nav nav-tabs nav-justified">
-                        <li class="active">
-                            <a href="#about" data-toggle="tab">About <?php echo $profile['user_fname']; ?></a>
-                        </li>
                         <?php
                         if($profile['user_group'] == 3){
                             ?>
-                            <li>
+                            <li class="active">
                                 <a href="#bookings" data-toggle="tab">Bookings</a>
                             </li>
                             <?php
                         }
                         ?>
+                        <li <?php if($profile['user_group'] != 3){ ?>class="active"<?php } ?>>
+                            <a href="#about" data-toggle="tab">About <?php echo $profile['user_fname']; ?></a>
+                        </li>
                         <?php
                         if($employee == true && $_SESSION['group'] <= 2){
                             ?>
@@ -52,11 +54,11 @@ if(isset($_SESSION['logged'])){
                 </div>
                 <div class="portlet-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="about">
+                        <div class="tab-pane <?php if($profile['user_group'] != 3){ ?>active<?php } ?>" id="about">
                             <h3>Personal Information</h3>
                             <div class="row static-info" style="margin-top: 20px;">
                                 <div class="col-md-5 name">
-                                    Name:
+                                    Name (ID):
                                 </div>
                                 <div class="col-md-7 value">
                                     <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_fname" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new first name.." data-url="assets/app/update_settings.php?update=usr_prf">
@@ -156,7 +158,7 @@ if(isset($_SESSION['logged'])){
                                     Password:
                                 </div>
                                 <div class="col-md-7 value">
-                                    <a>Send password reset to <?php echo clean_phone($profile['user_phone']); ?></a>
+                                    <a class="upr">Send password reset to <?php echo clean_phone($profile['user_phone']); ?></a>
                                 </div>
                             </div>
                             <?php
@@ -206,16 +208,7 @@ if(isset($_SESSION['logged'])){
                                     <div class="col-md-7 value">
                                         $<a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_employer_rate" data-pk="<?php echo $profile['user_token']; ?>" data-type="number" data-inputclass="form-control" data-placement="right" data-title="Enter new rate.." data-url="assets/app/update_settings.php?update=usr_prf">
                                             <?php echo $profile['user_employer_rate']; ?>
-                                        </a>-
-                                        <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_employer_salary" data-pk="<?php echo $profile['user_token']; ?>" data-type="select" data-source="[{value: 1, text: 'Hourly'},{value: 2, text: 'Weekly'}]" data-placement="right" data-title="Select new salary type.." data-url="assets/app/update_settings.php?update=usr_prf">
-                                            <?php
-                                            if($profile['user_employer_salary'] == 1){
-                                                echo "Hourly";
-                                            } elseif($profile['user_employer_salary'] == 2){
-                                                echo "Weekly";
-                                            }
-                                            ?>
-                                        </a>
+                                        </a>- ($<?php echo number_format($profile['user_employer_rate'] * 2080, 2); ?> / year)
                                     </div>
                                 </div>
                                 <div class="row static-info">
@@ -305,21 +298,43 @@ if(isset($_SESSION['logged'])){
                                         ?>
                                     </div>
                                 </div>
-
+                                <div class="row static-info">
+                                    <div class="col-md-5 name">
+                                        SurePayRoll Enrolled:
+                                    </div>
+                                    <div class="col-md-7 value">
+                                        <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_setup" data-pk="<?php echo $profile['user_token']; ?>" data-type="select" data-source="[{value: 0, text: 'No'}, {value: 1, text: 'Yes'}]" data-placement="right" data-title="Has employee been put into SurePayRoll?" data-url="assets/app/update_settings.php?update=usr_prf">
+                                            <?php
+                                            if($profile['user_setup'] == 0){
+                                                echo "No (new hire, needs to be put into SurePayRoll)";
+                                            } elseif($profile['user_setup'] == 1) {
+                                                echo "Yes";
+                                            }
+                                            ?>
+                                        </a>
+                                    </div>
+                                </div>
                                 <?php
                             }
                             ?>
                             <hr/>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                            <?php
+                            if($_SESSION['group'] <= 2 || $_SESSION['group'] == 4.0){
+                                ?>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                                    </div>
                                 </div>
-                            </div>
+                                <?php
+                            }
+                            ?>
+
                         </div>
                         <?php
                         if($profile['user_group'] == 3){
                             ?>
-                            <div class="tab-pane" id="bookings">
+                            <div class="tab-pane active" id="bookings">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="todo-tasklist">
@@ -342,7 +357,7 @@ if(isset($_SESSION['logged'])){
                                                             <?php
                                                         }
                                                         ?>
-                                                        >
+                                                    >
                                                         <div class="todo-tasklist-item-title">
                                                             <?php echo $event['event_name']; ?>
                                                             <?php
@@ -402,7 +417,7 @@ if(isset($_SESSION['logged'])){
                                             <div class="portlet-body">
                                                 <div class="table-container">
                                                     <form role="form" id="add_documents">
-                                                        <table class="table table-striped table-bordered table-hover datatable-2" data-src="assets/app/api/profile.php?type=documents&uuid=<?php echo $profile['user_token']; ?>">
+                                                        <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=documents&uuid=<?php echo $profile['user_token']; ?>">
                                                             <thead>
                                                             <tr role="row" class="heading">
                                                                 <th width="18%">
@@ -461,7 +476,7 @@ if(isset($_SESSION['logged'])){
                                 Child Support
                             </div>
                             <div class="tab-pane" id="administration">
-                                <div class="portlet light">
+                                <div class="portlet">
                                     <div class="portlet-title tabbable-line">
                                         <div class="caption">
                                             <i class="fa fa-file-o"></i>Administration <small><span class="font-red">|</span> These are special settings only for administration purposes.</small>
@@ -471,7 +486,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="tab-content">
                                             <div class="tab-pane active" id="tab">
                                                 <div class="table-container">
-                                                    <table class="table table-striped table-bordered table-hover datatable-2" id="timeclock_admin" data-src="assets/app/api/time_clock.php?admin=trl&uuid=<?php echo $profile['user_token']; ?>">
+                                                    <table class="table table-striped table-bordered table-hover datatable" id="timeclock_admin" data-src="assets/app/api/time_clock.php?admin=trl&uuid=<?php echo $profile['user_token']; ?>">
                                                         <thead>
                                                         <tr role="row" class="heading">
                                                             <th>
@@ -479,6 +494,9 @@ if(isset($_SESSION['logged'])){
                                                             </th>
                                                             <th>
                                                                 Clock-in Date & Time
+                                                            </th>
+                                                            <th>
+                                                                Clock IP Address
                                                             </th>
                                                             <th>
                                                                 Clock-out Date & Time
@@ -512,13 +530,14 @@ if(isset($_SESSION['logged'])){
                                                 <div class="actions">
                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#child_support_only" style="margin-left: 5px;"><i class="fa fa-child"></i> View <strong>child support</strong></button>
                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#advances_only"><i class="fa fa-money"></i> View <strong>advances</strong></button>
+                                                    <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#labor_only"><i class="fa fa-area-chart"></i> View <strong>labor</strong></button>
                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#write_ups_only"><i class="fa fa-pencil"></i> View <strong>write-ups</strong></button>
                                                     <button class="btn btn-xs default red-stripe pull-right" data-toggle="modal" href="#comments_only"><i class="fa fa-comments-o"></i> View <strong>comments</strong></button>
                                                 </div>
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="table-container">
-                                                    <table class="table table-striped table-bordered table-hover datatable-2" data-src="assets/app/api/profile.php?type=timeline&uuid=<?php echo $profile['user_token']; ?>">
+                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=timeline&uuid=<?php echo $profile['user_token']; ?>">
                                                         <thead>
                                                         <tr role="row" class="heading">
                                                             <th width="12%">

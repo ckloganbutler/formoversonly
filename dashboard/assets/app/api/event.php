@@ -218,7 +218,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findItems = mysql_query("SELECT item_item, item_desc, item_qty, item_cost, item_total FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $findItems = mysql_query("SELECT item_id, item_item, item_desc, item_qty, item_cost, item_total FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
     $iTotalRecords = mysql_num_rows($findItems);
 
     $records = array();
@@ -228,10 +228,10 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
         $records["data"][] = array(
             '<a>'.$items['item_item'].'</a>',
             '<a>'.$items['item_desc'].'</a>',
-            '<a>'.$items['item_qty'].'</a>',
-            '<a>'.$items['item_cost'].'</a>',
+            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
+            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
             '<a>'.$items['item_total'].'</a>',
-            '<a class="btn default btn-xs red-stripe edit" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete" data-delete="item_'.$items['laborer_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
+            '<a class="btn default btn-xs red-stripe edit" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
         );
     }
 

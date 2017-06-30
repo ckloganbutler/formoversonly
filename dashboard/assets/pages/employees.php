@@ -74,11 +74,10 @@ if(isset($_SESSION['logged'])){
                                         </thead>
                                         <tbody>
                                         <?php
-                                        $findEmployees = mysql_query("SELECT user_id, user_fname, user_lname, user_token, user_group, user_phone, user_email, user_last_ext_location, user_employer_location, user_status FROM fmo_users WHERE user_employer_location='".mysql_real_escape_string($_GET['luid'])."' OR user_group=1 AND user_token='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY user_lname ASC");
+                                        $findEmployees = mysql_query("SELECT user_id, user_fname, user_setup, user_lname, user_token, user_group, user_phone, user_email, user_last_ext_location, user_employer_location, user_status FROM fmo_users WHERE user_employer_location='".mysql_real_escape_string($_GET['luid'])."' OR user_group=1 AND user_token='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY user_lname ASC");
                                         while($emp = mysql_fetch_assoc($findEmployees)) {
                                             if($emp['user_fname'] == 'Logan'){
                                                 $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
-                                                $new     = '<span class="label label-sm label-warning">NEW HIRE</span>';
                                             } else {$warning = NULL; $new = NULL;}
                                             if($emp['user_group'] == 1) {
                                                 $status_tag = '<span class="label label-sm label-danger">ADMINISTRATOR</span>';
@@ -106,6 +105,9 @@ if(isset($_SESSION['logged'])){
                                             } elseif($emp['user_status'] == 2){
                                                 $status     = '<span class="label label-sm label-danger">TERMINATED</span>';
                                             }
+                                            if($emp['user_setup'] == 0){
+                                                $new        = '<span class="label label-sm label-warning">NEW HIRE</span>';
+                                            } else {$new = NULL;}
                                             ?>
                                             <tr>
                                                 <td>

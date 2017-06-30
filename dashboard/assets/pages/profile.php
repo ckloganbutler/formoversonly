@@ -11,13 +11,14 @@ session_start();
 if(isset($_SESSION['logged'])){
     include '../app/init.php';
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_id, user_company_name, user_company_token, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2 FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_id, user_company_name, user_company_token, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2 FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if(!empty($profile['user_employer']) && !empty($profile['user_employer_location'])) {
         $employee = true;
         $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
     } else {
         $employee = false;
-        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));}
+        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    }
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -520,7 +521,22 @@ if(isset($_SESSION['logged'])){
                                                             ?>
                                                         </div>
                                                     </div>
-
+                                                    <div class="row static-info">
+                                                        <div class="col-md-5 name">
+                                                            SurePayRoll Enrolled:
+                                                        </div>
+                                                        <div class="col-md-7 value">
+                                                            <a class="pu_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_setup" data-pk="<?php echo $profile['user_token']; ?>" data-type="select" data-source="[{value: 0, text: 'No'}, {value: 1, text: 'Yes'}]" data-placement="right" data-title="Has employee been put into SurePayRoll?" data-url="assets/app/update_settings.php?update=usr_prf">
+                                                                <?php
+                                                                if($profile['user_setup'] == 0){
+                                                                    echo "No (new hire, needs to be put into SurePayRoll)";
+                                                                } elseif($profile['user_setup'] == 1) {
+                                                                    echo "Yes";
+                                                                }
+                                                                ?>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                     <?php
                                                 }
                                             ?>

@@ -14,11 +14,17 @@ function mysql_loop($field, $value, $db, $where, $token) {
 $key = 'AIzaSyDxLua1UKdf-637NvG5NgBuhb0DYVQ77cg';
 $googer = new GoogleUrlApi($key);
 
-if($_GET['update'] == 'event_laborers'){
+if($_GET['setting'] == 'event_laborers'){
     $field = $_POST['name'];
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
     mysql_query("UPDATE fmo_locations_events_laborers SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE laborer_id='".mysql_real_escape_string($pk)."'") or die(mysql_error());
+}
+if($_GET['setting'] == 'event_items'){
+    $field = $_POST['name'];
+    $value = $_POST['value'];
+    $pk    = $_POST['pk'];
+    mysql_query("UPDATE fmo_locations_events_items SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE item_id='".mysql_real_escape_string($pk)."'") or die(mysql_error());
 }
 if($_GET['update'] == 'assets'){
     $field = $_POST['name'];

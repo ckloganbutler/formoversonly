@@ -822,7 +822,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     }
                 }
             });
-            toastr.info("<strong>Logan says</strong>:<br/>You can now edit that information. If you change a value, remember that you may need to refresh the page to see the changes.")
+            toastr.info("<strong>Logan says</strong>:<br/>Editable information has been underlined with blue dots.")
         });
     });
     $('#catcher_phone').focusout(function() {
