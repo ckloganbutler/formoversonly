@@ -73,7 +73,60 @@ if(isset($_SESSION['logged'])){
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        <?php
+                                        $findEmployees = mysql_query("SELECT user_id, user_fname, user_lname, user_token, user_group, user_phone, user_email, user_last_ext_location, user_employer_location, user_status FROM fmo_users WHERE user_employer_location='".mysql_real_escape_string($_GET['luid'])."' OR user_group=1 AND user_token='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY user_lname ASC");
+                                        while($emp = mysql_fetch_assoc($findEmployees)) {
+                                            if($emp['user_fname'] == 'Logan'){
+                                                $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
+                                                $new     = '<span class="label label-sm label-warning">NEW HIRE</span>';
+                                            } else {$warning = NULL; $new = NULL;}
+                                            if($emp['user_group'] == 1) {
+                                                $status_tag = '<span class="label label-sm label-danger">ADMINISTRATOR</span>';
+                                                $num        = '<span class="label label-sm label-danger"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            } elseif($emp['user_group'] == 2) {
+                                                $status_tag = '<span class="label label-sm label-success"> MANAGER</span>';
+                                                $num        = '<span class="label label-sm label-success"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            } elseif($emp['user_group'] == 4) {
+                                                $status_tag = '<span class="label label-sm label-info">CUSTOMER SERVICE</span>';
+                                                $num        = '<span class="label label-sm label-info"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            } elseif($emp['user_group'] == 5.1) {
+                                                $status_tag = '<span class="label label-sm label-warning">DRIVER</span>';
+                                                $num        = '<span class="label label-sm label-warning"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            } elseif($emp['user_group'] == 5.2) {
+                                                $status_tag = '<span class="label label-sm label-warning2">HELPER</span>';
+                                                $num        = '<span class="label label-sm label-warning2"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            } elseif($emp['user_group'] == 5.3) {
+                                                $status_tag = '<span class="label label-sm label-default">CREWMAN/OTHER</span>';
+                                                $num        = '<span class="label label-sm label-default"><strong>#'.$emp['user_id'].'</strong></span>';
+                                            }
+                                            if($emp['user_status'] == 0){
+                                                $status     = '<span class="label label-sm label-warning">INACTIVE</span>';
+                                            } elseif($emp['user_status'] == 1){
+                                                $status     = '<span class="label label-sm label-success">ACTIVE</span>';
+                                            } elseif($emp['user_status'] == 2){
+                                                $status     = '<span class="label label-sm label-danger">TERMINATED</span>';
+                                            }
+                                            ?>
+                                            <tr>
+                                                <td>
+                                                    <input type="checkbox" name="pk" value="<?php echo $emp['user_token']; ?>"> <?php echo $status_tag; ?> <?php echo $status; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $emp['user_lname']; ?>, <?php echo $emp['user_fname']; ?> <?php echo $num; ?> <?php echo $warning; ?> <?php echo $new; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo clean_phone($emp['user_phone']); ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo secret_mail($emp['user_email']); ?>
+                                                </td>
+                                                <td>
+                                                    <a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid=<?php echo $emp['user_token']; ?>&luid=<?php echo $emp['user_employer_location']; ?>" data-page-title="<?php echo $emp["user_fname"].' '.$profile["user_lname"]; ?>"><i class="fa fa-edit"></i> View profile</a>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -271,16 +324,11 @@ if(isset($_SESSION['logged'])){
     <script type="text/javascript">
         $(document).ready(function() {
             $("#employees").dataTable({
-                "processing": true,
-                "serverSide": true,
                 "order": [[ 0, "asc" ]],
                 "bFilter" : true,
-                "bLengthChange": false,
-                "bPaginate": false,
-                "info": true,
-                "ajax": {
-                    "url": "assets/app/api/employees.php?luid=<?php echo $_GET['luid']; ?>" // ajax source
-                }
+                "bLengthChange": true,
+                "bPaginate": true,
+                "info": true
             });
             $('#create_employee').validate({
                 errorElement: 'span', //default input error message container

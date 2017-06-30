@@ -20,7 +20,7 @@ if(isset($_SESSION['uuid'])){
 
     while($emp = mysql_fetch_assoc($findEmployees)) {
         if($emp['user_status'] != 1){
-            continue;
+
         }
         if($emp['user_fname'] == 'Logan'){
             $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
@@ -53,7 +53,7 @@ if(isset($_SESSION['uuid'])){
             $status     = '<span class="label label-sm label-danger">TERMINATED</span>';
         }
         $records["data"][] = array(
-            '<input type="checkbox" name="pk" value="'.$emp['user_token'].'"> '.$status_tag.'',
+            '<input type="checkbox" name="pk" value="'.$emp['user_token'].'"> '.$status_tag.' '.$status.'',
             ''.$emp['user_lname'].', '.$emp['user_fname'].' '.$num.' '.$warning.' '.$new.'',
             ''.clean_phone($emp['user_phone']).'',
             ''.secret_mail($emp['user_email']).'',

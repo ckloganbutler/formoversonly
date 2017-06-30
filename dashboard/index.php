@@ -76,7 +76,12 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         .popover-title {
             color: black !important;
         }
-
+        .dataTables_filter {
+            float: right !important;
+        }
+        .dataTables_paginate {
+            float: right !important;
+        }
     </style>
 
 </head>
