@@ -25,6 +25,9 @@ if($_GET['setting'] == 'event_items'){
     $value = $_POST['value'];
     $pk    = $_POST['pk'];
     mysql_query("UPDATE fmo_locations_events_items SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE item_id='".mysql_real_escape_string($pk)."'") or die(mysql_error());
+    $item  = mysql_fetch_array(mysql_query("SELECT item_qty, item_cost FROM fmo_locations_events_items WHERE item_id='".mysql_real_escape_string($pk)."'"));
+    $total = $item['item_cost'] * $item['item_qty'];
+    mysql_query("UPDATE fmo_locations_events_items SET item_total='".mysql_real_escape_string($total)."' WHERE item_id='".mysql_real_escape_string($pk)."'");
 }
 if($_GET['update'] == 'assets'){
     $field = $_POST['name'];

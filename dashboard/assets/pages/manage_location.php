@@ -871,12 +871,40 @@ if(isset($_SESSION['logged'])){
                                         <div class="portlet">
                                             <div class="portlet-title">
                                                 <div class="caption">
-                                                    <i class="fa fa-dot-circle-o"></i> Booking Fee Disclaimer
+                                                    <i class="fa fa-cubes"></i> Location Disclaimers
                                                 </div>
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="col-md-12">
-                                                    <a class="dc" style="color: #333333;" data-placement="bottom" data-name="location_booking_fee_disclaimer" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location booking fee disclaimer.." data-url="assets/app/update_settings.php?update=location">
+                                                    <a class="dc" style="color: #333333;" data-mode="inline" data-placement="bottom" data-name="location_disclaimers" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location disclaimers.." data-url="assets/app/update_settings.php?update=location">
+                                                        <?php
+                                                        if(empty($location['location_disclaimers'])){
+                                                            ?>
+                                                            <h3>You can edit this disclaimer!</h3>
+                                                            <p>Its easy, just hit edit & start editing away! You can even add cool colors like this: <span class="text-danger">WOW</span> <span class="text-warning">BLAM</span> <span class="text-info">SLAM</span></p>
+                                                            <?php
+                                                        } else {
+                                                            echo $location['location_declaimers'];
+                                                        }
+                                                        ?>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/><br/>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="portlet">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="fa fa-credit-card"></i> Booking Fee Disclaimers
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="col-md-12">
+                                                    <a class="dc" style="color: #333333;" data-mode="inline" data-placement="bottom" data-name="location_booking_fee_disclaimer" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location booking fee disclaimer.." data-url="assets/app/update_settings.php?update=location">
                                                         <?php
                                                         if(empty($location['location_booking_fee_disclaimer'])){
                                                             ?>
