@@ -133,7 +133,7 @@ if(isset($_SESSION['logged'])){
                                     <a class="load_profile_tab" data-href="assets/pages/sub/profile_personal_settings.php?uuid=<?php echo $profile['user_token']; ?>" data-page-title="Personal Settings"><i class="icon-user"></i>Personal Settings </a>
                                 </li>
                                 <?php
-                                if($profile['user_group'] == 1){
+                                if($profile['user_group'] == 1 && $_SESSION['group'] == 1){
                                     ?>
                                     <li>
                                         <a class="load_profile_tab" data-href="assets/pages/sub/profile_company_settings.php?uuid=<?php echo $profile['user_token']; ?>" data-page-title="Company Settings"><i class="icon-settings"></i>Company Settings  </a>
@@ -525,11 +525,18 @@ if(isset($_SESSION['logged'])){
                                                 }
                                             ?>
                                             <hr/>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                                            <?php
+                                            if($_SESSION['group'] <= 2 || $_SESSION['group'] == 4.0){
+                                                ?>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="pu_<?php echo $profile['user_token']; ?>" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                <?php
+                                            }
+                                            ?>
+
                                         </div>
                                         <?php
                                         if($profile['user_group'] == 3){

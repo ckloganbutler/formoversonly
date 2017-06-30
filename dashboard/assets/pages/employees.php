@@ -328,7 +328,8 @@ if(isset($_SESSION['logged'])){
                 "bFilter" : true,
                 "bLengthChange": true,
                 "bPaginate": true,
-                "info": true
+                "info": true,
+                "stateSave": true
             });
             $('#create_employee').validate({
                 errorElement: 'span', //default input error message container

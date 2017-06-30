@@ -211,57 +211,57 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                 <span class="arrow "></span>
                             </a>
                         </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">
+                                <i class="icon-earphones-alt"></i>
+                                <span class="title">Employees</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/reports.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Reports">
+                                <i class="icon-layers"></i>
+                                <span class="title">Reports</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Assets">
+                                <i class="fa fa-truck"></i>
+                                <span class="title">Assets</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/vendors.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Vendors">
+                                <i class="icon-tag"></i>
+                                <span class="title">Vendors</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/inventory.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Inventory">
+                                <i class="icon-eye"></i>
+                                <span class="title">Inventory</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/resource.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Resource Library">
+                                <i class="icon-folder"></i>
+                                <span class="title">Resource Library</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
                         <?php
                         if($user['user_group'] <= 2){
                             ?>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Employees">
-                                    <i class="icon-earphones-alt"></i>
-                                    <span class="title">Employees</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/reports.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Reports">
-                                    <i class="icon-layers"></i>
-                                    <span class="title">Reports</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/assets.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Assets">
-                                    <i class="fa fa-truck"></i>
-                                    <span class="title">Assets</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/vendors.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Vendors">
-                                    <i class="icon-tag"></i>
-                                    <span class="title">Vendors</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/inventory.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Inventory">
-                                    <i class="icon-eye"></i>
-                                    <span class="title">Inventory</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a class="load_page" data-href="assets/pages/resource.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Resource Library">
-                                    <i class="icon-folder"></i>
-                                    <span class="title">Resource Library</span>
-                                    <span class="selected"></span>
-                                    <span class="arrow "></span>
-                                </a>
-                            </li>
                             <li class="">
                                 <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Location Settings">
                                     <i class="icon-settings"></i>
@@ -629,7 +629,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         FormValidation.init();
         Index.init();
         <?php
-        if($user['user_status'] == 0){
+        if($user['user_status'] == 102012){
             ?>
         $.ajax({
             url: 'assets/pages/reset_password.php',
