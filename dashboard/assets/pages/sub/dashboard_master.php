@@ -14,7 +14,7 @@ if(isset($_SESSION['logged'])) {
         ?>
         <div class="row">
             <div class="col-md-6">
-                <h3 style="margin-top: 0px;">Morning Jobs <small class="hidden-sm"><span class="text-danger">| <span id="morning"></span> event(s)</span></small></h3>
+                <h3 style="margin-top: 0px;">Morning <small class="hidden-sm"><span class="text-danger">| <span id="morning"></span></span></small></h3>
                 <div class="todo-tasklist">
                     <?php
                     $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<='".mysql_real_escape_string($range[1])."') AND NOT event_status=0");
@@ -86,17 +86,19 @@ if(isset($_SESSION['logged'])) {
                         <?php
                     } else {
                         ?>
-                        <center>
-                            <h3>No events found for today at this location.</h3>
+                        <br/>
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                            <strong>No events found</strong> for this morning at this location.
                             <span id="morningCount" class="hidden">0</span>
-                        </center>
+                        </div>
                         <?php
                     }
                     ?>
                 </div>
             </div>
             <div class="col-md-6">
-                <h3 style="margin-top: 0px">Afternoon Jobs <small class="hidden-sm"><span class="text-danger">| <span id="afternoon"></span> event(s)</span></small></h3>
+                <h3 style="margin-top: 0px">Afternoon <small class="hidden-sm"><span class="text-danger">| <span id="afternoon"></span></span></small></h3>
                 <div class="todo-tasklist">
                     <?php
                     $events = mysql_query("SELECT event_name, event_date_start, event_date_end, event_time, event_token, event_status, event_type, event_subtype, event_booking, event_truckfee, event_laborrate FROM fmo_locations_events WHERE event_location_token='".mysql_real_escape_string($_GET['luid'])."' AND (event_date_start>='".$range[0]."' AND event_date_end<='".$range[1]."') AND NOT event_status=0");
@@ -168,10 +170,12 @@ if(isset($_SESSION['logged'])) {
                         <?php
                     } else {
                         ?>
-                        <center>
-                            <h3>No events found for today at this location.</h3>
+                        <br/>
+                        <div class="alert alert-danger alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                            <strong>No events found</strong> for this afternoon at this location.
                             <span id="afternoonCount" class="hidden">0</span>
-                        </center>
+                        </div>
                         <?php
                     }
                     ?>

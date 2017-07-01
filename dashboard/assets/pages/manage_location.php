@@ -10,7 +10,7 @@ include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_booking_fee_disclaimer, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_owner_company_token, location_name, location_phone, location_email, location_token, location_status, location_booking_fee_disclaimer, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access, location_disclaimers FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -884,7 +884,7 @@ if(isset($_SESSION['logged'])){
                                                             <p>Its easy, just hit edit & start editing away! You can even add cool colors like this: <span class="text-danger">WOW</span> <span class="text-warning">BLAM</span> <span class="text-info">SLAM</span></p>
                                                             <?php
                                                         } else {
-                                                            echo $location['location_declaimers'];
+                                                            echo $location['location_disclaimers'];
                                                         }
                                                         ?>
                                                     </a>

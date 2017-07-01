@@ -38,10 +38,7 @@ if(isset($_SESSION['logged'])){
                         </div>
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="#customers_tab" data-toggle="tab">Customers Search</a>
-                            </li>
-                            <li class="">
-                                <a href="#customers_list" data-toggle="tab">Customers List</a>
+                                <a href="#customers_tab" data-toggle="tab">Customers</a>
                             </li>
                         </ul>
                     </div>
