@@ -82,6 +82,16 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         .dataTables_paginate {
             float: right !important;
         }
+
+        @media print
+        {
+            table { page-break-after:auto }
+            tr    { page-break-inside:avoid; page-break-after:auto }
+            td    { page-break-inside:avoid; page-break-after:auto }
+            thead { display:table-header-group }
+            tfoot { display:table-footer-group }
+            .no_print { display: none !important; }
+        }
     </style>
 
 </head>
@@ -708,7 +718,26 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     url: url,
                     success: function(data) {
                         $('#profile-content').html(data);
-
+                    },
+                    error: function() {
+                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    }
+                });
+            });
+        });
+        $(document).on('click', '.load_payments', function(){
+            var act = $(this).attr('data-act');
+            var url = $(this).attr('data-href');
+            var tit = $(this).attr('data-page-title');
+            Pace.track(function(){
+                $.ajax({
+                    url: url,
+                    data: {
+                        type: act
+                    },
+                    success: function(data) {
+                        $('#payments-content').html(data);
+                        document.title = tit;
                     },
                     error: function() {
                         toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");

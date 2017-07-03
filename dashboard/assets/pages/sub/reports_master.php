@@ -12,16 +12,6 @@ if(isset($_SESSION['logged'])){
     if($_POST['type'] == 'pryl'){
         $range = explode(" - ", $_POST['ext']);
         ?>
-        <style type="text/css">
-            @media print
-            {
-                table { page-break-after:auto }
-                tr    { page-break-inside:avoid; page-break-after:auto }
-                td    { page-break-inside:avoid; page-break-after:auto }
-                thead { display:table-header-group }
-                tfoot { display:table-footer-group }
-            }
-        </style>
         <div class="col-md-12">
             <div class="portlet">
                 <div class="portlet-title tabbable-line">

@@ -669,17 +669,6 @@ if(isset($_SESSION['logged'])){
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="#invoices" data-toggle="tab">Invoicing
-                                                <?php
-                                                if($items > 0){
-                                                    ?>
-                                                    <span class="badge badge-danger"> <?php echo $items; ?> </span>
-                                                    <?php
-                                                }
-                                                ?>
-                                            </a>
-                                        </li>
-                                        <li>
                                             <a href="#labor" data-toggle="tab">
                                                 Laborers
                                                 <?php
@@ -692,195 +681,19 @@ if(isset($_SESSION['logged'])){
                                                 Assets
                                             </a>
                                         </li>
+                                        <li>
+                                            <a href="#invoices" data-toggle="tab">Invoicing
+                                                <?php
+                                                if($items > 0){
+                                                    ?>
+                                                    <span class="badge badge-danger"> <?php echo $items; ?> </span>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </a>
+                                        </li>
                                     </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane" id="documents">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="portlet">
-                                                        <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i class="fa fa-cogs"></i>Documents & Photos<small><span class="font-red">|</span> Upload files that regard the event here.</small>
-                                                            </div>
-                                                            <div class="actions">
-                                                                <a class="btn default red-stripe show_form" data-show="#add_document">
-                                                                    <i class="fa fa-plus"></i>
-                                                                    <span class="hidden-480">Upload new document or photo </span>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <div class="table-container">
-                                                                <form role="form" id="add_documents">
-                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=documents&ev=<?php echo $event['event_token']; ?>">
-                                                                        <thead>
-                                                                        <tr role="row" class="heading">
-                                                                            <th width="18%">
-                                                                                File Thumbnail
-                                                                            </th>
-                                                                            <th>
-                                                                                File Description
-                                                                            </th>
-                                                                            <th width="8%">
-                                                                                Actions
-                                                                            </th>
-                                                                        </tr>
-                                                                        <tr role="row" class="filter" style="display: none;" id="add_document">
-                                                                            <td><input type="file" class="form-control form-filter input-sm" name="file"></td>
-                                                                            <td>
-                                                                                <div class="form-group">
-                                                                                    <div class="col-md-12">
-                                                                                        <input type="text" class="form-control form-filter input-sm" name="file_desc">
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-                                                                        </tbody>
-                                                                    </table>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End: life time stats -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="invoices">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="portlet">
-                                                        <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i class="fa fa-tags"></i> Items for sale(s) <small><span class="font-red">|</span> Available items for invoicing. <i class="fa fa-arrow-right"></i></small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <div class="table-container">
-                                                                <form role="form" id="add_service_rate">
-                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=rates&luid=<?php echo $event['event_location_token']; ?>&ev=<?php echo $event['event_token']; ?>">
-                                                                        <thead>
-                                                                        <tr role="row" class="heading">
-                                                                            <th>
-                                                                                Service Name
-                                                                            </th>
-                                                                            <th>
-                                                                                Service Description
-                                                                            </th>
-                                                                            <th>
-                                                                                Taxable
-                                                                            </th>
-                                                                            <th>
-                                                                                Commissionable
-                                                                            </th>
-                                                                            <th width="12%" class="text-center">
-                                                                                Invoice item <i class="fa fa-arrow-right"></i>
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-
-                                                                        </tbody>
-                                                                    </table>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12">
-                                                    <div class="portlet">
-                                                        <div class="portlet-title">
-                                                            <div class="caption">
-                                                                <i class="fa fa-file"></i>Customer Invoice <small><span class="font-red">|</span> Preview for customer's invoice.</small>
-                                                            </div>
-                                                        </div>
-                                                        <div class="portlet-body">
-                                                            <div class="invoice">
-                                                                <div class="row">
-                                                                    <div class="col-xs-12">
-                                                                        <div class="table-container">
-                                                                            <form role="form" id="add_service_rate">
-                                                                                <table class="table table-striped table-bordered table-hover datatable" id="sales" data-src="assets/app/api/event.php?type=sales&ev=<?php echo $event['event_token']; ?>">
-                                                                                    <thead>
-                                                                                    <tr role="row" class="heading">
-                                                                                        <th>
-                                                                                            Item
-                                                                                        </th>
-                                                                                        <th class="hidden-480">
-                                                                                            Description
-                                                                                        </th>
-                                                                                        <th class="hidden-480">
-                                                                                            Quantity
-                                                                                        </th>
-                                                                                        <th class="hidden-480">
-                                                                                            Unit Cost
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Total
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Actions
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <div class="col-xs-4">
-                                                                        <div class="well">
-                                                                            <address>
-                                                                                <strong>Loop, Inc.</strong><br>
-                                                                                795 Park Ave, Suite 120<br>
-                                                                                San Francisco, CA 94107<br>
-                                                                                <abbr title="Phone">P:</abbr> (234) 145-1810 </address>
-                                                                            <address>
-                                                                                <strong>Full Name</strong><br>
-                                                                                <a href="mailto:#">
-                                                                                    first.last@email.com </a>
-                                                                            </address>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xs-8 invoice-block">
-                                                                        <ul class="list-unstyled amounts">
-                                                                            <li>
-                                                                                <strong>Sub - Total amount:</strong> $9265
-                                                                            </li>
-                                                                            <li>
-                                                                                <strong>Discount:</strong> 12.9%
-                                                                            </li>
-                                                                            <li>
-                                                                                <strong>VAT:</strong> -----
-                                                                            </li>
-                                                                            <li>
-                                                                                <strong>Grand Total:</strong> $12489
-                                                                            </li>
-                                                                        </ul>
-                                                                        <br>
-                                                                        <a class="btn btn-lg blue hidden-print margin-bottom-5" onclick="javascript:window.print();">
-                                                                            Print <i class="fa fa-print"></i>
-                                                                        </a>
-                                                                        <a class="btn btn-lg green hidden-print margin-bottom-5">
-                                                                            Submit Your Invoice <i class="fa fa-check"></i>
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="tab-pane active" id="comments">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -927,20 +740,77 @@ if(isset($_SESSION['logged'])){
                                                                 <form role="form" id="add_service_rate">
                                                                     <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=timeline&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
-                                                                            <tr role="row" class="heading">
-                                                                                <th width="12%">
-                                                                                    Record Timestamp
-                                                                                </th>
-                                                                                <th width="14%">
-                                                                                    Record Type
-                                                                                </th>
-                                                                                <th>
-                                                                                    Record Details
-                                                                                </th>
-                                                                                <th width="12%">
-                                                                                    Record Creator
-                                                                                </th>
-                                                                            </tr>
+                                                                        <tr role="row" class="heading">
+                                                                            <th width="12%">
+                                                                                Record Timestamp
+                                                                            </th>
+                                                                            <th width="14%">
+                                                                                Record Type
+                                                                            </th>
+                                                                            <th>
+                                                                                Record Details
+                                                                            </th>
+                                                                            <th width="12%">
+                                                                                Record Creator
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End: life time stats -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="documents">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="portlet">
+                                                        <div class="portlet-title">
+                                                            <div class="caption">
+                                                                <i class="fa fa-cogs"></i>Documents & Photos<small><span class="font-red">|</span> Upload files that regard the event here.</small>
+                                                            </div>
+                                                            <div class="actions">
+                                                                <a class="btn default red-stripe show_form" data-show="#add_document">
+                                                                    <i class="fa fa-plus"></i>
+                                                                    <span class="hidden-480">Upload new document or photo </span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body">
+                                                            <div class="table-container">
+                                                                <form role="form" id="add_documents">
+                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=documents&ev=<?php echo $event['event_token']; ?>">
+                                                                        <thead>
+                                                                        <tr role="row" class="heading">
+                                                                            <th width="18%">
+                                                                                File Thumbnail
+                                                                            </th>
+                                                                            <th>
+                                                                                File Description
+                                                                            </th>
+                                                                            <th width="8%">
+                                                                                Actions
+                                                                            </th>
+                                                                        </tr>
+                                                                        <tr role="row" class="filter" style="display: none;" id="add_document">
+                                                                            <td><input type="file" class="form-control form-filter input-sm" name="file"></td>
+                                                                            <td>
+                                                                                <div class="form-group">
+                                                                                    <div class="col-md-12">
+                                                                                        <input type="text" class="form-control form-filter input-sm" name="file_desc">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
+                                                                            </td>
+                                                                        </tr>
                                                                         </thead>
                                                                         <tbody>
 
@@ -1042,6 +912,133 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                     </div>
                                                     <!-- End: life time stats -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane" id="invoices">
+                                            <div class="row">
+                                                <!--
+                                                <div class="col-md-6">
+                                                    <div class="portlet">
+                                                        <div class="portlet-title">
+                                                            <div class="caption">
+                                                                <i class="fa fa-tags"></i> Items for sale(s) <small><span class="font-red">|</span> Available items for invoicing. <i class="fa fa-arrow-right"></i></small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body">
+                                                            <div class="table-container">
+                                                                <form role="form" id="add_service_rate">
+                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=rates&luid=<?php echo $event['event_location_token']; ?>&ev=<?php echo $event['event_token']; ?>">
+                                                                        <thead>
+                                                                        <tr role="row" class="heading">
+                                                                            <th>
+                                                                                Service Name
+                                                                            </th>
+                                                                            <th>
+                                                                                Service Description
+                                                                            </th>
+                                                                            <th>
+                                                                                Taxable
+                                                                            </th>
+                                                                            <th>
+                                                                                Commissionable
+                                                                            </th>
+                                                                            <th width="12%" class="text-center">
+                                                                                Invoice item <i class="fa fa-arrow-right"></i>
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                -->
+                                                <div class="col-md-12">
+                                                    <div class="portlet">
+                                                        <div class="portlet-title">
+                                                            <div class="caption">
+                                                                <i class="fa fa-file"></i>Invoice <small><span class="font-red">|</span></small> <button class="btn btn-xs red-stripe print" data-print="#invoice"><i class="fa fa-print"></i> Print</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portlet-body" id="invoice">
+                                                            <div class="invoice" id="payments-content">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <div class="table-container">
+                                                                            <form role="form" id="add_service_rate">
+                                                                                <table class="table table-striped table-hover datatable" id="sales" data-src="assets/app/api/event.php?type=sales&ev=<?php echo $event['event_token']; ?>">
+                                                                                    <thead>
+                                                                                    <tr role="row" class="heading">
+                                                                                        <th>
+                                                                                            Item
+                                                                                            <span class="pull-right no_print">
+                                                                                                Options for you
+                                                                                            </span>
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Description
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Quantity
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Unit Cost
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            <span class="pull-right">Total</span>
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-xs-4">
+                                                                        <div class="well">
+                                                                            <address>
+                                                                                <strong><?php echo $event['event_name']; ?></strong><br>
+                                                                                <?php echo $pk_strt; ?>, <br/>
+                                                                                <?php echo $pk_city; ?>, <?php echo $pk_state; ?> <?php echo $pk_zip; ?> <br/>
+                                                                                <abbr title="Phone">P:</abbr> <?php echo clean_phone($event['event_phone']); ?> </address>
+                                                                            <address>
+                                                                                <strong><?php echo $user['user_fname']." ".$user['user_lname']; ?></strong><br>
+                                                                                <a href="mailto:#">
+                                                                                    <?php echo secret_mail($user['user_email']); ?> </a>
+                                                                            </address>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-xs-8 invoice-block">
+                                                                        <ul class="list-unstyled amounts">
+                                                                            <li>
+                                                                                Sub total: <strong>$2,265</strong>
+                                                                            </li>
+                                                                            <li>
+                                                                                Tax (<strong>X</strong> items) 7%:  <strong>$100</strong>
+                                                                            </li>
+                                                                            <li>
+                                                                                Grand Total: <strong class="text-danger">$2,365</strong>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <br>
+                                                                        <a class="btn btn-lg green hidden-print margin-bottom-5 load_payments"  data-type="py" data-href="assets/pages/sub/event_master.php?ev=<?php echo $event['event_token']; ?>" data-page-title="Taking payment">
+                                                                            Take Payment <i class="fa fa-check"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

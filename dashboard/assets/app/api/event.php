@@ -226,12 +226,11 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            '<a>'.$items['item_item'].'</a>',
-            '<a>'.$items['item_desc'].'</a>',
+            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_item" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new item.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_item'].'</a> <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
+            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
-            '<a>'.$items['item_total'].'</a>',
-            '<a class="btn default btn-xs red-stripe edit" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
+            '<strong class="text-danger pull-right">'.$items['item_total'].'</strong>'
         );
     }
 
