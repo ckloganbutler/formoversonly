@@ -726,12 +726,13 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             });
         });
         $(document).on('click', '.load_payments', function(){
-            var act = $(this).attr('data-act');
+            var act = $(this).attr('data-type');
             var url = $(this).attr('data-href');
             var tit = $(this).attr('data-page-title');
             Pace.track(function(){
                 $.ajax({
                     url: url,
+                    type: 'POST',
                     data: {
                         type: act
                     },

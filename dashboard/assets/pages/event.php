@@ -1036,6 +1036,11 @@ if(isset($_SESSION['logged'])){
                                                                         </a>
                                                                     </div>
                                                                 </div>
+                                                                <div class="row" id="payments-content">
+                                                                    <div class="col-md-12">
+                                                                        <h3>Payments made</h3>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1520,6 +1525,20 @@ if(isset($_SESSION['logged'])){
     </form>
     <script type="text/javascript">
         $(document).ready(function() {
+
+            $('#payments .button-cancel').click(function () {
+                Pace.track(function(){
+                    $.ajax({
+                        url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                        success: function(data) {
+                            $('#page_content').html(data);
+                        },
+                        error: function() {
+                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        }
+                    });
+                });
+            });
 
             var handler = StripeCheckout.configure({
                 key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
