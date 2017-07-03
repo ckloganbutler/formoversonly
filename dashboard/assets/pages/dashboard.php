@@ -119,12 +119,9 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-title tabbable-line">
                         <div class="caption caption-md">
                             <i class="fa fa-tags theme-font bold"></i>
-                            <span class="caption-subject font-red bold uppercase">Events</span> <span class="font-red">|</span> <small>for <?php echo $location['location_name']; ?></small>
+                            <span class="caption-subject font-red bold uppercase">Events</span>
                         </div>
                         <div class="actions">
-                            <div class="btn-group">
-                                <button class="btn red"><i class="fa fa-external-link"></i> Month at a Glance</button>
-                            </div>
                             <div class="btn-group">
                                 <a id="dashboard-report-range" class="pull-right tooltips btn red" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
                                     <i class="icon-calendar"></i>&nbsp;Events for:
@@ -132,6 +129,9 @@ if(isset($_SESSION['logged'])){
                                         <?php echo date('m-d-Y'); ?>
                                     </span>&nbsp; <i class="fa fa-angle-down"></i>
                                 </a>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn red mag" data-month="<?php echo date('Y-m-d'); ?>"><i class="fa fa-external-link"></i> Month at a Glance</button>
                             </div>
                         </div>
                     </div>
@@ -315,36 +315,37 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-12 col-sm-12">
                 <div class="portlet light">
                     <div class="portlet-title tabbable-line">
                         <div class="caption">
-                            <i class="icon-globe font-green-sharp"></i>
-                            <span class="caption-subject font-green-sharp bold uppercase">Feeds</span>
+                            <i class="icon-globe theme-font bold"></i>
+                            <span class="caption-subject font-red bold uppercase">Activity</span>
                         </div>
                         <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#l_a" data-toggle="tab" aria-expanded="true">
+                                    Activity </a>
+                            </li>
                             <li class="">
-                                <a href="#tab_1_1" data-toggle="tab" aria-expanded="false">
+                                <a href="#c_c" data-toggle="tab" aria-expanded="false">
                                     Claims </a>
                             </li>
                             <li class="">
                                 <a href="#a_r" data-toggle="tab" aria-expanded="false">
-                                    Accounts Recievable </a>
+                                    Accounts Receivable </a>
                             </li>
-                            <li class="active">
-                                <a href="#tab_1_2" data-toggle="tab" aria-expanded="true">
-                                    Location Activity </a>
-                            </li>
+
                             <li class="">
-                                <a href="#tab_1_3" data-toggle="tab" aria-expanded="false">
-                                    Recent Reviews </a>
+                                <a href="#c_r" data-toggle="tab" aria-expanded="false">
+                                    Customer Reviews </a>
                             </li>
                         </ul>
                     </div>
                     <div class="portlet-body">
                         <!--BEGIN TABS-->
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tab_1_1">
+                            <div class="tab-pane active" id="l_a">
                                 <div class="scroller" style="height: 339px;" data-always-visible="1" data-rail-visible="0">
                                     <ul class="feeds">
                                         <li>
@@ -733,7 +734,7 @@ if(isset($_SESSION['logged'])){
                                     </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_1_2">
+                            <div class="tab-pane" id="c_c">
                                 <div class="scroller" style="height: 290px;" data-always-visible="1" data-rail-visible1="1">
                                     <ul class="feeds">
                                         <li>
@@ -969,7 +970,7 @@ if(isset($_SESSION['logged'])){
                                     </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_1_3">
+                            <div class="tab-pane" id="c_r">
                                 <div class="scroller" style="height: 290px;" data-always-visible="1" data-rail-visible1="1">
                                     <div class="row">
                                         <div class="col-md-6 user-info">
@@ -1158,6 +1159,7 @@ if(isset($_SESSION['logged'])){
                     </div>
                 </div>
             </div>
+            <!--
             <div class="col-md-6 col-sm-12">
                 <div class="portlet light ">
                     <div class="portlet-title">
@@ -1297,7 +1299,7 @@ if(isset($_SESSION['logged'])){
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
     <div class="modal fade bs-modal-lg" id="recent_texts" tabindex="-1" role="basic" aria-hidden="true">
@@ -1538,6 +1540,7 @@ if(isset($_SESSION['logged'])){
                 },
                 function (start, end) {
                     $('#dashboard-report-range span').html(start.format('MM-DD-YYYY'));
+                    $('.mag').attr('data-month', start.format('YYYY-MM-DD'));
                     $.ajax({
                         url: 'assets/pages/sub/dashboard_master.php?t=dash_evs&luid=<?php echo $_GET['luid']; ?>',
                         type: 'POST',
@@ -1546,13 +1549,32 @@ if(isset($_SESSION['logged'])){
                         },
                         success: function(events){
                             $('#dashboard_events').html(events);
+                            toastr.success("<strong>Logan says:</strong><br/>I updated the lists for you below.");
                         },
                         error: function(error){
-
+                            toastr.error("<strong>Logan says:</strong><br/>Something didn't work correctly there. Try again.");
                         }
                     })
                 }
             );
+
+            $('.mag').click(function() {
+                var date = $(this).attr('data-month');
+                $.ajax({
+                    url: 'assets/pages/sub/dashboard_master.php?t=dash_mag&luid=<?php echo $_GET['luid']; ?>',
+                    type: 'POST',
+                    data: {
+                        month: date
+                    },
+                    success: function(events){
+                        $('#dashboard_events').html(events);
+                        toastr.success("<strong>Logan says:</strong><br/>Events for the month viewable below.");
+                    },
+                    error: function(){
+                        toastr.error("<strong>Logan says:</strong><br/>Something didn't work correctly there. Try again.");
+                    }
+                })
+            });
 
             $('.datatable').each(function(){
                 var url = $(this).attr('data-src');

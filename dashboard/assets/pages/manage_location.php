@@ -864,7 +864,6 @@ if(isset($_SESSION['logged'])){
                                     </div>
                                 </div>
                             </div>
-
                             <div class="tab-pane" id="disclaimers">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -876,7 +875,7 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="col-md-12">
-                                                    <a class="dc" style="color: #333333;" data-mode="inline" data-placement="bottom" data-name="location_disclaimers" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location disclaimers.." data-url="assets/app/update_settings.php?update=location">
+                                                    <span class="dc" style="color: #333333; width: 100%;" data-mode="inline" data-placement="bottom" data-inputclass="form-control col-md-12" data-name="location_disclaimers" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location disclaimers.." data-url="assets/app/update_settings.php?update=location">
                                                         <?php
                                                         if(empty($location['location_disclaimers'])){
                                                             ?>
@@ -887,7 +886,7 @@ if(isset($_SESSION['logged'])){
                                                             echo $location['location_disclaimers'];
                                                         }
                                                         ?>
-                                                    </a>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -904,7 +903,7 @@ if(isset($_SESSION['logged'])){
                                             </div>
                                             <div class="portlet-body">
                                                 <div class="col-md-12">
-                                                    <a class="dc" style="color: #333333;" data-mode="inline" data-placement="bottom" data-name="location_booking_fee_disclaimer" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location booking fee disclaimer.." data-url="assets/app/update_settings.php?update=location">
+                                                    <a class="dc" style="color: #333333;" data-mode="inline" data-placement="bottom" data-inputclass="form-control" data-name="location_booking_fee_disclaimer" data-pk="<?php echo $location['location_token']; ?>" data-type="wysihtml5" data-title="Enter new location booking fee disclaimer.." data-url="assets/app/update_settings.php?update=location">
                                                         <?php
                                                         if(empty($location['location_booking_fee_disclaimer'])){
                                                             ?>
@@ -924,7 +923,7 @@ if(isset($_SESSION['logged'])){
                                 <hr/>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <a href="javascript:;" class="btn text-center red btn-sm edit" data-edit="dc" data-reload="tables"> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
+                                        <a class="btn text-center red btn-sm edit" data-edit="dc" data-reload=""> <i class="fa fa-pencil"></i> <span class="hidden-sm hidden-md " >Edit</span></a>
                                     </div>
                                 </div>
                             </div>

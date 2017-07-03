@@ -189,5 +189,78 @@ if(isset($_SESSION['logged'])) {
             });
         </script>
         <?php
+    } elseif($_GET['t'] == 'dash_mag'){
+        ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="mag" class="has-toolbar">
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+
+                var date = new Date(Date.parse("<?php echo $_POST['month']; ?>"));
+                var d = date.getDate();
+                var m = date.getMonth();
+                var y = date.getFullYear();
+
+                console.log(m + ' ' + y + ' ' + d);
+
+                var h = {};
+
+                <?php
+                $events = mysql_query("SELECT event_name, event_time, event_date_start, event_token FROM fmo_locations_events WHERE MONTH(event_date_start)=MONTH('".mysql_real_escape_string($_POST['month'])."') AND event_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+                ?>
+
+                $('#mag').fullCalendar('destroy'); // destroy the calendar
+                $('#mag').fullCalendar({ //re-initialize the calendar
+                    header: {
+                        left:   'title',
+                        center: '',
+                        right:  ''
+                    },
+                    defaultView: 'month', // change default view with available options from http://arshaw.com/fullcalendar/docs/views/Available_Views/
+                    slotMinutes: 15,
+                    events: [
+                        <?php
+                    if(mysql_num_rows($events)>0){
+                        while($event = mysql_fetch_assoc($events)){
+                         ?>
+                        {
+                            title: "<?php echo $event['event_name']; ?>",
+                            ev: "<?php echo $event['event_token']; ?>",
+                            start: new Date(Date.parse("<?php echo $event['event_date_start']; ?> 23:00:00")),
+                            backgroundColor: Metronic.getBrandColor('red')
+                        },
+                        <?php
+                        }
+                    }
+                    ?>
+                    ],
+                    eventClick: function(event) {
+                        Pace.track(function(){
+                            $.ajax({
+                                url: "assets/pages/event.php?ev=" + event.ev,
+                                success: function(data) {
+                                    $('#page_content').html(data);
+                                    document.title = event.title+" - For Movers Only";
+                                },
+                                error: function() {
+                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                }
+                            });
+                        });
+                    }
+                });
+
+
+                $('#mag').fullCalendar('gotoDate', '<?php echo $_POST['month']; ?>');
+
+                $(".fc-button-prev").addClass('fc-state-disabled');
+                $(".fc-button-next").addClass('fc-state-disabled');
+            });
+        </script>
+        <?php
     }
 }
