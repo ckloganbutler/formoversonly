@@ -25,13 +25,7 @@ if(isset($_SESSION['logged'])){
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#tab3" data-toggle="tab" class="step">
-                                            <span class="number">2 </span>
-                                            <span class="desc"><i class="fa fa-check"></i> Payment Finalization </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#tab4" data-toggle="tab" class="step">
+                                        <a href="#tab2" data-toggle="tab" class="step">
                                             <span class="number">3 </span>
                                             <span class="desc"><i class="fa fa-check"></i> Complete </span>
                                         </a>
@@ -43,59 +37,104 @@ if(isset($_SESSION['logged'])){
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="tab1">
-                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>verify invoice matches amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
-                                    </div>
-                                    <div class="tab-pane" id="tab3">
+                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
+                                        <hr/>
                                         <div class="row">
-                                            <div class="col-md-6 col-sm-12">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label col-md-3">Tender Type <span class="required">*</span></label>
-                                                    <div class="col-md-9">
+                                                    <label class="control-label col-md-5">Tender Type <span class="required">*</span></label>
+                                                    <div class="col-md-7">
                                                         <select class="form-control input-sm type" name="type" data-target=".tender-inputs">
                                                             <option disabled selected value="">Select one..</option>
-                                                            <option value="Cash" data-show=".cash">Cash</option>
-                                                            <option value="Check" data-show=".chec">Check</option>
-                                                            <option value="Credit/Debt" data-show=".cc">Credit/Debt Card (ckPay&trade;)</option>
-                                                            <option value="Other" data-show=".other">Credit/Debt Card (Other Payment Processor)</option>
+                                                            <option value="Cash" data-show=".cash" data-input="cash">Cash</option>
+                                                            <option value="Check" data-show=".chec" data-input="chec">Check</option>
+                                                            <option value="Credit/Debt" data-show=".cc" data-input="cc">Credit/Debt Card (ckPay&trade;)</option>
+                                                            <option value="Other" data-show=".other" data-input="other">Credit/Debt Card (Other Payment Processor)</option>
                                                         </select>
-                                                        <span class="help-block">This should the type of payment in which the customer choose to use.</span>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
                                                 <div class="tender-inputs">
-                                                    <div class="form-group cash hidden">
-                                                        <label class="control-label col-md-3">Tender Amount <span class="required">*</span></label>
-                                                        <div class="col-md-9">
-                                                            <input type="number" step="any" class="form-control input-sm" name="amount" placeholder="XXXX.XX">
-                                                            <span class="help-block">This is the amount you are receiving in cash.</span>
+                                                    <div class="row cash hidden">
+                                                        <div class="form-group col-md-6">
+                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="XXXX.XX">
+                                                                <span class="help-block">Amount in cash.</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label class="control-label col-md-5">Tender Notes <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="XXXX.XX">
+                                                                <span class="help-block">Notes about transaction (if any).</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group chec hidden">
-                                                        <label class="control-label col-md-3">Tender Amount <span class="required">*</span></label>
-                                                        <div class="col-md-9">
-                                                            <input type="number" step="any" class="form-control input-sm" name="amount" placeholder="XXXX.XX">
-                                                            <span class="help-block">This is the amount you are receiving from this check.</span>
+                                                    <div class="row chec hidden">
+                                                        <div class="form-group col-md-6">
+                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="XXXX.XX">
+                                                                <span class="help-block">Amount for check.</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group col-md-6">
+                                                            <label class="control-label col-md-5">Check Number <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="XXXX.XX">
+                                                                <span class="help-block">Found on check.</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group cc hidden">
-                                                        <label class="control-label col-md-3">Tender Amount <span class="required">*</span></label>
-                                                        <div class="col-md-9">
-                                                            <input type="number" step="any" class="form-control input-sm" name="amount" placeholder="XXXX.XX">
-                                                            <span class="help-block">This is the amount you are charging the card for.</span>
+                                                    <div class="row cc hidden">
+                                                        <div class="form-group cc hidden">
+                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="XXXX.XX">
+                                                                <span class="help-block">Amount charging to card.</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group other hidden">
-                                                        <label class="control-label col-md-3">Tender Amount <span class="required">*</span></label>
-                                                        <div class="col-md-9">
-                                                            <input type="number" step="any" class="form-control input-sm" name="amount" placeholder="XXXX.XX">
-                                                            <span class="help-block">This is the amount you are receiving from another type of payment.</span>
+                                                    <div class="row other hidden">
+                                                        <div class="form-group other hidden">
+                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
+                                                            <div class="col-md-7">
+                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="XXXX.XX">
+                                                                <span class="help-block">Amount for other payment type.</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="tab4">
+                                    <div class="tab-pane" id="tab2">
+                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
+                                        <hr/>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Tender Type:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <strong id="t_type">
 
+                                                </strong>
+                                            </div>
+                                        </div>
+                                        <div class="row static-info">
+                                            <div class="col-md-5 name">
+                                                Tender Amount:
+                                            </div>
+                                            <div class="col-md-7 value">
+                                                <strong class="text-success">$</strong><strong id="t_amount" class="text-success">
+
+                                                </strong>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -195,6 +234,12 @@ if(isset($_SESSION['logged'])){
                     } else {
                         $('#payments').find('.button-previous').show();
                     }
+                    if (current == 2){
+                        var select = $('.type option:selected').data('input');
+                        console.log(select);
+                        $('#t_type').html($('.type').val());
+                        $('#t_amount').html($('#'+select).val());
+                    }
 
                     if (current >= total) {
                         $('#payments').find('.button-next').hide();
@@ -249,13 +294,24 @@ if(isset($_SESSION['logged'])){
                 $('#payments').find('.button-previous').hide();
                 $('#payments .button-submit').click(function () {
                     Pace.track(function(){
-
+                        $.ajax({
+                            url: 'assets/app/update_settings.php?setting=pymnt',
+                            type: 'POST',
+                            data: $('#submit_form').serialize(),
+                            success: function(p){
+                                toastr.success("Nice, we took your payment!");
+                                $('#payments-content').html("Here goes a table full of payment history....");
+                            },
+                            error: function(p){
+                                toastr.error("Ooops. Something went wrong.")
+                            }
+                        })
                     });
                 }).hide();
 
                 $('#payments .button-cancel').click(function () {
                     Pace.track(function(){
-
+                        $('#payments-content').html("");
                     });
                 });
 

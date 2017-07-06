@@ -918,7 +918,6 @@ if(isset($_SESSION['logged'])){
 
                                         <div class="tab-pane" id="invoices">
                                             <div class="row">
-                                                <!--
                                                 <div class="col-md-6">
                                                     <div class="portlet">
                                                         <div class="portlet-title">
@@ -958,8 +957,7 @@ if(isset($_SESSION['logged'])){
                                                         </div>
                                                     </div>
                                                 </div>
-                                                -->
-                                                <div class="col-md-12">
+                                                <div class="col-md-6">
                                                     <div class="portlet">
                                                         <div class="portlet-title">
                                                             <div class="caption">
@@ -967,7 +965,7 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                         </div>
                                                         <div class="portlet-body" id="invoice">
-                                                            <div class="invoice" id="payments-content">
+                                                            <div class="invoice">
                                                                 <div class="row">
                                                                     <div class="col-md-12">
                                                                         <div class="table-container">

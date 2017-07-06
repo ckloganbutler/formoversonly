@@ -31,7 +31,7 @@ class GoogleUrlApi {
         return isset($response['longUrl']) ? $response['longUrl'] : false;
     }
 
-    // Send information to Google
+    // Swipe UP to start a streak with me <3
     function send($url,$shorten = true) {
         // Create cURL
         $ch = curl_init();

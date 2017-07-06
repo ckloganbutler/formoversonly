@@ -55,13 +55,17 @@ if(isset($_SESSION['logged'])){
             <div class="col-md-12">
                 <div class="portlet light">
                     <?php
+
+
                     $broadcast = getBroadcast($_SESSION['cuid']);
-                    if(!empty($broadcast['message']) && $broadcast['time'] <= date('Y-m-d', strtotime($broadcast['time'].' + 2 days'))){
+                    $after = "".date('Y-m-d', strtotime($broadcast['time']." + 2 days"))."";
+                    $time  = "".date('Y-m-d')."";
+                    if(!empty($broadcast['message']) && $time < $after){
                         ?>
                         <div class="portlet-title">
                             <div class="caption caption-md col-md-12">
                                 <marquee>
-                                    <i class="fa fa-bullhorn"></i> Company broadcast | <strong class="text-danger" style="font-size: 16px;">
+                                    <i class="fa fa-bullhorn"></i> Company Broadcast | <strong class="text-danger" style="font-size: 16px;">
                                         <em><?php echo $broadcast['message']; ?></em>
                                     </strong>
                                 </marquee>
