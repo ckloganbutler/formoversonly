@@ -1029,14 +1029,36 @@ if(isset($_SESSION['logged'])){
                                                                             </li>
                                                                         </ul>
                                                                         <br>
-                                                                        <a class="btn btn-lg green hidden-print margin-bottom-5 load_payments"  data-type="py" data-href="assets/pages/sub/event_master.php?ev=<?php echo $event['event_token']; ?>" data-page-title="Taking payment">
+                                                                        <a class="btn btn-lg green hidden-print margin-bottom-5 load_payments"  data-type="py" data-href="assets/pages/sub/event_master.php?ev=<?php echo $event['event_token']; ?>&uuid=<?php echo $event['event_user_token']; ?>" data-page-title="Taking payment">
                                                                             Take Payment <i class="fa fa-check"></i>
                                                                         </a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row" id="payments-content">
                                                                     <div class="col-md-12">
-                                                                        <h3>Payments made</h3>
+                                                                        <div class="table-container">
+                                                                            <table class="table table-striped table-hover datatable" id="sales" data-src="assets/app/api/event.php?type=payments&ev=<?php echo $event['event_token']; ?>">
+                                                                                <thead>
+                                                                                <tr role="row" class="heading">
+                                                                                    <th>
+                                                                                        Tender Type
+                                                                                        <span class="pull-right no_print">
+                                                                                            By
+                                                                                        </span>
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        Notes
+                                                                                    </th>
+                                                                                    <th class="text-right">
+                                                                                        Tender Amount
+                                                                                    </th>
+                                                                                </tr>
+                                                                                </thead>
+                                                                                <tbody>
+
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>

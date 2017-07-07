@@ -14,7 +14,7 @@ if(isset($_SESSION['logged'])){
         <div class="col-md-12">
             <div class="portlet" id="payments">
                 <div class="portlet-body form">
-                    <form action="#" class="form-horizontal" id="submit_form" method="POST">
+                    <form action="#" id="submit_form" method="POST">
                         <div class="form-wizard">
                             <div class="form-body">
                                 <ul class="nav nav-pills nav-justified steps hidden">
@@ -39,76 +39,55 @@ if(isset($_SESSION['logged'])){
                                     <div class="tab-pane" id="tab1">
                                         <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
                                         <hr/>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-5">Tender Type <span class="required">*</span></label>
-                                                    <div class="col-md-7">
-                                                        <select class="form-control input-sm type" name="type" data-target=".tender-inputs">
-                                                            <option disabled selected value="">Select one..</option>
-                                                            <option value="Cash" data-show=".cash" data-input="cash">Cash</option>
-                                                            <option value="Check" data-show=".chec" data-input="chec">Check</option>
-                                                            <option value="Credit/Debt" data-show=".cc" data-input="cc">Credit/Debt Card (ckPay&trade;)</option>
-                                                            <option value="Other" data-show=".other" data-input="other">Credit/Debt Card (Other Payment Processor)</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="form-group form-md-line-input">
+                                            <select class="form-control type" name="type" data-target=".tender-inputs">
+                                                <option disabled selected value="">Select one..</option>
+                                                <option value="Cash" data-show=".cash" data-input="cash">Cash</option>
+                                                <option value="Check" data-show=".chec" data-input="chec">Check</option>
+                                                <option value="Credit/Debt" data-show=".cc" data-input="cc">Credit/Debt Card (ckPay&trade;)</option>
+                                                <option value="Other" data-show=".other" data-input="other">Credit/Debt Card (Other Payment Processor)</option>
+                                            </select>
+                                            <label for="form_control_1">Tender Type</label>
+                                            <span class="help-block"></span>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="tender-inputs">
-                                                    <div class="row cash hidden">
-                                                        <div class="form-group col-md-6">
-                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="XXXX.XX">
-                                                                <span class="help-block">Amount in cash.</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label class="control-label col-md-5">Tender Notes <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="XXXX.XX">
-                                                                <span class="help-block">Notes about transaction (if any).</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row chec hidden">
-                                                        <div class="form-group col-md-6">
-                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="XXXX.XX">
-                                                                <span class="help-block">Amount for check.</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label class="control-label col-md-5">Check Number <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="XXXX.XX">
-                                                                <span class="help-block">Found on check.</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row cc hidden">
-                                                        <div class="form-group cc hidden">
-                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="XXXX.XX">
-                                                                <span class="help-block">Amount charging to card.</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row other hidden">
-                                                        <div class="form-group other hidden">
-                                                            <label class="control-label col-md-5">Tender Amount <span class="required">*</span></label>
-                                                            <div class="col-md-7">
-                                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="XXXX.XX">
-                                                                <span class="help-block">Amount for other payment type.</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="tender-inputs">
+                                            <div class="form-group form-md-line-input cash hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="XXXX.XX">
+                                                <label for="form_control_1">Tender Amount</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input cash hidden">
+                                                <input type="text" step="any" class="form-control input-sm" name="notes" placeholder="...">
+                                                <label for="form_control_1">Tender Notes</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input chec hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="XXXX.XX">
+                                                <label for="form_control_1">Tender Amount</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input chec hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="...">
+                                                <label for="form_control_1">Check Number</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input cc hidden">
+                                                <input type="text" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="XXXX.XX">
+                                                <label for="form_control_1">Tender Amount</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group cc hidden">
+                                                <button class="btn btn-block red ">Pay using card <strong>number</strong>, <strong>expiration</strong>, and <strong>CVC</strong> <i class="fa fa-credit-card"></i></button>
+                                            </div>
+                                            <div class="form-group form-md-line-input other hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="XXXX.XX">
+                                                <label for="form_control_1">Tender Amount</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input other hidden" style="margin-bottom: 48px">
+                                                <input type="text" step="any" class="form-control input-sm" name="notes" placeholder="...">
+                                                <label for="form_control_1">Approval Number</label>
+                                                <span class="help-block"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -295,7 +274,7 @@ if(isset($_SESSION['logged'])){
                 $('#payments .button-submit').click(function () {
                     Pace.track(function(){
                         $.ajax({
-                            url: 'assets/app/update_settings.php?setting=pymnt',
+                            url: 'assets/app/update_settings.php?setting=pymt&ev=<?php echo $_GET['ev']; ?>&uuid=<?php echo $_GET['uuid']; ?>',
                             type: 'POST',
                             data: $('#submit_form').serialize(),
                             success: function(p){
@@ -321,9 +300,9 @@ if(isset($_SESSION['logged'])){
                     var show   =  $("option:selected", this).data('show');
                     $(target).children().addClass('hidden');
                     $(show).removeClass('hidden');
-                    $("input:hidden").attr('disabled', 'disabled');
-                    $("input:visible").removeAttr('disabled');
-                    $('input[name="amount"]').focus();
+                    $(".tender-inputs input:hidden").attr('disabled', 'disabled');
+                    $(".tender-inputs input:visible").removeAttr('disabled');
+                    $('.tender-inputs input:visible[name="amount"]').focus();
                     /*
                      if(type == 'Credit/Debt'){
                      $('#cc_btn').addClass("hide");

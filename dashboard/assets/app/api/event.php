@@ -226,11 +226,36 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
+            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
             '<strong class="text-danger pull-right">'.$items['item_total'].'</strong>'
+        );
+    }
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+if(isset($_GET['type']) && $_GET['type'] == 'payments'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findItems = mysql_query("SELECT payment_type, payment_amount, payment_detail, payment_by_user_token FROM fmo_locations_events_payments WHERE payment_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $iTotalRecords = mysql_num_rows($findItems);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($items = mysql_fetch_assoc($findItems)) {
+        $records["data"][] = array(
+            ''.$items['payment_type'].' <span class="pull-right">'.name($items['payment_by_user_token']).'</span>',
+            ''.$items['payment_detail'].'',
+            '<strong class="text-success pull-right">'.$items['payment_amount'].'</strong>'
+
         );
     }
 

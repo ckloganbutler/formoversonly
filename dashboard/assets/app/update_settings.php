@@ -13,7 +13,25 @@ function mysql_loop($field, $value, $db, $where, $token) {
 
 $key = 'AIzaSyDxLua1UKdf-637NvG5NgBuhb0DYVQ77cg';
 $googer = new GoogleUrlApi($key);
+if($_GET['setting'] == 'pymt'){
+    $event  = $_GET['ev'];
+    $loc    = $_GET['luid'];
+    $user   = $_GET['uuid'];
+    $by     = $_SESSION['uuid'];
+    $type   = $_POST['type'];
+    $amount = $_POST['amount'];
+    $notes  = $_POST['notes'];
 
+    mysql_query("INSERT INTO fmo_locations_events_payments (payment_event_token, payment_user_token, payment_company_token, payment_transaction_id, payment_type, payment_amount, payment_detail, payment_by_user_token) VALUES (
+    '".mysql_real_escape_string($event)."',
+    '".mysql_real_escape_string($user)."',
+    '".mysql_real_escape_string($_SESSION['cuid'])."',
+    '".mysql_real_escape_string(struuid(true))."',
+    '".mysql_real_escape_string($type)."',
+    '".mysql_real_escape_string($amount)."',
+    '".mysql_real_escape_string($notes)."',
+    '".mysql_real_escape_string($by)."')");
+}
 if($_GET['setting'] == 'event_laborers'){
     $field = $_POST['name'];
     $value = $_POST['value'];
