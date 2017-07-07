@@ -165,7 +165,7 @@ if(isset($_GET) && $_GET['type'] == 'labor'){
             '<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_hours_worked" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new paid hours.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_hours_worked'], 2).'</a>',
             '$<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_tip" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new tip/other pay.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_tip'], 2).'</a>',
             ''.name($lb['laborer_by_user_token']).'',
-            '<a class="btn default btn-xs red-stripe edit" data-edit="lb_'.$lb['laborer_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete" data-delete="lb_'.$lb['laborer_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Delete</a>',
+            '<a class="btn default btn-xs red-stripe edit" data-edit="lb_'.$lb['laborer_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_labor" data-delete="lb_'.$lb['laborer_id'].'"><i class="fa fa-times"></i></a>',
         );
     }
 
@@ -181,7 +181,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_taxable, services_commissionable FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_taxable, services_commissionable, services_type FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
     $iTotalRecords = mysql_num_rows($findRates);
 
     $records = array();
@@ -198,13 +198,24 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
         }  else  {
             $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
         }
-        $records["data"][] = array(
-            '<a>'.$services['services_item'].'</a>',
-            '<a>'.$services['services_item_desc'].'</a>',
-            '<a>'.$taxable_tag.'</a>',
-            '<a>'.$commissionable_tag.'</a>',
-            '<button type="button" data-id="'.$services['services_id'].'" data-ev="'.$_GET['ev'].'" class="btn default btn-xs blue-stripe add_item"><i class="fa fa-plus"></i> Add to invoice</a>',
-        );
+        if($services['services_type'] == 'Discount'){
+            $records["data"][] = array(
+                '<a>'.$services['services_item'].'</a>',
+                '<a>'.$services['services_item_desc'].'</a>',
+                '<a>'.$taxable_tag.'</a>',
+                '<a>'.$commissionable_tag.'</a>',
+                '<button type="button" data-id="'.$services['services_id'].'" data-ev="'.$_GET['ev'].'" class="btn default btn-xs blue-stripe add_item"><i class="fa fa-plus"></i> Add to invoice</a>',
+            );
+        } else {
+            $records["data"][] = array(
+                ''.$services['services_item'].'',
+                ''.$services['services_item_desc'].'',
+                ''.$taxable_tag.'',
+                ''.$commissionable_tag.'',
+                '<button type="button" data-id="'.$services['services_id'].'" data-ev="'.$_GET['ev'].'" class="btn default btn-xs blue-stripe add_item"><i class="fa fa-plus"></i> Add to invoice</a>',
+            );
+        }
+
     }
 
     $records["draw"] = $sEcho;
@@ -226,7 +237,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
+            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload="" data-event="'.$_GET['ev'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',

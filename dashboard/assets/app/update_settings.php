@@ -13,6 +13,14 @@ function mysql_loop($field, $value, $db, $where, $token) {
 
 $key = 'AIzaSyDxLua1UKdf-637NvG5NgBuhb0DYVQ77cg';
 $googer = new GoogleUrlApi($key);
+if($_GET['setting'] == 'delete_item'){
+    $item = explode("_", $_POST['del']);
+    mysql_query("DELETE FROM fmo_locations_events_items WHERE item_id='".mysql_real_escape_string($item[1])."'");
+}
+if($_GET['setting'] == 'delete_labor'){
+    $laborer = explode("_", $_POST['del']);
+    mysql_query("DELETE FROM fmo_locations_events_laborers WHERE laborer_id='".mysql_real_escape_string($laborer[1])."'");
+}
 if($_GET['setting'] == 'pymt'){
     $event  = $_GET['ev'];
     $loc    = $_GET['luid'];
@@ -186,6 +194,12 @@ if($_GET['update'] == 'change_type'){
         $token   = $_GET['ev'];
         mysql_query("UPDATE fmo_locations_events SET event_subtype='".mysql_real_escape_string($subtype)."' WHERE event_token='".mysql_real_escape_string($token)."'");
         timeline_event($token, $_SESSION['uuid'], "Subtype update", "Event subtype was changed to <strong>".$value."</strong>");
+        echo true;
+    } elseif(isset($_POST['type']) && $_POST['type'] == 'eventtime'){
+        $time    = $_POST['value'];
+        $token   = $_GET['ev'];
+        mysql_query("UPDATE fmo_locations_events SET event_time='".mysql_real_escape_string($time)."' WHERE event_token='".mysql_real_escape_string($token)."'");
+        timeline_event($token, $_SESSION['uuid'], "Event time update", "Event time was changed to <strong>".$time."</strong>");
         echo true;
     }
 }

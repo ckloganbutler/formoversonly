@@ -16,7 +16,7 @@ if(isset($_SESSION['logged'])){
     } else {$editable = false;$view='infoOnly';}
     if(isset($_GET['conf'])){
         $event    = mysql_fetch_array(mysql_query("SELECT event_token, event_location_token, event_date_start, event_date_end, event_time, event_name, event_email, event_phone, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_additions, event_comments, event_booking FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['conf'])."'"));
-        $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_booking_fee_disclaimer, location_disclaimers FROM fmo_locations WHERE location_token='".$event['event_location_token']."'"));
     } elseif(isset($_GET['n']) && $_GET['n'] == 'nekotwen'){
         $new_token      = struuid(true);
         $new_location   = $_GET['luid'];
@@ -576,6 +576,13 @@ if(isset($_SESSION['logged'])){
                                                                             <div class="well">
                                                                                 <button id="pay" class="btn btn-block btn-xl red">Securely pay <strong>$10.00</strong> booking fee</button>
                                                                             </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <?php
+                                                                            echo $location['location_disclaimers'];
+                                                                            ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>

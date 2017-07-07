@@ -718,27 +718,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     url: url,
                     success: function(data) {
                         $('#profile-content').html(data);
-                    },
-                    error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                    }
-                });
-            });
-        });
-        $(document).on('click', '.load_payments', function(){
-            var act = $(this).attr('data-type');
-            var url = $(this).attr('data-href');
-            var tit = $(this).attr('data-page-title');
-            Pace.track(function(){
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: {
-                        type: act
-                    },
-                    success: function(data) {
-                        $('#payments-content').html(data);
-                        document.title = tit;
+
                     },
                     error: function() {
                         toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
@@ -800,7 +780,65 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 });
             });
         });
+
+        function updateInv(event){
+            $.ajax({
+                url: 'assets/app/api/event.php?type=inv',
+                type: 'POST',
+                data: {
+                    event: '' + event + ''
+                },
+                success: function(m){
+                    var owe = JSON.parse(m);
+                    $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
+                    $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
+                    $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
+                },
+                error: function(e){
+
+                }
+            });
+        }
+
+        $(document).on('click', '.delete_labor',  function() {
+            var del    = $(this).attr('data-delete');
+            $(this).closest('tr').remove();
+            $.ajax({
+                url: 'assets/app/update_settings.php?setting=delete_labor',
+                type: 'POST',
+                data: {
+                    del: del
+                },
+                success: function(s){
+                    $('#laborers').DataTable().ajax.reload();
+                },
+                error: function(e){
+                }
+            });
+        });
+
+        $(document).on('click', '.delete_item',  function() {
+            var del    = $(this).attr('data-delete');
+            var event  = $(this).attr('data-event');
+            $(this).closest('tr').remove();
+            $.ajax({
+                url: 'assets/app/update_settings.php?setting=delete_item',
+                type: 'POST',
+                data: {
+                    del: del,
+                    ev: event
+                },
+                success: function(s){
+                    updateInv(event);
+                },
+                error: function(e){
+                    updateInv(event);
+                }
+            });
+        });
+
         $(document).on('click', '.add_item', function(){
+            var event = $(this).attr('data-ev');
             $.ajax({
                 url: 'assets/app/api/actions.php?ty=ai',
                 type: 'POST',
@@ -812,6 +850,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     var inf = JSON.parse(d);
                     toastr.success("<strong>Logan says</strong>:<br/> "+inf.item+" added to <?php echo $user['user_fname']; ?>'s invoice for "+inf.cost);
                     $('#sales').DataTable().ajax.reload();
+                    updateInv(event);
                 },
                 error: function(e){
                     toastr.error("<strong>Logan says</strong>:<br/> An unexpected error has occurred. Please try again later.")
@@ -845,8 +884,11 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         $(document).on('click', '.edit', function(){
             var line   = $(this).attr('data-edit');
             var reload = $(this).attr('data-reload');
+            var event  = $(this).attr('data-event');
             $('.'+line).editable({
+                step: 'any',
                 success: function() {
+                    updateInv(event);
                     if(reload.length > 0){
                         $('.datatable').DataTable().ajax.reload();
                     }

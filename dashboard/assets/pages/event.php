@@ -842,7 +842,7 @@ if(isset($_SESSION['logged'])){
                                                         <div class="portlet-body">
                                                             <div class="table-container">
                                                                 <form role="form" id="add_laborer">
-                                                                    <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/event.php?type=labor&ev=<?php echo $_GET['ev']; ?>">
+                                                                    <table class="table table-striped table-bordered table-hover datatable" id="laborers" data-src="assets/app/api/event.php?type=labor&ev=<?php echo $_GET['ev']; ?>">
                                                                         <thead>
                                                                         <tr role="row" class="heading">
                                                                             <th width="12%">
@@ -1037,7 +1037,7 @@ if(isset($_SESSION['logged'])){
                                                                 <div class="row" id="payments-content">
                                                                     <div class="col-md-12">
                                                                         <div class="table-container">
-                                                                            <table class="table table-striped table-hover datatable" id="sales" data-src="assets/app/api/event.php?type=payments&ev=<?php echo $event['event_token']; ?>">
+                                                                            <table class="table table-striped table-hover datatable" id="payments" data-src="assets/app/api/event.php?type=payments&ev=<?php echo $event['event_token']; ?>">
                                                                                 <thead>
                                                                                 <tr role="row" class="heading">
                                                                                     <th>
@@ -1708,26 +1708,25 @@ if(isset($_SESSION['logged'])){
                     ]// set first column as a default sort by asc
                 });
             });
-            function updateInv(){
+            function updateI(){
                 $.ajax({
                     url: 'assets/app/api/event.php?type=inv',
                     type: 'POST',
                     data: {
-                        event: "<?php echo $event['event_token']; ?>"
+                        event: '<?php echo $event['event_token']; ?>'
                     },
                     success: function(m){
                         var owe = JSON.parse(m);
-                        $('#owe_sub_total').html(owe.sub_total);
-                        $('#owe_tax').html(owe.tax);
-                        $('#owe_total').html(owe.total);
+                        $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
+                        $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
+                        $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
                     },
                     error: function(e){
 
                     }
                 });
             }
-
-            updateInv();
+            updateI();
             $('#add_laborer').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class
@@ -2054,10 +2053,6 @@ if(isset($_SESSION['logged'])){
             );
 
             $('#dashboard-report-range').show();
-
-            $('.delete_item').click(function() {
-                toastr.info("Success!");
-            });
 
             $('.fire').click(function(f){
                 var fire = $(this).attr('data-fire');
