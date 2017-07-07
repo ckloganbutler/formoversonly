@@ -973,7 +973,7 @@ if(isset($_SESSION['logged'])){
                                                                                         <th>
                                                                                             Item
                                                                                             <span class="pull-right no_print">
-                                                                                                Options for you
+                                                                                                Options
                                                                                             </span>
                                                                                         </th>
                                                                                         <th>
@@ -1043,12 +1043,13 @@ if(isset($_SESSION['logged'])){
                                                                                     <th>
                                                                                         Tender Type
                                                                                         <span class="pull-right no_print">
-                                                                                            Taken By
+                                                                                            Options
                                                                                         </span>
                                                                                     </th>
                                                                                     <th>
                                                                                         Notes
                                                                                     </th>
+                                                                                    <th>Taken By</th>
                                                                                     <th class="text-right">
                                                                                         Tender Amount
                                                                                     </th>

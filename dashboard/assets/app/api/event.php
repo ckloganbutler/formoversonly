@@ -198,7 +198,6 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
                 '<a>'.$services['services_item'].'</a>',
                 '<a>'.$services['services_item_desc'].'</a>',
                 '<a>'.$taxable_tag.'</a>',
-                '<a>'.$commissionable_tag.'</a>',
                 '<button type="button" data-id="'.$services['services_id'].'" data-ev="'.$_GET['ev'].'" class="btn default btn-xs blue-stripe add_item"><i class="fa fa-plus"></i> Add to invoice</a>',
             );
         } else {
@@ -249,7 +248,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'payments'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findItems = mysql_query("SELECT payment_type, payment_amount, payment_detail, payment_by_user_token FROM fmo_locations_events_payments WHERE payment_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $findItems = mysql_query("SELECT payment_id, payment_type, payment_amount, payment_detail, payment_by_user_token FROM fmo_locations_events_payments WHERE payment_event_token='".mysql_real_escape_string($_GET['ev'])."'");
     $iTotalRecords = mysql_num_rows($findItems);
 
     $records = array();
@@ -257,8 +256,9 @@ if(isset($_GET['type']) && $_GET['type'] == 'payments'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            ''.$items['payment_type'].' <span class="pull-right">'.name($items['payment_by_user_token']).'</span>',
+            ''.$items['payment_type'].' <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="pay_'.$items['payment_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i> Void</a>',
             ''.$items['payment_detail'].'',
+            ''.name($items['payment_by_user_token']).'',
             '<strong class="text-success pull-right">'.$items['payment_amount'].'</strong>'
 
         );
