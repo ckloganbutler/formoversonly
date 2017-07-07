@@ -77,7 +77,7 @@ if(isset($_SESSION['logged'])){
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group cc hidden">
-                                                <button class="btn btn-block red ">Pay using card <strong>number</strong>, <strong>expiration</strong>, and <strong>CVC</strong> <i class="fa fa-credit-card"></i></button>
+                                                <button id="checkout" class="btn btn-block red ">Pay using card <strong>number</strong>, <strong>expiration</strong>, and <strong>CVC</strong> <i class="fa fa-credit-card"></i></button>
                                             </div>
                                             <div class="form-group form-md-line-input other hidden">
                                                 <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="XXXX.XX">
@@ -279,7 +279,15 @@ if(isset($_SESSION['logged'])){
                             data: $('#submit_form').serialize(),
                             success: function(p){
                                 toastr.success("Nice, we took your payment!");
-                                $('#payments-content').html("Here goes a table full of payment history....");
+                                $.ajax({
+                                    url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                                    success: function(data) {
+                                        $('#page_content').html(data);
+                                    },
+                                    error: function() {
+                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                    }
+                                });
                             },
                             error: function(p){
                                 toastr.error("Ooops. Something went wrong.")
@@ -310,6 +318,76 @@ if(isset($_SESSION['logged'])){
                      $('#cc_btn').removeClass("hide");
                      }*/
                 });
+
+                var checkout = StripeCheckout.configure({
+                    key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
+                    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+                    locale: 'auto',
+                    token: function(token) {
+                        $.ajax({
+                            url: 'assets/app/checkout.php',
+                            type: 'POST',
+                            data: {
+                                stripeToken: token.id,
+                                stripeEmail: token.email,
+                                stripeAmt: 1000
+                            },
+                            success: function(data){
+                                $.ajax({
+                                    url: 'assets/app/update_settings.php?update=pymt&ev=<?php echo $_GET['ev']; ?>&uuid=<?php echo $_GET['uuid']; ?>',
+                                    type: 'POST',
+                                    data: {
+                                        type: 'Credit/Debt (ckPay)',
+                                        amount: 1000,
+                                        notes: token.id
+                                    },
+                                    success: function(s){
+                                        $.ajax({
+                                            url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
+                                            success: function(data) {
+                                                $('#page_content').html(data);
+                                            },
+                                            error: function() {
+                                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                            }
+                                        });
+                                        toastr.success("<strong>Logan says:</strong><br/>Booking fee paid, 10$ has been charged to the card you provided.");
+                                    },
+                                    error: function(s){
+
+                                    }
+                                });
+                            },
+                            error: function(e){
+
+                            }
+                        })
+                    }
+                });
+
+                $('#checkout').click(function(e) {
+                    // Open Checkout with further options:
+                    checkout.open({
+                        name: 'Checkout',
+                        description: 'Lets pay that bill.',
+                        amount: 1000,
+                        <?php
+                        if(!empty($event['event_email'])){
+                        ?>
+                        email: '<?php echo $event['event_email']; ?>'
+                        <?php
+                        }
+                        ?>
+
+                    });
+                    e.preventDefault();
+                });
+
+                // Close Checkout on page navigation:
+                window.addEventListener('popstate', function() {
+                    checkout.close();
+                });
+
             });
         </script>
         <?php

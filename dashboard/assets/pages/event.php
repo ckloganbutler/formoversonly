@@ -1019,13 +1019,13 @@ if(isset($_SESSION['logged'])){
                                                                     <div class="col-xs-8 invoice-block">
                                                                         <ul class="list-unstyled amounts">
                                                                             <li>
-                                                                                Sub total: <strong>$2,265</strong>
+                                                                                Sub total: <strong>$<span id="owe_sub_total">2265</span></strong>
                                                                             </li>
                                                                             <li>
-                                                                                Tax (<strong>X</strong> items) 7%:  <strong>$100</strong>
+                                                                                Taxes due:  <strong>$<span id="owe_tax">100</span></strong>
                                                                             </li>
                                                                             <li>
-                                                                                Grand Total: <strong class="text-danger">$2,365</strong>
+                                                                                Grand Total: <strong class="text-danger">$<span id="owe_total">2365</span></strong>
                                                                             </li>
                                                                         </ul>
                                                                         <br>
@@ -1708,6 +1708,26 @@ if(isset($_SESSION['logged'])){
                     ]// set first column as a default sort by asc
                 });
             });
+            function updateInv(){
+                $.ajax({
+                    url: 'assets/app/api/event.php?type=inv',
+                    type: 'POST',
+                    data: {
+                        event: "<?php echo $event['event_token']; ?>"
+                    },
+                    success: function(m){
+                        var owe = JSON.parse(m);
+                        $('#owe_sub_total').html(owe.sub_total);
+                        $('#owe_tax').html(owe.tax);
+                        $('#owe_total').html(owe.total);
+                    },
+                    error: function(e){
+
+                    }
+                });
+            }
+
+            updateInv();
             $('#add_laborer').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class
@@ -2034,6 +2054,10 @@ if(isset($_SESSION['logged'])){
             );
 
             $('#dashboard-report-range').show();
+
+            $('.delete_item').click(function() {
+                toastr.info("Success!");
+            });
 
             $('.fire').click(function(f){
                 var fire = $(this).attr('data-fire');

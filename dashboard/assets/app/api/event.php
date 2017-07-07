@@ -226,7 +226,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
+            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
@@ -266,4 +266,21 @@ if(isset($_GET['type']) && $_GET['type'] == 'payments'){
     echo json_encode($records);
 }
 
+if(isset($_GET['type']) && $_GET['type'] == 'inv'){
+    $findItems = mysql_query("SELECT item_total, item_taxable FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_POST['event'])."'");
+    $iTotalRecords = mysql_num_rows($findItems);
+
+    $total = array();
+    if($iTotalRecords > 0){
+        while($item = mysql_fetch_assoc($findItems)){
+            $total['sub_total'] += $item['item_total'];
+            if($item['item_taxable'] == 1){
+                $total['tax']   += $item['item_total'] * .07;
+            }
+        }
+        $total['total'] = $total['sub_total'] + $total['tax'];
+    }
+
+    echo json_encode($total);
+}
 
