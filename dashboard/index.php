@@ -749,6 +749,28 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 });
             });
         });
+        $(document).on('click', '.load_payments', function(){
+            var act = $(this).attr('data-type');
+            var url = $(this).attr('data-href');
+            var tit = $(this).attr('data-page-title');
+            Pace.track(function(){
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        type: act
+                    },
+                    success: function(data) {
+                        $('#payments-content').html(data);
+                        $('#payments-maked').hide();
+                        document.title = tit;
+                    },
+                    error: function() {
+                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    }
+                });
+            });
+        });
         $(document).on('click', '.update_settings', function(){
             var url = $(this).attr("data-form");
             var id  = $(this).attr("data-id");
@@ -798,6 +820,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 
                 }
             });
+            $('#')
         }
 
         $(document).on('click', '.delete_labor',  function() {
@@ -888,8 +911,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
             $('.'+line).editable({
                 step: 'any',
                 success: function() {
-                    updateInv(event);
-                    if(reload.length > 0){
+                    if(reload == "eve"){
+                        updateInv(event);
+                    } if(reload.length > 0){
                         $('.datatable').DataTable().ajax.reload();
                     }
                 }

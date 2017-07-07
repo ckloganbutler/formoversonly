@@ -10,6 +10,19 @@ include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
     if($_POST['type'] == 'py') {
+        $findItems = mysql_query("SELECT item_total, item_taxable FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+        $iTotalRecords = mysql_num_rows($findItems);
+
+        $total = array();
+        if($iTotalRecords > 0){
+            while($item = mysql_fetch_assoc($findItems)){
+                $total['sub_total'] += $item['item_total'];
+                if($item['item_taxable'] == 1){
+                    $total['tax']   += $item['item_total'] * .07;
+                }
+            }
+            $total['total'] = $total['sub_total'] + $total['tax'];
+        }
         ?>
         <div class="col-md-12">
             <div class="portlet" id="payments">
@@ -37,7 +50,7 @@ if(isset($_SESSION['logged'])){
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="tab1">
-                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
+                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$<?php echo $total['total']; ?></span></strong></span></h3>
                                         <hr/>
                                         <div class="form-group form-md-line-input">
                                             <select class="form-control type" name="type" data-target=".tender-inputs">
@@ -52,7 +65,7 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                         <div class="tender-inputs">
                                             <div class="form-group form-md-line-input cash hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="XXXX.XX">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="<?php echo number_format($total['total'], 2); ?>">
                                                 <label for="form_control_1">Tender Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -62,7 +75,7 @@ if(isset($_SESSION['logged'])){
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input chec hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="XXXX.XX">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="<?php echo number_format($total['total'], 2); ?>">
                                                 <label for="form_control_1">Tender Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -72,7 +85,7 @@ if(isset($_SESSION['logged'])){
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input cc hidden">
-                                                <input type="text" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="XXXX.XX">
+                                                <input type="text" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="<?php echo number_format($total['total'], 2); ?>">
                                                 <label for="form_control_1">Tender Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -80,7 +93,7 @@ if(isset($_SESSION['logged'])){
                                                 <button id="checkout" class="btn btn-block red ">Pay using card <strong>number</strong>, <strong>expiration</strong>, and <strong>CVC</strong> <i class="fa fa-credit-card"></i></button>
                                             </div>
                                             <div class="form-group form-md-line-input other hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="XXXX.XX">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="<?php echo number_format($total['total'], 2); ?>">
                                                 <label for="form_control_1">Tender Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
@@ -92,7 +105,7 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tab2">
-                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$X,XXX</span></strong></span></h3>
+                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$<?php echo number_format($total['total'], 2); ?></span></strong></span></h3>
                                         <hr/>
                                         <div class="row static-info">
                                             <div class="col-md-5 name">
@@ -279,15 +292,9 @@ if(isset($_SESSION['logged'])){
                             data: $('#submit_form').serialize(),
                             success: function(p){
                                 toastr.success("Nice, we took your payment!");
-                                $.ajax({
-                                    url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
-                                    success: function(data) {
-                                        $('#page_content').html(data);
-                                    },
-                                    error: function() {
-                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                                    }
-                                });
+                                $('#payments-content').html("");
+                                $('#payments-maked').show();
+                                $('#paid').DataTable().ajax.reload();
                             },
                             error: function(p){
                                 toastr.error("Ooops. Something went wrong.")
@@ -296,11 +303,6 @@ if(isset($_SESSION['logged'])){
                     });
                 }).hide();
 
-                $('#payments .button-cancel').click(function () {
-                    Pace.track(function(){
-                        $('#payments-content').html("");
-                    });
-                });
 
                 $('.type').on('change', function() {
                     var type    = $(this).val();
@@ -318,76 +320,6 @@ if(isset($_SESSION['logged'])){
                      $('#cc_btn').removeClass("hide");
                      }*/
                 });
-
-                var checkout = StripeCheckout.configure({
-                    key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
-                    image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-                    locale: 'auto',
-                    token: function(token) {
-                        $.ajax({
-                            url: 'assets/app/checkout.php',
-                            type: 'POST',
-                            data: {
-                                stripeToken: token.id,
-                                stripeEmail: token.email,
-                                stripeAmt: 1000
-                            },
-                            success: function(data){
-                                $.ajax({
-                                    url: 'assets/app/update_settings.php?update=pymt&ev=<?php echo $_GET['ev']; ?>&uuid=<?php echo $_GET['uuid']; ?>',
-                                    type: 'POST',
-                                    data: {
-                                        type: 'Credit/Debt (ckPay)',
-                                        amount: 1000,
-                                        notes: token.id
-                                    },
-                                    success: function(s){
-                                        $.ajax({
-                                            url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
-                                            success: function(data) {
-                                                $('#page_content').html(data);
-                                            },
-                                            error: function() {
-                                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                                            }
-                                        });
-                                        toastr.success("<strong>Logan says:</strong><br/>Booking fee paid, 10$ has been charged to the card you provided.");
-                                    },
-                                    error: function(s){
-
-                                    }
-                                });
-                            },
-                            error: function(e){
-
-                            }
-                        })
-                    }
-                });
-
-                $('#checkout').click(function(e) {
-                    // Open Checkout with further options:
-                    checkout.open({
-                        name: 'Checkout',
-                        description: 'Lets pay that bill.',
-                        amount: 1000,
-                        <?php
-                        if(!empty($event['event_email'])){
-                        ?>
-                        email: '<?php echo $event['event_email']; ?>'
-                        <?php
-                        }
-                        ?>
-
-                    });
-                    e.preventDefault();
-                });
-
-                // Close Checkout on page navigation:
-                window.addEventListener('popstate', function() {
-                    checkout.close();
-                });
-
             });
         </script>
         <?php

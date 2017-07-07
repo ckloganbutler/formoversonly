@@ -940,9 +940,6 @@ if(isset($_SESSION['logged'])){
                                                                             <th>
                                                                                 Taxable
                                                                             </th>
-                                                                            <th>
-                                                                                Commissionable
-                                                                            </th>
                                                                             <th width="12%" class="text-center">
                                                                                 Invoice item <i class="fa fa-arrow-right"></i>
                                                                             </th>
@@ -1035,9 +1032,12 @@ if(isset($_SESSION['logged'])){
                                                                     </div>
                                                                 </div>
                                                                 <div class="row" id="payments-content">
+
+                                                                </div>
+                                                                <div class="row" id="payments-maked">
                                                                     <div class="col-md-12">
                                                                         <div class="table-container">
-                                                                            <table class="table table-striped table-hover datatable" id="payments" data-src="assets/app/api/event.php?type=payments&ev=<?php echo $event['event_token']; ?>">
+                                                                            <table class="table table-striped table-hover datatable" id="paid" data-src="assets/app/api/event.php?type=payments&ev=<?php echo $event['event_token']; ?>">
                                                                                 <thead>
                                                                                 <tr role="row" class="heading">
                                                                                     <th>
@@ -1546,20 +1546,6 @@ if(isset($_SESSION['logged'])){
     <script type="text/javascript">
         $(document).ready(function() {
 
-            $('#payments .button-cancel').click(function () {
-                Pace.track(function(){
-                    $.ajax({
-                        url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
-                        success: function(data) {
-                            $('#page_content').html(data);
-                        },
-                        error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
-                        }
-                    });
-                });
-            });
-
             var handler = StripeCheckout.configure({
                 key: 'pk_test_o9s6ScI3jBABd3V5pZM7kdYA',
                 image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
@@ -2051,6 +2037,14 @@ if(isset($_SESSION['logged'])){
                     });
                 }
             );
+
+            $(document).on('click', '#payments .button-cancel', function () {
+                Pace.track(function(){
+                    $('#paid').DataTable().ajax.reload();
+                    $('#payments-maked').show();
+                    $('#payments-content').html("");
+                });
+            });
 
             $('#dashboard-report-range').show();
 

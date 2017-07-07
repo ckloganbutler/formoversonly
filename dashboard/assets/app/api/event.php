@@ -181,7 +181,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_taxable, services_commissionable, services_type FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_taxable, services_type FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
     $iTotalRecords = mysql_num_rows($findRates);
 
     $records = array();
@@ -192,11 +192,6 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
             $taxable_tag = '<span class="label label-sm label-danger">NO</span>';
         } else {
             $taxable_tag = '<span class="label label-sm label-success">YES</span>';
-        }
-        if($services['services_commissionable'] == 0) {
-            $commissionable_tag = '<span class="label label-sm label-danger">NO</span>';
-        }  else  {
-            $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
         }
         if($services['services_type'] == 'Discount'){
             $records["data"][] = array(
@@ -211,7 +206,6 @@ if(isset($_GET['type']) && $_GET['type'] == 'rates'){
                 ''.$services['services_item'].'',
                 ''.$services['services_item_desc'].'',
                 ''.$taxable_tag.'',
-                ''.$commissionable_tag.'',
                 '<button type="button" data-id="'.$services['services_id'].'" data-ev="'.$_GET['ev'].'" class="btn default btn-xs blue-stripe add_item"><i class="fa fa-plus"></i> Add to invoice</a>',
             );
         }
@@ -237,7 +231,7 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
 
     while($items = mysql_fetch_assoc($findItems)) {
         $records["data"][] = array(
-            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload="" data-event="'.$_GET['ev'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
+            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload="eve" data-event="'.$_GET['ev'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
             '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
