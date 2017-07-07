@@ -12,6 +12,8 @@ if(isset($_SESSION['logged'])){
     if($_POST['type'] == 'py') {
         $findItems = mysql_query("SELECT item_total, item_taxable FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
         $iTotalRecords = mysql_num_rows($findItems);
+        $findPaid = mysql_query("SELECT payment_amount FROM fmo_locations_events_payments WHERE payment_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+        $bTotalRecords = mysql_num_rows($findPaid);
 
         $total = array();
         if($iTotalRecords > 0){
@@ -22,6 +24,19 @@ if(isset($_SESSION['logged'])){
                 }
             }
             $total['total'] = $total['sub_total'] + $total['tax'];
+        } else {
+            $total['total']     = 0;
+            $total['sub_total'] = 0;
+        }
+
+        if($bTotalRecords > 0){
+            while($paid = mysql_fetch_assoc($findPaid)){
+                $total['paid'] += $paid['payment_amount'];
+            }
+            $total['unpaid'] = $total['total'] - $total['paid'];
+        } else {
+            $total['unpaid'] = $total['total'];
+            $total['paid']   = 0;
         }
         ?>
         <div class="col-md-12">
@@ -50,13 +65,14 @@ if(isset($_SESSION['logged'])){
                                 </div>
                                 <div class="tab-content">
                                     <div class="tab-pane" id="tab1">
-                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$<?php echo $total['total']; ?></span></strong></span></h3>
+                                        <h3>Payment Details <small class="hidden-xs hidden-sm"><span class="text-danger">| </span>collecting amount due.</small> <span class="pull-right">Amount due: <strong><span class="text-success">$<?php echo $total['unpaid']; ?></span></strong></span></h3>
                                         <hr/>
                                         <div class="form-group form-md-line-input">
                                             <select class="form-control type" name="type" data-target=".tender-inputs">
                                                 <option disabled selected value="">Select one..</option>
                                                 <option value="Cash" data-show=".cash" data-input="cash">Cash</option>
                                                 <option value="Check" data-show=".chec" data-input="chec">Check</option>
+                                                <option value="Invoice" data-show=".invoice" data-input="invoice">Invoice</option>
                                                 <option value="Credit/Debt" data-show=".cc" data-input="cc">Credit/Debt Card (ckPay&trade;)</option>
                                                 <option value="Other" data-show=".other" data-input="other">Credit/Debt Card (Other Payment Processor)</option>
                                             </select>
@@ -65,18 +81,18 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                         <div class="tender-inputs">
                                             <div class="form-group form-md-line-input cash hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="<?php echo number_format($total['total'], 2); ?>">
-                                                <label for="form_control_1">Tender Amount</label>
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="cash" placeholder="<?php echo number_format($total['unpaid'], 2); ?>">
+                                                <label for="form_control_1">Cash Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input cash hidden">
                                                 <input type="text" step="any" class="form-control input-sm" name="notes" placeholder="...">
-                                                <label for="form_control_1">Tender Notes</label>
+                                                <label for="form_control_1">Cash Notes</label>
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input chec hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="<?php echo number_format($total['total'], 2); ?>">
-                                                <label for="form_control_1">Tender Amount</label>
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="<?php echo number_format($total['unpaid'], 2); ?>">
+                                                <label for="form_control_1">Check Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input chec hidden">
@@ -84,22 +100,32 @@ if(isset($_SESSION['logged'])){
                                                 <label for="form_control_1">Check Number</label>
                                                 <span class="help-block"></span>
                                             </div>
+                                            <div class="form-group form-md-line-input invoice hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="chec" placeholder="<?php echo number_format($total['unpaid'], 2); ?>">
+                                                <label for="form_control_1">Invoice Amount</label>
+                                                <span class="help-block"></span>
+                                            </div>
+                                            <div class="form-group form-md-line-input invoice hidden">
+                                                <input type="number" step="any" class="form-control input-sm" name="notes" placeholder="...">
+                                                <label for="form_control_1">Invoice Notes</label>
+                                                <span class="help-block"></span>
+                                            </div>
                                             <div class="form-group form-md-line-input cc hidden">
-                                                <input type="text" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="<?php echo number_format($total['total'], 2); ?>">
-                                                <label for="form_control_1">Tender Amount</label>
+                                                <input type="text" step="any" class="form-control input-sm" name="amount" id="cc" placeholder="<?php echo number_format($total['unpaid'], 2); ?>">
+                                                <label for="form_control_1">Credit/Debt Charge Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group cc hidden">
                                                 <button id="checkout" class="btn btn-block red ">Pay using card <strong>number</strong>, <strong>expiration</strong>, and <strong>CVC</strong> <i class="fa fa-credit-card"></i></button>
                                             </div>
                                             <div class="form-group form-md-line-input other hidden">
-                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="<?php echo number_format($total['total'], 2); ?>">
-                                                <label for="form_control_1">Tender Amount</label>
+                                                <input type="number" step="any" class="form-control input-sm" name="amount" id="other" placeholder="<?php echo number_format($total['unpaid'], 2); ?>">
+                                                <label for="form_control_1">Credit/Debt Charge Amount</label>
                                                 <span class="help-block"></span>
                                             </div>
                                             <div class="form-group form-md-line-input other hidden" style="margin-bottom: 48px">
                                                 <input type="text" step="any" class="form-control input-sm" name="notes" placeholder="...">
-                                                <label for="form_control_1">Approval Number</label>
+                                                <label for="form_control_1">Credit/Debt Approval Number</label>
                                                 <span class="help-block"></span>
                                             </div>
                                         </div>
@@ -154,6 +180,27 @@ if(isset($_SESSION['logged'])){
         </div>
         <script>
             $(document).ready(function() {
+
+                function updateIn(){
+                    $.ajax({
+                        url: 'assets/app/api/event.php?type=inv',
+                        type: 'POST',
+                        data: {
+                            event: '<?php echo $_GET['ev']; ?>'
+                        },
+                        success: function(m){
+                            var owe = JSON.parse(m);
+                            $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
+                            $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
+                            $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
+                            $(document).find('#owe_total_unpaid').html(parseFloat(owe.unpaid).toFixed(2));
+                            $(document).find('#owe_paid').html(parseFloat(owe.paid).toFixed(2));
+                        },
+                        error: function(e){
+
+                        }
+                    });
+                }
 
                 var form = $('#submit_form');
                 var error = $('.alert-danger', form);
@@ -295,11 +342,12 @@ if(isset($_SESSION['logged'])){
                                 $('#payments-content').html("");
                                 $('#payments-maked').show();
                                 $('#paid').DataTable().ajax.reload();
+                                updateIn();
                             },
                             error: function(p){
                                 toastr.error("Ooops. Something went wrong.")
                             }
-                        })
+                        });
                     });
                 }).hide();
 

@@ -1016,13 +1016,13 @@ if(isset($_SESSION['logged'])){
                                                                     <div class="col-xs-8 invoice-block">
                                                                         <ul class="list-unstyled amounts">
                                                                             <li>
-                                                                                Sub total: <strong>$<span id="owe_sub_total">2265</span></strong>
+                                                                                Sub total: <h3 style="display: inline" class="text-danger">$<span id="owe_sub_total"></span></h3>
                                                                             </li>
                                                                             <li>
-                                                                                Taxes due:  <strong>$<span id="owe_tax">100</span></strong>
+                                                                                Taxes due:  <h3 style="display: inline;" class="text-danger">$<span id="owe_tax"></span></h3>
                                                                             </li>
                                                                             <li>
-                                                                                Grand Total: <strong class="text-danger">$<span id="owe_total">2365</span></strong>
+                                                                                Grand Total: <h3 style="display: inline;" class="text-danger">$<span id="owe_total"></span></h3>
                                                                             </li>
                                                                         </ul>
                                                                         <br>
@@ -1043,7 +1043,7 @@ if(isset($_SESSION['logged'])){
                                                                                     <th>
                                                                                         Tender Type
                                                                                         <span class="pull-right no_print">
-                                                                                            By
+                                                                                            Taken By
                                                                                         </span>
                                                                                     </th>
                                                                                     <th>
@@ -1059,6 +1059,21 @@ if(isset($_SESSION['logged'])){
                                                                                 </tbody>
                                                                             </table>
                                                                         </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-xs-4">
+
+                                                                    </div>
+                                                                    <div class="col-xs-8 invoice-block">
+                                                                        <ul class="list-unstyled amounts">
+                                                                            <li>
+                                                                               Paid: <h3 style="display: inline;" class="text-success">$<span id="owe_paid"></span></h3>
+                                                                            </li>
+                                                                            <li>
+                                                                                Amount Due: <h3 style="display: inline" class="text-danger">$<span id="owe_total_unpaid"></span></h3>
+                                                                            </li>
+                                                                        </ul>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1706,6 +1721,8 @@ if(isset($_SESSION['logged'])){
                         $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
                         $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
                         $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
+                        $(document).find('#owe_total_unpaid').html(parseFloat(owe.unpaid).toFixed(2));
+                        $(document).find('#owe_paid').html(parseFloat(owe.paid).toFixed(2));
                     },
                     error: function(e){
 

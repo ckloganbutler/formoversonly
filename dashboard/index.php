@@ -815,6 +815,8 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
                     $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
                     $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
+                    $(document).find('#owe_total_unpaid').html(parseFloat(owe.unpaid).toFixed(2));
+                    $(document).find('#owe_paid').html(parseFloat(owe.paid).toFixed(2));
                 },
                 error: function(e){
 

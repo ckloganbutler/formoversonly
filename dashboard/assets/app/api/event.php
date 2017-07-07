@@ -275,6 +275,9 @@ if(isset($_GET['type']) && $_GET['type'] == 'inv'){
     $findItems = mysql_query("SELECT item_total, item_taxable FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_POST['event'])."'");
     $iTotalRecords = mysql_num_rows($findItems);
 
+    $findPaid = mysql_query("SELECT payment_amount FROM fmo_locations_events_payments WHERE payment_event_token='".mysql_real_escape_string($_POST['event'])."'");
+    $bTotalRecords = mysql_num_rows($findPaid);
+
     $total = array();
     if($iTotalRecords > 0){
         while($item = mysql_fetch_assoc($findItems)){
@@ -284,6 +287,19 @@ if(isset($_GET['type']) && $_GET['type'] == 'inv'){
             }
         }
         $total['total'] = $total['sub_total'] + $total['tax'];
+    } else {
+        $total['total']     = 0;
+        $total['sub_total'] = 0;
+    }
+
+    if($bTotalRecords > 0){
+        while($paid = mysql_fetch_assoc($findPaid)){
+            $total['paid'] += $paid['payment_amount'];
+        }
+        $total['unpaid'] = $total['total'] - $total['paid'];
+    } else {
+        $total['unpaid'] = $total['total'];
+        $total['paid']   = 0;
     }
 
     echo json_encode($total);
