@@ -82,7 +82,7 @@ if(isset($_SESSION['logged'])){
                                             </span>
                                         </div>
                                     </div>
-                                    <a class="more" href="javascript:;">
+                                    <a class="more load_reports_pull" data-type="sales" data-href="assets/pages/sub/reports_master.php?luid=<?php echo $_GET['luid']; ?>&cuid=<?php echo $_SESSION['cuid']; ?>" data-page-title="Payroll Report" data-ext="<?php echo date('Y-m-d', strtotime($start)); ?> - <?php echo date('Y-m-d', strtotime($end)); ?>">
                                         View report <i class="m-icon-swapright m-icon-white"></i>
                                     </a>
                                 </div>

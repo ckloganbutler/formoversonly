@@ -374,54 +374,54 @@ if(isset($_SESSION['logged'])){
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <?php
-                                                    foreach($user['events'] as $event){
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $event[0]; ?></td>
-                                                            <td><?php echo $event[1]; ?></td>
-                                                            <td class="text-right"><?php echo $event[2]; ?></td>
-                                                            <td class="text-right"><?php echo $event[3]; ?></td>
-                                                            <td class="text-right"><?php echo $event[4]; ?></td>
-                                                            <td class="text-right"><?php echo $event[5]; ?></td>
-                                                        </tr>
-                                                        <?php
-                                                    }
-                                                    foreach($user['clock'] as $clock){
-                                                        ?>
-                                                        <tr style="background-color: lightyellow">
-                                                            <td><?php echo $clock[1]; ?></td>
-                                                            <td><?php echo $clock[0]; ?></td>
-                                                            <td class="text-right"><?php echo $clock[2]; ?></td>
-                                                            <td class="text-right"><?php echo $clock[3]; ?></td>
-                                                            <td class="text-right"><?php echo $clock[4]; ?></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <?php
-                                                    }
-                                                    foreach($user['loans'] as $loan){
-                                                        ?>
-                                                        <tr class="text-danger">
-                                                            <td><?php echo $loan[1]; ?></td>
-                                                            <td><?php echo $loan[2]; ?> <span class="pull-right"><?php echo $loan[0]; ?></span></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td class="text-right"></td>
-                                                            <td class="text-right"></td>
-                                                        </tr>
-                                                        <?php
-                                                    }
+                                                <?php
+                                                foreach($user['events'] as $event){
                                                     ?>
+                                                    <tr>
+                                                        <td><?php echo $event[0]; ?></td>
+                                                        <td><?php echo $event[1]; ?></td>
+                                                        <td class="text-right"><?php echo $event[2]; ?></td>
+                                                        <td class="text-right"><?php echo $event[3]; ?></td>
+                                                        <td class="text-right"><?php echo $event[4]; ?></td>
+                                                        <td class="text-right"><?php echo $event[5]; ?></td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                foreach($user['clock'] as $clock){
+                                                    ?>
+                                                    <tr style="background-color: lightyellow">
+                                                        <td><?php echo $clock[1]; ?></td>
+                                                        <td><?php echo $clock[0]; ?></td>
+                                                        <td class="text-right"><?php echo $clock[2]; ?></td>
+                                                        <td class="text-right"><?php echo $clock[3]; ?></td>
+                                                        <td class="text-right"><?php echo $clock[4]; ?></td>
+                                                        <td></td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                foreach($user['loans'] as $loan){
+                                                    ?>
+                                                    <tr class="text-danger">
+                                                        <td><?php echo $loan[1]; ?></td>
+                                                        <td><?php echo $loan[2]; ?> <span class="pull-right"><?php echo $loan[0]; ?></span></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td class="text-right"></td>
+                                                        <td class="text-right"></td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
                                                 </tbody>
                                                 <tfoot>
-                                                    <tr>
-                                                        <td><strong>TOTALS <i class="fa fa-arrow-right"></i></strong></td>
-                                                        <td class="text-right"><?php if(!empty($user['loans'])){ ?><strong class="text-danger"><?php echo $user['totals'][2]; ?></strong><?php } ?></td>
-                                                        <td class="text-right"><strong><?php echo $user['totals'][1]; ?></strong></td>
-                                                        <td class="text-right"></td>
-                                                        <td class="text-right"><strong><?php echo $user['totals'][0]; ?></strong></td>
-                                                        <td class="text-right"><strong><?php echo $user['totals'][3]; ?></strong></td>
-                                                    </tr>
+                                                <tr>
+                                                    <td><strong>TOTALS <i class="fa fa-arrow-right"></i></strong></td>
+                                                    <td class="text-right"><?php if(!empty($user['loans'])){ ?><strong class="text-danger"><?php echo $user['totals'][2]; ?></strong><?php } ?></td>
+                                                    <td class="text-right"><strong><?php echo $user['totals'][1]; ?></strong></td>
+                                                    <td class="text-right"></td>
+                                                    <td class="text-right"><strong><?php echo $user['totals'][0]; ?></strong></td>
+                                                    <td class="text-right"><strong><?php echo $user['totals'][3]; ?></strong></td>
+                                                </tr>
                                                 </tfoot>
                                             </table>
                                         </div>
@@ -446,7 +446,64 @@ if(isset($_SESSION['logged'])){
                     "bPaginate": false,
                     "info": false
                 });
+            });
+        </script>
+        <?php
+    } elseif ($_POST['type'] == 'sales'){
+        ?>
+        <div class="col-md-12">
+            <div class="portlet">
+                <div class="portlet-title tabbable-line">
+                    <div class="caption caption-md">
+                        <i class="fa fa-bar-chart-o theme-font bold"></i>
+                        <span class="caption-subject font-red bold uppercase">SALES</span> <span class="font-red">|</span> <button class="btn btn-xs red-stripe print" data-print="#redemption"><i class="fa fa-print"></i> Print</button>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="">
+                            <a href="#timesheets" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#bookingfees">
+                                Booking Fees</a>
+                        </li>
+                        <li class="">
+                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#sales">
+                                Sales</a>
+                        </li>
+                        <li>
+                            <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#taxes">
+                                Taxes</a>
+                        </li>
+                        <li class="active">
+                            <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#redemption">
+                                Redemptions</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="portlet-body">
+                    <div class="tab-content">
+                        <div class="tab-pane" id="bookingfees">
 
+                        </div>
+                        <div class="tab-pane" id="sales">
+
+                        </div>
+                        <div class="tab-pane" id="taxes">
+
+                        </div>
+                        <div class="tab-pane active" id="redemption">
+                            :->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function(e){
+                $('.datatable').dataTable({
+                    "order": [[ 0, "asc" ]],
+                    "bFilter" : false,
+                    "bLengthChange": false,
+                    "bPaginate": false,
+                    "info": false
+                });
             });
         </script>
         <?php
