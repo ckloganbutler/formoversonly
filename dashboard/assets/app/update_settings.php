@@ -96,6 +96,9 @@ if($_GET['update'] == 'usr_prf'){
     if($field == 'user_broadcast'){
         mysql_query("UPDATE fmo_users SET user_broadcast_timestamp='".date('Y/m/d')."' WHERE user_token='".mysql_real_escape_string($pk)."'");
     }
+    if($field == 'user_employer_commission'){
+        $value = $value / 100;
+    }
     mysql_query("UPDATE fmo_users SET ".mysql_real_escape_string($field)."='".mysql_real_escape_string($value)."' WHERE user_token='".mysql_real_escape_string($pk)."'");
     timeline_log($pk, $_SESSION['uuid'], "Profile updated", "Profile updated '<strong>".$field."</strong>' with new value: <strong>".$value."</strong>");
 }

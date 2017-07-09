@@ -12,7 +12,7 @@ if(isset($_SESSION['uuid'])){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_saleprice, services_cost, services_taxable, services_commissionable, services_status, services_type FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+    $findRates = mysql_query("SELECT services_id, services_item, services_item_desc, services_saleprice, services_cost, services_taxable, services_commissionable, services_redeemable, services_status, services_type FROM fmo_services WHERE services_location_token='".mysql_real_escape_string($_GET['luid'])."'");
     $iTotalRecords = mysql_num_rows($findRates);
 
     $records = array();
@@ -29,6 +29,11 @@ if(isset($_SESSION['uuid'])){
         }  else  {
             $commissionable_tag = '<span class="label label-sm label-success">YES</span>';
         }
+        if($services['services_redeemable'] == 0){
+            $redeemable_tag = '<span class="label label-sm label-danger">NO</span>';
+        }  else  {
+            $redeemable_tag = '<span class="label label-sm label-success">YES</span>';
+        }
         if($services['services_status'] == 0) {
             $status_tag = '<span class="label label-sm label-danger">DISABLED</span>';
         } else {
@@ -42,6 +47,7 @@ if(isset($_SESSION['uuid'])){
             '<a class="editable_item_'.$services['services_id'].'" style="color:#333333" data-name="services_cost" data-pk="'.$services['services_id'].'" data-type="number" data-placement="right" data-title="Enter new service cost.." data-url="assets/app/update_settings.php?update=location_services">'.$services['services_cost'].'</a>',
             '<a class="editable_item_'.$services['services_id'].'_taxable" style="color:#333333" data-name="services_taxable" data-pk="'.$services['services_id'].'" data-type="select" data-placement="right" data-title="Select new taxable status.." data-url="assets/app/update_settings.php?update=location_services">'.$taxable_tag.'</a>',
             '<a class="editable_item_'.$services['services_id'].'_commissionable" style="color:#333333" data-name="services_commissionable" data-pk="'.$services['services_id'].'" data-type="select" data-placement="right" data-title="Select new commissionable status.." data-url="assets/app/update_settings.php?update=location_services">'.$commissionable_tag.'</a>',
+            '<a class="editable_item_'.$services['services_id'].'_redeemable" style="color:#333333" data-name="services_redeemable" data-pk="'.$services['services_id'].'" data-type="select" data-placement="right" data-title="Select new redeemable status.." data-url="assets/app/update_settings.php?update=location_services">'.$redeemable_tag.'</a>',
             '<a class="editable_item_'.$services['services_id'].'_type" style="color:#333333" data-name="services_type" data-pk="'.$services['services_id'].'" data-type="select" data-placement="right" data-title="Select new type.." data-url="assets/app/update_settings.php?update=location_services">'.$services['services_type'].'</a>',
             '<button type="button" value="editable_item_'.$services['services_id'].'" class="btn default btn-xs red-stripe edit_line"><i class="fa fa-edit"></i> Edit</a>',
         );

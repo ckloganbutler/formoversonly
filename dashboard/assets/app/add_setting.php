@@ -393,15 +393,17 @@ if(isset($_GET['setting'])){
         $cost           = $_POST['cost'];
         $taxable        = $_POST['taxable'];
         $commissionable = $_POST['commissionable'];
+        $redeemable     = $_POST['redeemable'];
         $type           = $_POST['type'];
 
-        mysql_query("INSERT INTO fmo_services (services_location_token, services_item, services_saleprice, services_cost, services_taxable, services_commissionable, services_type) VALUES (
+        mysql_query("INSERT INTO fmo_services (services_location_token, services_item, services_saleprice, services_cost, services_taxable, services_commissionable, services_redeemable, services_type) VALUES (
         '".mysql_real_escape_string($location_token)."',
         '".mysql_real_escape_string($item)."',
         '".mysql_real_escape_string($saleprice)."',
         '".mysql_real_escape_string($cost)."',
         '".mysql_real_escape_string($taxable)."',
         '".mysql_real_escape_string($commissionable)."',
+        '".mysql_real_escape_string($redeemable)."',
         '".mysql_real_escape_string($type)."')");
         echo $item;
     }

@@ -305,6 +305,9 @@ if(isset($_SESSION['logged'])){
                                                                     <th width="9%">
                                                                         Commissionable
                                                                     </th>
+                                                                    <th>
+                                                                        Redeemable
+                                                                    </th>
                                                                     <th width="10%">
                                                                         Type
                                                                     </th>
@@ -327,6 +330,13 @@ if(isset($_SESSION['logged'])){
                                                                     </td>
                                                                     <td>
                                                                         <select name="commissionable" class="form-control form-filter input-sm">
+                                                                            <option value="">Select one..</option>
+                                                                            <option value="1">Yes</option>
+                                                                            <option value="0">No</option>
+                                                                        </select>
+                                                                    </td>
+                                                                    <td>
+                                                                        <select name="redeemable" class="form-control form-filter input-sm">
                                                                             <option value="">Select one..</option>
                                                                             <option value="1">Yes</option>
                                                                             <option value="0">No</option>
@@ -1262,14 +1272,20 @@ if(isset($_SESSION['logged'])){
                 $('.'+line).editable();
                 $('.'+line+'_taxable').editable({
                     source: [
-                        {value: 0, text: 'Yes'},
-                        {value: 1, text: 'No'}
+                        {value: 1, text: 'Yes'},
+                        {value: 0, text: 'No'}
                     ]
                 });
                 $('.'+line+'_commissionable').editable({
                     source: [
-                        {value: 0, text: 'Yes'},
-                        {value: 1, text: 'No'}
+                        {value: 1, text: 'Yes'},
+                        {value: 0, text: 'No'}
+                    ]
+                });
+                $('.'+line+'_redeemable').editable({
+                    source: [
+                        {value: 1, text: 'Yes'},
+                        {value: 0, text: 'No'}
                     ]
                 });
                 $('.'+line+'_type').editable({
@@ -1317,6 +1333,9 @@ if(isset($_SESSION['logged'])){
                         required: true
                     },
                     commissionable: {
+                        required: true
+                    },
+                    redeemable: {
                         required: true
                     },
                     type: {
