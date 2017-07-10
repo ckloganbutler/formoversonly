@@ -621,7 +621,6 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 <script src="assets/admin/pages/scripts/ui-idletimeout.js"></script>
 <script src="assets/global/plugins/xeditable/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
 <script src="assets/admin/pages/scripts/form-validation.js"></script>
-<script src="assets/admin/pages/scripts/tasks.js" type="text/javascript"></script>
 <script src="assets/admin/pages/scripts/index.js" type="text/javascript"></script>
 <script src="assets/global/scripts/datatable.js"></script>
 <script src="https://checkout.stripe.com/checkout.js"></script>

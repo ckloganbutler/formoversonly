@@ -495,7 +495,7 @@ if(isset($_SESSION['logged'])){
                              *  ITEMS THAT NEED TO BE REDEEMED
                              */
                             $redeem = array();
-                            $events = mysql_query("SELECT event_token, event_user_token FROM fmo_locations_events WHERE event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<'".mysql_real_escape_string($range[1])."'");
+                            $events = mysql_query("SELECT event_token, event_user_token FROM fmo_locations_events WHERE event_company_token='".mysql_real_escape_string($_SESSION['cuid'])."'");
                             if(mysql_num_rows($events) > 0){
                                 while($event = mysql_fetch_assoc($events)){
                                     $items = mysql_query("SELECT item_item, item_desc FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($event['event_token'])."' AND item_redeemable=1");
@@ -512,9 +512,62 @@ if(isset($_SESSION['logged'])){
                             }
 
                             ?>
-                            <pre>
-                                <?php var_dump($redeem); ?>
-                            </pre>
+                            <div class="portlet">
+                                <div class="portlet-body">
+                                    <div class="task-content">
+                                        <!-- START TASK LIST -->
+                                        <ul class="task-list">
+                                            <?php
+                                            foreach($redeem['items'] as $event){
+                                                ?>
+                                                <li>
+                                                    <div class="task-checkbox">
+                                                        <input type="checkbox" class="liChild" value=""/>
+                                                    </div>
+                                                    <div class="task-title">
+                                                    <span class="task-title-sp">
+                                                        <?php echo $event[1]; ?> </span>
+                                                        <span class="label label-sm label-success">
+                                                        <?php echo $event[0]; ?></span>
+                                                        <span class="task-bell">
+                                                        <i class="fa fa-bell-o"></i></span>
+                                                    </div>
+                                                    <div class="task-config">
+                                                        <div class="task-config-btn btn-group">
+                                                            <a class="btn btn-xs default" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                                                <i class="fa fa-cog"></i><i class="fa fa-angle-down"></i>
+                                                            </a>
+                                                            <ul class="dropdown-menu pull-right">
+                                                                <li>
+                                                                    <a href="javascript:;">
+                                                                        <i class="fa fa-check"></i> Complete </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:;">
+                                                                        <i class="fa fa-pencil"></i> Edit </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:;">
+                                                                        <i class="fa fa-trash-o"></i> Cancel </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <?php
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                    <!--
+                                    <div class="task-footer">
+                                        <div class="btn-arrow-link pull-right">
+                                            <a href="javascript:;">See All Records</a>
+                                            <i class="icon-arrow-right"></i>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -528,6 +581,13 @@ if(isset($_SESSION['logged'])){
                     "bLengthChange": false,
                     "bPaginate": false,
                     "info": false
+                });
+                $('.task-list input[type="checkbox"]').change(function() {
+                    if ($(this).is(':checked')) {
+                        $(this).parents('li').addClass("task-done");
+                    } else {
+                        $(this).parents('li').removeClass("task-done");
+                    }
                 });
             });
         </script>
