@@ -12,7 +12,7 @@ session_start();
 include 'init.php';
 if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
     if(isset($_POST)){
-        $checkEmail = mysql_query("SELECT user_email, user_pword, user_status, user_token, user_company_token, user_group, user_fname, user_lname, user_employer, user_employer_location, user_last_ext_location, user_phone FROM fmo_users WHERE (user_email='".mysql_real_escape_string($_POST['email'])."' AND user_pword='".mysql_real_escape_string(md5($_POST['password']))."'))");
+        $checkEmail = mysql_query("SELECT user_email, user_pword, user_status, user_token, user_company_token, user_group, user_fname, user_lname, user_employer, user_employer_location, user_last_ext_location, user_phone FROM fmo_users WHERE (user_email='".mysql_real_escape_string($_POST['email'])."' AND user_pword='".mysql_real_escape_string(md5($_POST['password']))."')");
         if(mysql_num_rows($checkEmail) > 0){
             $checkInfo = mysql_fetch_array($checkEmail);
             session_start();
@@ -24,12 +24,12 @@ if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
             $_SESSION['fname']  = $checkInfo['user_fname'];
             $_SESSION['lname']  = $checkInfo['user_lname'];
             $_SESSION['permissions'] = $checkInfo['user_permissions'];
-            if(!empty($checkInfo['user_employer']) && !empty($checkInfo['user_employer_location'])){
-                $_SESSION['cuid']   = $checkInfo['user_employer'];
-                $location           = $checkInfo['user_employer_location'];
-            } else {
+            if($checkInfo['user_group'] == 1) {
                 $_SESSION['cuid']   = $checkInfo['user_company_token'];
                 $location           = $checkInfo['user_last_ext_location'];
+            } elseif(!empty($checkInfo['user_employer']) && !empty($checkInfo['user_employer_location'])){
+                $_SESSION['cuid']   = $checkInfo['user_employer'];
+                $location           = $checkInfo['user_employer_location'];
             }
             header("Location: ../../index.php?uuid=".$_SESSION['uuid']."&cuid=".$_SESSION['cuid']."&luid=".$location."");
         } else {

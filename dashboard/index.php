@@ -103,13 +103,25 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 </div>
 <div class="page-header -i navbar navbar-fixed-top">
 	<div class="page-header-inner">
-		<div class="page-logo" style="color: white; text-transform: uppercase; font-size: 25px; margin-top: 5px; letter-spacing: .01em; word-spacing: 5px; width: auto;">
+		<div class="page-logo" style="color: white; text-transform: uppercase; font-size: 23px; letter-spacing: .01em; word-spacing: 1px; width: auto; margin-top: 7px; font-weight: 400;">
             <?php
             $name = companyName($_SESSION['cuid']);
             if(!empty($name)){
-                ?>
-                <h3><?php echo $name; ?></h3>
-                <?php
+                $cool = explode(" ", $name);
+                $white = true; $red = false;
+                foreach($cool as $word){
+                    if($white == true){
+                        $white = false;
+                        $color = "#FFFFFF";
+                        $red   = true;
+                        echo "<span style='color: ".$color."'>".$word."</span>";
+                    } elseif($red == true){
+                        $red   = false;
+                        $color = "#cb5a5e";
+                        $white = true;
+                        echo "<span style='color: ".$color."'>".$word."</span>";
+                    }
+                }
             } else {
                 ?>
                 <?php

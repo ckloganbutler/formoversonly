@@ -92,7 +92,7 @@ function companyPhone($cuid){
 function companyName($cuid){
     $name = mysql_fetch_array(mysql_query("SELECT user_company_name FROM fmo_users WHERE user_company_token='".mysql_real_escape_string($cuid)."'"));
     if(!empty($name['user_company_name'])){
-        echo $name['user_company_name'];
+        return $name['user_company_name'];
     } else {
         return NULL;
     }
