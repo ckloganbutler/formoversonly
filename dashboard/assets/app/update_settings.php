@@ -223,7 +223,7 @@ if($_GET['update'] == 'event' && isset($_POST)){
         $confirm = $googer->shorten("https://www.formoversonly.com/dashboard/assets/public/conf.php?ev=".$_POST['ev']);
         _sendText(companyPhone($_SESSION['cuid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
         _sendText(locationManagerPhone($_GET['luid']), "New ".locationName($_GET['luid'])." event on ".date("m/d/Y", strtotime($_POST['startdate']))." by ".$_POST['name']." / ".name($_SESSION['uuid'])."");
-        _sendText($_POST['phone'], "Thanks for booking with us! Confirm your move using the link below.\r\n".$confirm);
+        _sendText($_POST['phone'], "Ahoy from ".companyName($_SESSION['cuid'])."! Track your booking using handly link!.\r\n".$confirm);
 
         // Now, we must also put the default items into the invoice.
         /*
@@ -236,22 +236,6 @@ if($_GET['update'] == 'event' && isset($_POST)){
          *  - Other items added
          *
          */
-        for($i = 0; $i<4; $i++){
-
-
-            mysql_query("INSERT INTO fmo_locations_events_items (item_event_token, item_item, item_description, item_qty, item_cost, item_taxable, item_commissionable, item_total, item_added, item_adder) VALUES (
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."',
-            '".mysql_real_escape_string()."')");
-        }
-
 
 
     }

@@ -11,13 +11,13 @@ session_start();
 if(isset($_SESSION['logged'])){
     include '../app/init.php';
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_id, user_company_name, user_company_token, user_employer_commission, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2 FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_id, user_company_name, user_company_token, user_employer_commission, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2, user_last_ext_location FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if(!empty($profile['user_employer']) && !empty($profile['user_employer_location'])) {
         $employee = true;
-        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
     } else {
         $employee = false;
-        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_last_ext_location'])."'"));
     }
     ?>
     <div class="page-content">
