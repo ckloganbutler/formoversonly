@@ -24,7 +24,7 @@ if(isset($_SESSION['logged'])){
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <strong><?php echo $event['event_name']; ?></strong> | <small>(EVENT ID #0<?php echo $event['event_id']; ?>)</small>
+            <strong><?php echo $event['event_name']; ?></strong> | <small>(EVENT ID #<?php echo $event['event_id']; ?>)</small>
 
             <div class="btn-group pull-right">
                 <a class="btn red dropdown-toggle" href="javascript:;" data-toggle="dropdown">
