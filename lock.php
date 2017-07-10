@@ -81,8 +81,8 @@ if(isset($_GET['uuid'])){
                     </form>
                 </div>
             </div>
-            <div class="page-footer-custom">
-                2016-2017 &copy; For Movers Only | All Rights Reserved
+            <div class="page-footer">
+                2017 &copy; For Movers Only | Powered by <strong>HTT 5.0</strong> | <a href="index.php">Back to login <i class="fa fa-arrow-right"></i></a>
             </div>
         </div>
         <?php

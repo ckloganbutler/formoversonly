@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: loganCk
+ * User: CkAICk
  * Date: 3/3/2017
  * Time: 3:52 AM
  */
@@ -1591,10 +1591,10 @@ if(isset($_SESSION['logged'])){
                                             $('#page_content').html(data);
                                         },
                                         error: function() {
-                                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                         }
                                     });
-                                    toastr.success("<strong>Logan says:</strong><br/>Booking fee paid, 10$ has been charged to the card you provided.");
+                                    toastr.success("<strong>CkAI says:</strong><br/>Booking fee paid, 10$ has been charged to the card you provided.");
                                 },
                                 error: function(s){
 
@@ -1675,7 +1675,7 @@ if(isset($_SESSION['logged'])){
                             summaryPanel.innerHTML += route.legs[i].end_address + ' <br/><br/>';*/
                         }
                     } else {
-                        toastr.error("<strong>Logan says:</strong><br/>There is not enough information to route the trip. Please add at least 1 pickup and destination location.")
+                        toastr.error("<strong>CkAI says:</strong><br/>There is not enough information to route the trip. Please add at least 1 pickup and destination location.")
                     }
                 });
             }
@@ -1752,11 +1752,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_laborer').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of laborers for this event.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of laborers for this event.');
                             $('.datatable').getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1863,19 +1863,19 @@ if(isset($_SESSION['logged'])){
                         success: function(data) {
                             $('#draggable').modal('hide')
                             $('#new_location')[0].reset();
-                            toastr.success("<strong>Logan says</strong>:<br/>That location has been added to this events record. Let me refresh the event for you, so you can see the changes.");
+                            toastr.success("<strong>CkAI says</strong>:<br/>That location has been added to this events record. Let me refresh the event for you, so you can see the changes.");
                             $.ajax({
                                 url: 'assets/pages/event.php?ev=<?php echo $_GET['ev']; ?>&luid=<?php echo $_GET['luid']; ?>',
                                 success: function(data) {
                                     $('#page_content').html(data);
                                 },
                                 error: function() {
-                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                 }
                             });
                         },
                         error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
                 }
@@ -1896,10 +1896,10 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_comt').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>Comment has been added to events comment history.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Comment has been added to events comment history.');
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1913,11 +1913,11 @@ if(isset($_SESSION['logged'])){
                         processData: false,
                         contentType: false,
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>Document has been added to users documents table.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Document has been added to users documents table.');
                             $("#add_documents")[0].reset();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1939,12 +1939,12 @@ if(isset($_SESSION['logged'])){
                                 $('#page_content').html(data);
                             },
                             error: function() {
-                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                             }
                         });
                     },
                     error: function(e){
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -1959,7 +1959,7 @@ if(isset($_SESSION['logged'])){
                         ev: '<?php echo $event['event_token']; ?>'
                     },
                     success: function(bol_cmts){
-                        toastr.success("<strong>Logan says:</strong><br/> BOL comments saved (see? told you). ")
+                        toastr.success("<strong>CkAI says:</strong><br/> BOL comments saved (see? told you). ")
                     },
                     error: function(){
 
@@ -2075,7 +2075,7 @@ if(isset($_SESSION['logged'])){
                         ev: '<?php echo $event['event_token']; ?>'
                     },
                     success: function(f){
-                        toastr.success("<strong>Logan says:</strong><br/>Message was sent to the phone number associated with the event. They should recieve it momentarily. ");
+                        toastr.success("<strong>CkAI says:</strong><br/>Message was sent to the phone number associated with the event. They should recieve it momentarily. ");
                     },
                     error: function(f){
 

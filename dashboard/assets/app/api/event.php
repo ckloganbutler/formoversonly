@@ -222,20 +222,31 @@ if(isset($_GET['type']) && $_GET['type'] == 'sales'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findItems = mysql_query("SELECT item_id, item_item, item_desc, item_qty, item_cost, item_total FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
+    $findItems = mysql_query("SELECT item_id, item_item, item_desc, item_qty, item_cost, item_total, item_redeemable FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($_GET['ev'])."'");
     $iTotalRecords = mysql_num_rows($findItems);
 
     $records = array();
     $records["data"] = array();
 
     while($items = mysql_fetch_assoc($findItems)) {
-        $records["data"][] = array(
-            ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload="eve" data-event="'.$_GET['ev'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
-            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
-            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
-            '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
-            '<strong class="text-danger pull-right">'.$items['item_total'].'</strong>'
-        );
+        if($items['item_redeemable'] == 2){
+            $records["data"][] = array(
+                '<span class="text-success">'.$items['item_item'].'</span>',
+                '<span class="text-success">'.$items['item_desc'].'</span>',
+                '<span class="text-success">'.$items['item_qty'].'</span>',
+                '<span class="text-success">'.$items['item_cost'].'</span>',
+                '<strong class="text-danger pull-right">'.$items['item_total'].'</strong>'
+            );
+        } else {
+            $records["data"][] = array(
+                ''.$items['item_item'].' <a class="btn default btn-xs red-stripe edit pull-right no_print" data-edit="item_'.$items['item_id'].'" data-reload="eve" data-event="'.$_GET['ev'].'"><i class="fa fa-edit"></i> Edit</a> <a class="btn default btn-xs red delete_item pull-right no_print" data-delete="item_'.$items['item_id'].'" data-event="'.$_GET['ev'].'"><i class="fa fa-times"></i></a>',
+                '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_desc" data-pk="'.$items['item_id'].'" data-type="text" data-placement="right" data-title="Enter new description.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_desc'].'</a>',
+                '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_qty" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new quantity.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_qty'].'</a>',
+                '<a class="item_'.$items['item_id'].'" style="color:#333333" data-inputclass="form-control" data-name="item_cost" data-pk="'.$items['item_id'].'" data-type="number" data-placement="right" data-title="Enter new cost.." data-url="assets/app/update_settings.php?setting=event_items">'.$items['item_cost'].'</a>',
+                '<strong class="text-danger pull-right">'.$items['item_total'].'</strong>'
+            );
+        }
+
     }
 
     $records["draw"] = $sEcho;

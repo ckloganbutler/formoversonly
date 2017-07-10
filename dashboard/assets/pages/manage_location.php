@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: loganCk
+ * User: CkAICk
  * Date: 3/3/2017
  * Time: 3:52 AM
  */
@@ -249,7 +249,7 @@ if(isset($_SESSION['logged'])){
                                         <div class="portlet">
                                             <div class="portlet-title">
                                                 <div class="caption">
-                                                    <i class="fa fa-cogs"></i>Custom Services & Rates <small><span class="font-red">|</span> Add your own services/rates to the system. This helps <strong>Logan</strong> adapt to your company.</small>
+                                                    <i class="fa fa-cogs"></i>Custom Services & Rates <small><span class="font-red">|</span> Add your own services/rates to the system. This helps <strong>CkAI</strong> adapt to your company.</small>
                                                 </div>
                                                 <div class="actions">
                                                     <a class="btn default red-stripe" id="show_add_service">
@@ -307,6 +307,9 @@ if(isset($_SESSION['logged'])){
                                                                     </th>
                                                                     <th>
                                                                         Redeemable
+                                                                        <span class="pull-right">
+                                                                            Prepaid
+                                                                        </span>
                                                                     </th>
                                                                     <th width="10%">
                                                                         Type
@@ -1297,7 +1300,7 @@ if(isset($_SESSION['logged'])){
                         {value: 'Other', text: 'Other'}
                     ]
                 });
-                toastr.info("<strong>Logan says</strong>:<br/>You can now edit that line. To edit, please click the blue underline under the value you'd like to update.")
+                toastr.info("<strong>CkAI says</strong>:<br/>You can now edit that line. To edit, please click the blue underline under the value you'd like to update.")
             });
             $(document).on('focusout', '.catcher_item', function(){
                 $.ajax({
@@ -1309,7 +1312,7 @@ if(isset($_SESSION['logged'])){
                         l: '<?php echo $_GET['luid']; ?>'
                     },
                     success: function(e){
-                        toastr.info("<strong>Logan says</strong>:<br/>Information has been saved to the database successfully.")
+                        toastr.info("<strong>CkAI says</strong>:<br/>Information has been saved to the database successfully.")
                     },
                     error: function(e){
 
@@ -1827,11 +1830,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_times_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of times for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of times for this location.');
                             times.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1846,11 +1849,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_eventtype_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of eventtypes counties for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of eventtypes counties for this location.');
                             eventtype.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1865,11 +1868,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_subtype_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of subtypes for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of subtypes for this location.');
                             subtype.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1884,11 +1887,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_service_rate').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of services and rates for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of services and rates for this location.');
                             grid.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1903,11 +1906,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_county_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of serviceable counties for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of serviceable counties for this location.');
                             counties.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1922,11 +1925,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_hear_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of references for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of references for this location.');
                             howhear.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1941,11 +1944,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_storage_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of available storage units for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of available storage units for this location.');
                             storage.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 });
@@ -1960,11 +1963,11 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_zipcodes_form').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of serviceable zipccodes for this location.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to your list of serviceable zipccodes for this location.');
                             zipcodes.getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1980,10 +1983,10 @@ if(isset($_SESSION['logged'])){
                         status: state
                     },
                     success: function(data) {
-                        toastr.info('<strong>Logan says</strong>:<br/>Your changes have been saved to the database. Changes wll take effect in a few moments...');
+                        toastr.info('<strong>CkAI says</strong>:<br/>Your changes have been saved to the database. Changes wll take effect in a few moments...');
                     },
                     error: function() {
-                        toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                        toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                     }
                 });
             });

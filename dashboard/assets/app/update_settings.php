@@ -17,6 +17,9 @@ if($_GET['setting'] == 'delete_item'){
     $item = explode("_", $_POST['del']);
     mysql_query("DELETE FROM fmo_locations_events_items WHERE item_id='".mysql_real_escape_string($item[1])."'");
 }
+if($_GET['setting'] == 'redeem'){
+    mysql_query("UPDATE fmo_locations_events_items SET item_desc='REDEEMED', item_redeemable=2 WHERE item_id='".mysql_real_escape_string($_POST['item'])."'");
+}
 if($_GET['setting'] == 'delete_labor'){
     $laborer = explode("_", $_POST['del']);
     mysql_query("DELETE FROM fmo_locations_events_laborers WHERE laborer_id='".mysql_real_escape_string($laborer[1])."'");

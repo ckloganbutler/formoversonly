@@ -498,13 +498,15 @@ if(isset($_SESSION['logged'])){
                             $events = mysql_query("SELECT event_token, event_user_token FROM fmo_locations_events WHERE event_company_token='".mysql_real_escape_string($_SESSION['cuid'])."'");
                             if(mysql_num_rows($events) > 0){
                                 while($event = mysql_fetch_assoc($events)){
-                                    $items = mysql_query("SELECT item_item, item_desc FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($event['event_token'])."' AND item_redeemable=1");
+                                    $items = mysql_query("SELECT item_id, item_item, item_desc, item_added FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($event['event_token'])."' AND item_redeemable=1");
                                     if(mysql_num_rows($items) > 0){
                                         while($item = mysql_fetch_assoc($items)){
-                                            $redeem['event'][$event['event_token']]['items'][] = array(
+                                            $redeem['items'][] = array(
                                                 ''.nameFromEvent($event['event_user_token']).'',
                                                 ''.$item['item_item'].'',
-                                                ''.$item['item_desc'].''
+                                                ''.$item['item_desc'].'',
+                                                ''.$item['item_added'].'',
+                                                ''.$item['item_id'].''
                                             );
                                         }
                                     }
@@ -514,51 +516,32 @@ if(isset($_SESSION['logged'])){
                             ?>
                             <div class="portlet">
                                 <div class="portlet-body">
-                                    <div class="task-content">
-                                        <!-- START TASK LIST -->
-                                        <ul class="task-list">
-                                            <?php
-                                            foreach($redeem['items'] as $event){
-                                                ?>
-                                                <li>
-                                                    <div class="task-checkbox">
-                                                        <input type="checkbox" class="liChild" value=""/>
-                                                    </div>
-                                                    <div class="task-title">
-                                                    <span class="task-title-sp">
-                                                        <?php echo $event[1]; ?> </span>
-                                                        <span class="label label-sm label-success">
-                                                        <?php echo $event[0]; ?></span>
-                                                        <span class="task-bell">
-                                                        <i class="fa fa-bell-o"></i></span>
-                                                    </div>
-                                                    <div class="task-config">
-                                                        <div class="task-config-btn btn-group">
-                                                            <a class="btn btn-xs default" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                                                                <i class="fa fa-cog"></i><i class="fa fa-angle-down"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu pull-right">
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="fa fa-check"></i> Complete </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="fa fa-pencil"></i> Edit </a>
-                                                                </li>
-                                                                <li>
-                                                                    <a href="javascript:;">
-                                                                        <i class="fa fa-trash-o"></i> Cancel </a>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <?php
-                                            }
+                                    <table class="table table-striped table-hover datatable">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Item</th>
+                                            <th>Description/Codes</th>
+                                            <th>Customer Name</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                        foreach($redeem['items'] as $items){
                                             ?>
-                                        </ul>
-                                    </div>
+                                            <tr>
+                                                <td><?php echo date('Y-m-d', strtotime($items[3])); ?></td>
+                                                <td><?php echo $items[1]; ?></td>
+                                                <td><?php echo $items[2]; ?></td>
+                                                <td><?php echo $items[0]; ?></td>
+                                                <td><button class="btn btn-xs red redeem" data-redeem="<?php echo $items[4]; ?>"><i class="fa fa-check"></i> Mark as redeemed (currently not)</button></td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
+                                        </tbody>
+                                    </table>
                                     <!--
                                     <div class="task-footer">
                                         <div class="btn-arrow-link pull-right">
@@ -582,12 +565,23 @@ if(isset($_SESSION['logged'])){
                     "bPaginate": false,
                     "info": false
                 });
-                $('.task-list input[type="checkbox"]').change(function() {
-                    if ($(this).is(':checked')) {
-                        $(this).parents('li').addClass("task-done");
-                    } else {
-                        $(this).parents('li').removeClass("task-done");
-                    }
+                $('.redeem').click(function() {
+                    var item = $(this).data('redeem');
+                    $(this).closest('tr').remove();
+                    $.ajax({
+                        url: 'assets/app/update_settings.php?setting=redeem',
+                        type: 'POST',
+                        data: {
+                            item: item
+                        },
+                        success: function(s){
+
+                            toastr.info("<strong>Logan says:</strong><br/>Item ("+item+") has been redeemed.");
+                        },
+                        error: function(e){
+
+                        }
+                    });
                 });
             });
         </script>

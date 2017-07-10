@@ -398,7 +398,7 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#create_employee').serialize(),
                         success: function(data) {
-                            toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your employee to the system, you will now be redirected to their profile.");
+                            toastr.success("<strong>CkAI says</strong>:<br/>Nice! We've added your employee to the system, you will now be redirected to their profile.");
                             $.ajax({
                                 url: 'assets/pages/profile.php?uuid='+data,
                                 success: function(data) {
@@ -406,12 +406,12 @@ if(isset($_SESSION['logged'])){
                                     document.title = "Profile - For Movers Only";
                                 },
                                 error: function() {
-                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                 }
                             });
                         },
                         error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
                 }

@@ -96,7 +96,7 @@
             ?>
 
         </div>
-        <h3 class="form-title"><strong>Administrator</strong> login</h3>
+        <h3 class="form-title"><strong>System</strong> login</h3>
         <form class="admin-form" action="dashboard/assets/app/login.php?t=aXn" method="POST">
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">Email</label>
@@ -120,34 +120,6 @@
                 </button>
             </div>
         </form>
-        <div class="login-options">
-            <form class="employee-form" action="dashboard/assets/app/login.php?t=aXn" method="POST">
-                <h4 class="form-title" style="margin-top: 30px;"><strong>Employee</strong> login</h4>
-                <div class="form-group">
-                    <label class="control-label visible-ie8 visible-ie9">Employee ID Number</label>
-                    <div class="input-icon">
-                        <i class="fa fa-sort-numeric-asc"></i>
-                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Employee ID Number" name="id"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label visible-ie8 visible-ie9">Password</label>
-                    <div class="input-icon">
-                        <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="pass"/>
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <label class="checkbox">
-                        <input type="checkbox" name="remem" value="1"/> Remember me </label>
-                    <button type="submit" class="btn red pull-right">
-                        Login <i class="m-icon-swapright m-icon-white"></i>
-                    </button>
-                </div>
-            </form>
-        </div>
-
-
 
         <div class="forget-password">
             <h4>Forgot your password ?</h4>
@@ -345,7 +317,7 @@
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2017 &copy; For Movers Only | <strong>Powered by Logan</strong> <br/>  <small><strong>This project is in beta. If you make an account, expect issues.</strong></small>
+    2017 &copy; For Movers Only | Powered <a href="#">HTT 5.0</a> <br/>  <small><strong><a href="tos.php">Terms of Service</a> &nbsp; [+] &nbsp; <a href="pp.php">Privacy Policy</a></strong></small>
 </div>
 <!--[if lt IE 9]>
 <script src="dashboard/assets/global/plugins/respond.min.js"></script>
@@ -367,63 +339,6 @@
         Metronic.init();
         Layout.init();
         Login.init();
-        $('.employee-form').validate({
-            errorElement: 'span', //default input error message container
-            errorClass: 'help-block', // default input error message class
-            focusInvalid: false, // do not focus the last invalid input
-            rules: {
-                id: {
-                    required: true,
-                    number: true
-                },
-                pass: {
-                    required: true
-                },
-                remem: {
-                    required: false
-                }
-            },
-
-            messages: {
-                id: {
-                    required: "Email is required."
-                },
-                pass: {
-                    required: "Password is required."
-                }
-            },
-
-            invalidHandler: function(event, validator) { //display error alert on form submit
-                $('.alert-danger', $('.login-form')).show();
-            },
-
-            highlight: function(element) { // hightlight error inputs
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // set error class to the control group
-            },
-
-            success: function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
-
-            errorPlacement: function(error, element) {
-                error.insertAfter(element.closest('.input-icon'));
-            },
-
-            submitHandler: function(form) {
-                form.submit(); // form validation success, call ajax form submit
-            }
-        });
-
-        $('.employee-form input').keypress(function(e) {
-            if (e.which == 13) {
-                if ($('.employee-form').validate().form()) {
-                    $('.employee-form').submit(); //form validation success, call ajax form submit
-                }
-                return false;
-            }
-        });
 
         $('.admin-form').validate({
             errorElement: 'span', //default input error message container

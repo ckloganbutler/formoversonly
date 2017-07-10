@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: loganCk
+ * User: CkAICk
  * Date: 3/3/2017
  * Time: 3:55 AM
  */
@@ -1425,10 +1425,10 @@ if(isset($_SESSION['logged'])){
                        p: <?php echo $profile['user_phone']; ?>
                    },
                    success: function() {
-                       toastr.success("<strong>Logan says:</strong><br/>Password reset was sent to <?php echo clean_phone($profile['user_phone']); ?>, they should recieve it momentarily.");
+                       toastr.success("<strong>CkAI says:</strong><br/>Password reset was sent to <?php echo clean_phone($profile['user_phone']); ?>, they should recieve it momentarily.");
                    },
                    error: function() {
-                        toastr.error("<strong>Logan says:</strong><br/>Oops..that didnt work properly. Try again?");
+                        toastr.error("<strong>CkAI says:</strong><br/>Oops..that didnt work properly. Try again?");
                    }
                })
             });
@@ -1549,35 +1549,35 @@ if(isset($_SESSION['logged'])){
                         success: function(data) {
                             $('#childsupport').modal('hide');
                             $('#new_case')[0].reset();
-                            toastr.success("<strong>Logan says</strong>:<br/>That case has been added to this users records. I had to refresh the page for you, so you can see the new record.");
+                            toastr.success("<strong>CkAI says</strong>:<br/>That case has been added to this users records. I had to refresh the page for you, so you can see the new record.");
                             $.ajax({
                                 url: 'assets/pages/profile.php?uuid=<?php echo $profile['user_token']; ?>&luid=<?php echo $_GET['luid']; ?>',
                                 success: function(data) {
                                     $('#page_content').html(data);
                                 },
                                 error: function() {
-                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                 }
                             });
                         },
                         error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
                 }
             });
-            $('.add_laborer').on('click', function(){
+            $('.add_labor').on('click', function(){
                 if($("#add_laborer").valid()){
                     $.ajax({
                         url: "assets/app/add_setting.php?setting=laborer&ev=<?php echo $profile['user_token']; ?>",
                         type: "POST",
                         data: $('#add_laborer').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>'+data+' has been added to your list of laborers for this event.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>'+data+' has been added to this users labor record.');
                             $('.datatable').getDataTable().ajax.reload();
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1591,10 +1591,10 @@ if(isset($_SESSION['logged'])){
                         processData: false,
                         contentType: false,
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>Document has been added to users documents table.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Document has been added to users documents table.');
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1606,10 +1606,10 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_comt').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>Comment has been added to users comment history.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Comment has been added to users comment history.');
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1621,10 +1621,10 @@ if(isset($_SESSION['logged'])){
                         type: "POST",
                         data: $('#add_writeups').serialize(),
                         success: function(data) {
-                            toastr.info('<strong>Logan says</strong>:<br/>Write-up has been added to users write-up history.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Write-up has been added to users write-up history.');
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1644,10 +1644,10 @@ if(isset($_SESSION['logged'])){
                             $('#add_advances')[0].reset();
                             $('input[name="available"]').val(inf.available);
                             window.open('assets/public/loan_auth.php?t=auth_tok&i='+inf.id,'_blank');
-                            toastr.info('<strong>Logan says</strong>:<br/>Advance has been added to users advance history.');
+                            toastr.info('<strong>CkAI says</strong>:<br/>Advance has been added to users advance history.');
                         },
                         error: function() {
-                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                            toastr.error('<strong>CkAI says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
                         }
                     });
                 }
@@ -1661,11 +1661,11 @@ if(isset($_SESSION['logged'])){
                     data: formData,
                     async: false,
                     success: function(data) {
-                        toastr.success("<strong>Logan says</strong>:<br/>Your new profile picture has been uploaded. Refreshing the dashboard to show your new image..");
+                        toastr.success("<strong>CkAI says</strong>:<br/>Your new profile picture has been uploaded. Refreshing the dashboard to show your new image..");
                         $('.pp').attr("src", data);
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     },
                     cache: false,
                     contentType: false,

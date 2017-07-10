@@ -12,7 +12,7 @@ session_start();
 include 'init.php';
 if(isset($_GET['t']) && $_GET['t'] == 'aXn'){
     if(isset($_POST)){
-        $checkEmail = mysql_query("SELECT user_email, user_pword, user_status, user_token, user_company_token, user_group, user_fname, user_lname, user_employer, user_employer_location, user_last_ext_location, user_phone FROM fmo_users WHERE (user_email='".mysql_real_escape_string($_POST['email'])."' AND user_pword='".mysql_real_escape_string(md5($_POST['password']))."') OR (user_id='".mysql_real_escape_string($_POST['id'])."' AND user_pword='".mysql_real_escape_string(md5($_POST['pass']))."')");
+        $checkEmail = mysql_query("SELECT user_email, user_pword, user_status, user_token, user_company_token, user_group, user_fname, user_lname, user_employer, user_employer_location, user_last_ext_location, user_phone FROM fmo_users WHERE (user_email='".mysql_real_escape_string($_POST['email'])."' AND user_pword='".mysql_real_escape_string(md5($_POST['password']))."'))");
         if(mysql_num_rows($checkEmail) > 0){
             $checkInfo = mysql_fetch_array($checkEmail);
             session_start();

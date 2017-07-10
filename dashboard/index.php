@@ -103,10 +103,18 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 </div>
 <div class="page-header -i navbar navbar-fixed-top">
 	<div class="page-header-inner">
-		<div class="page-logo">
-			<a href="">
-				<img src="assets/admin/layout/img/logo.png" alt="logo" class="logo-default"/>
-			</a>
+		<div class="page-logo" style="color: white; text-transform: uppercase; font-size: 25px; margin-top: 5px; letter-spacing: .01em; word-spacing: 5px; width: auto;">
+            <?php
+            $name = companyName($_SESSION['cuid']);
+            if(!empty($name)){
+                ?>
+                <h3><?php echo $name; ?></h3>
+                <?php
+            } else {
+                ?>
+                <?php
+            }
+            ?>
 			<div class="menu-toggler sidebar-toggler hide">
 			</div>
 		</div>
@@ -561,7 +569,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 </div>
 <div class="page-footer">
 	<div class="page-footer-inner">
-		2017 &copy; For Movers Only | All Rights Reserved. <strong>Powered by Logan</strong>
+		2017 &copy; For Movers Only | Powered by <strong>CkAI 5.0</strong>
 	</div>
 	<div class="scroll-to-top">
 		<i class="icon-arrow-up"></i>
@@ -646,7 +654,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 $('#page_content').html(data);
             },
             error: function() {
-                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
             }
         });
             <?php
@@ -658,7 +666,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 $('#page_content').html(data);
             },
             error: function() {
-                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
             }
         });
             <?php
@@ -701,7 +709,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         document.title = tit+" - For Movers Only";
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -720,7 +728,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -743,7 +751,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         document.title = tit;
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -765,7 +773,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         document.title = tit;
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -780,7 +788,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     url: url,
                     data: $(id).serialize(),
                     success: function(data) {
-                        toastr.success("<strong>Logan says</strong>:<br/>Your changes have been saved to the database.");
+                        toastr.success("<strong>CkAI says</strong>:<br/>Your changes have been saved to the database.");
                         if($(this).hasAttribute("data-no-reload")){
 
                         } else {
@@ -790,13 +798,13 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                     $('#page_content').html(data);
                                 },
                                 error: function() {
-                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                 }
                             });
                         }
                     },
                     error: function() {
-                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                     }
                 });
             });
@@ -872,12 +880,12 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 },
                 success: function(d){
                     var inf = JSON.parse(d);
-                    toastr.success("<strong>Logan says</strong>:<br/> "+inf.item+" added to <?php echo $user['user_fname']; ?>'s invoice for "+inf.cost);
+                    toastr.success("<strong>CkAI says</strong>:<br/> "+inf.item+" added to <?php echo $user['user_fname']; ?>'s invoice for "+inf.cost);
                     $('#sales').DataTable().ajax.reload();
                     updateInv(event);
                 },
                 error: function(e){
-                    toastr.error("<strong>Logan says</strong>:<br/> An unexpected error has occurred. Please try again later.")
+                    toastr.error("<strong>CkAI says</strong>:<br/> An unexpected error has occurred. Please try again later.")
                 }
             });
         });
@@ -895,13 +903,13 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                             $('#profile-content').html(data);
                         },
                         error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
 
                 },
                 error: function() {
-                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                 }
             });
         });
@@ -919,7 +927,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                     }
                 }
             });
-            toastr.info("<strong>Logan says</strong>:<br/>Editable information has been underlined with blue dots.")
+            toastr.info("<strong>CkAI says</strong>:<br/>Editable information has been underlined with blue dots.")
         });
     });
     $('#catcher_phone').focusout(function() {
@@ -941,7 +949,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                             $('#page_content').html(data);
                         },
                         error: function() {
-                            toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                            toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                         }
                     });
                 },
@@ -1085,13 +1093,13 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                                 $('.catcher-items-hide').hide();
                                                                                                                                             },
                                                                                                                                             error: function() {
-                                                                                                                                                toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                                                                                                                             }
                                                                                                                                         });
 
                                                                                                                                     },
                                                                                                                                     error: function() {
-                                                                                                                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                                                                                                                     }
                                                                                                                                 });
                                                                                                                             },
@@ -1137,7 +1145,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                                                                                         $('body.page-quick-sidebar-open').removeClass("page-quick-sidebar-open");
                                                                                                                                     },
                                                                                                                                     error: function() {
-                                                                                                                                        toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                                                                                        toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                                                                                                                     }
                                                                                                                                 });
                                                                                                                             },
@@ -1163,7 +1171,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                                                                     });
                                                                 },
                                                                 error: function() {
-                                                                    toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                                                                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
                                                                 }
                                                             });
                                                         });

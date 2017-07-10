@@ -1501,16 +1501,16 @@ if(isset($_SESSION['logged'])){
                            msg: $('#ttm_msg').val()
                        },
                        success: function(e){
-                           toastr.success("<strong>Logan says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
+                           toastr.success("<strong>CkAI says:</strong><br/>Text message has been sent to <?php echo name($location['location_manager']); ?>");
                            $('#ttm_msg').val('');
                            updateCountdown();
                        },
                        error: function(e){
-                           toastr.error("<strong>Logan says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
+                           toastr.error("<strong>CkAI says:</strong><br/>Something bad happened. You messed everything up. Just kidding, try that again.")
                        }
                    })
                } else {
-                   toastr.error("<strong>Logan says:</strong><br/>You need to type up a message first, silly! I can't send <strong><i>nothing</i></strong>!")
+                   toastr.error("<strong>CkAI says:</strong><br/>You need to type up a message first, silly! I can't send <strong><i>nothing</i></strong>!")
                }
 
             });
@@ -1553,10 +1553,10 @@ if(isset($_SESSION['logged'])){
                         },
                         success: function(events){
                             $('#dashboard_events').html(events);
-                            toastr.success("<strong>Logan says:</strong><br/>I updated the lists for you below.");
+                            toastr.success("<strong>CkAI says:</strong><br/>I updated the lists for you below.");
                         },
                         error: function(error){
-                            toastr.error("<strong>Logan says:</strong><br/>Something didn't work correctly there. Try again.");
+                            toastr.error("<strong>CkAI says:</strong><br/>Something didn't work correctly there. Try again.");
                         }
                     })
                 }
@@ -1572,10 +1572,10 @@ if(isset($_SESSION['logged'])){
                     },
                     success: function(events){
                         $('#dashboard_events').html(events);
-                        toastr.success("<strong>Logan says:</strong><br/>Events for the month viewable below.");
+                        toastr.success("<strong>CkAI says:</strong><br/>Events for the month viewable below.");
                     },
                     error: function(){
-                        toastr.error("<strong>Logan says:</strong><br/>Something didn't work correctly there. Try again.");
+                        toastr.error("<strong>CkAI says:</strong><br/>Something didn't work correctly there. Try again.");
                     }
                 })
             });

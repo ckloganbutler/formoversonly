@@ -233,22 +233,19 @@ if(isset($_GET) && $_GET['type'] == 'labor'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findLabor = mysql_query("SELECT laborer_id, laborer_user_token, laborer_event_token, laborer_desc, laborer_hours_worked, laborer_timestamp, laborer_by_user_token, laborer_rate FROM fmo_locations_events_laborers WHERE laborer_user_token='".mysql_real_escape_string($_GET['uuid'])."'");
+    $findLabor = mysql_query("SELECT laborer_id, laborer_user_token, laborer_event_token, laborer_desc, laborer_hours_worked, laborer_timestamp, laborer_by_user_token, laborer_rate FROM fmo_locations_events_laborers WHERE laborer_event_token='".mysql_real_escape_string($_GET['uuid'])."'") or die(mysql_error());
     $iTotalRecords = mysql_num_rows($findLabor);
 
     $records = array();
     $records["data"] = array();
 
     while($lb = mysql_fetch_assoc($findLabor)) {
-        if(!empty($lb['laborer_event_token'])){
-            continue;
-        }
         $records["data"][] = array(
+            ''.$lb['laborer_timestamp'].'',
             ''.$lb['laborer_desc'].'',
-            '$'.number_format($lb['laborer_rate'], 2).'/hr',
-            '<a class="lb_'.$lb['laborer_id'].'" style="color:#333333" data-inputclass="form-control" data-name="laborer_hours_worked" data-pk="'.$lb['laborer_id'].'" data-type="number" data-placement="right" data-title="Enter new paid hours.." data-url="assets/app/update_settings.php?setting=event_laborers">'.number_format($lb['laborer_hours_worked'], 2).'</a>',
-            ''.name($lb['laborer_by_user_token']).'',
-            '<a class="btn default btn-xs red-stripe edit" data-edit="lb_'.$lb['laborer_id'].'" data-reload=""><i class="fa fa-edit"></i> Edit</a>',
+            '$'.$lb['laborer_rate'].'/hr',
+            ''.$lb['laborer_hours_worked'].'hrs',
+            ''.name($lb['laborer_by_user_token']).''
         );
     }
 
