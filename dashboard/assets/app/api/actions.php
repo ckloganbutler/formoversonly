@@ -12,16 +12,17 @@ if(isset($_GET['ty']) && $_GET['ty'] == 'ai'){
     $id    = $_POST['srv_id'];
     $ev    = $_POST['srv_ev'];
     $echo  = array();
-    $rate = mysql_fetch_array(mysql_query("SELECT services_item, services_item_desc, services_saleprice, services_taxable, services_commissionable FROM fmo_services WHERE services_id='".mysql_real_escape_string($id)."'"));
+    $rate = mysql_fetch_array(mysql_query("SELECT services_item, services_item_desc, services_saleprice, services_taxable, services_commissionable, services_redeemable FROM fmo_services WHERE services_id='".mysql_real_escape_string($id)."'"));
 
     if(!empty($rate)){
-        mysql_query("INSERT INTO fmo_locations_events_items (item_event_token, item_item, item_desc, item_cost, item_taxable, item_commission, item_adder) VALUES (
+        mysql_query("INSERT INTO fmo_locations_events_items (item_event_token, item_item, item_desc, item_cost, item_taxable, item_commission, item_redeemable, item_adder) VALUES (
         '".mysql_real_escape_string($ev)."',
         '".mysql_real_escape_string($rate['services_item'])."',
         '".mysql_real_escape_string($rate['services_item_desc'])."',
         '".mysql_real_escape_string($rate['services_saleprice'])."',
         '".mysql_real_escape_string($rate['services_taxable'])."',
         '".mysql_real_escape_string($rate['services_commissionable'])."',
+        '".mysql_real_escape_string($rate['services_redeemable'])."',
         '".mysql_real_escape_string($_SESSION['uuid'])."')");
 
 

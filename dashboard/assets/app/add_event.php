@@ -29,10 +29,11 @@ if(isset($_GET['ev']) && $_GET['ev'] == 'plk'){
         $additions .= "".$ck."|";
     }
 
-    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_time, event_name, event_phone, event_email, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_referer, event_comments, event_additions, event_status) VALUES (
+    mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_company_token, event_date_start, event_date_end, event_time, event_name, event_phone, event_email, event_type, event_subtype, event_truckfee, event_laborrate, event_countyfee, event_referer, event_comments, event_additions, event_status) VALUES (
     '".mysql_real_escape_string($token)."',
     '".mysql_real_escape_string($loc)."',
     '".mysql_real_escape_string($usr)."',
+    '".mysql_real_escape_string($_SESSION['cuid'])."',
     '".mysql_real_escape_string($start)."',
     '".mysql_real_escape_string($end)."',
     '".mysql_real_escape_string($time)."',

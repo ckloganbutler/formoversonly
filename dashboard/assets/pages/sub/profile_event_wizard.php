@@ -25,10 +25,11 @@ if(isset($_SESSION['logged'])){
         $new_end        = date('Y-m-d');
         $new_name       = $profile['user_fname']." ".$profile['user_lname']."";
         $new_status     = 0;
-        mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_date_start, event_date_end, event_name, event_status) VALUES (
+        mysql_query("INSERT INTO fmo_locations_events (event_token, event_location_token, event_user_token, event_company_token, event_date_start, event_date_end, event_name, event_status) VALUES (
         '".mysql_real_escape_string($new_token)."',
         '".mysql_real_escape_string($new_location)."',
         '".mysql_real_escape_string($new_user_token)."',
+        '".mysql_real_escape_string($_SESSION['cuid'])."',
         '".mysql_real_escape_string($new_start)."',
         '".mysql_real_escape_string($new_end)."',
         '".mysql_real_escape_string($new_name)."',
@@ -48,7 +49,7 @@ if(isset($_SESSION['logged'])){
                         <span class="caption-subject font-red bold uppercase">Create Event</span>
                     </div>
                     <ul class="nav nav-tabs">
-                        <li class="active">
+                         <li class="active">
                             <a href="#tab_1_1" data-toggle="tab">Create Event</a>
                         </li>
                     </ul>

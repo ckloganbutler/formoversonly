@@ -137,3 +137,8 @@ function locationManagerPhone($token){
         return NULL;
     }
 }
+
+function nameFromEvent($token){
+    $name = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname FROM fmo_users WHERE user_token='".mysql_real_escape_string($token)."'"));
+    return $name['user_fname']." ".$name['user_lname'];
+}

@@ -450,6 +450,7 @@ if(isset($_SESSION['logged'])){
         </script>
         <?php
     } elseif ($_POST['type'] == 'sales'){
+        $range = explode(" - ", $_POST['ext']);
         ?>
         <div class="col-md-12">
             <div class="portlet">
@@ -460,19 +461,19 @@ if(isset($_SESSION['logged'])){
                     </div>
                     <ul class="nav nav-tabs">
                         <li class="">
-                            <a href="#timesheets" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#bookingfees">
+                            <a href="#bookingfees" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#bookingfees">
                                 Booking Fees</a>
                         </li>
                         <li class="">
-                            <a href="#deductions" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#sales">
+                            <a href="#sales" data-toggle="tab" aria-expanded="false" style="color: black;" class="tab_print" data-print="#sales">
                                 Sales</a>
                         </li>
                         <li>
-                            <a href="#payrollsummary" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#taxes">
+                            <a href="#taxes" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#taxes">
                                 Taxes</a>
                         </li>
                         <li class="active">
-                            <a href="#payrollsummary_admin" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#redemption">
+                            <a href="#redemption" data-toggle="tab" aria-expanded="true" style="color: black;" class="tab_print" data-print="#redemption">
                                 Redemptions</a>
                         </li>
                     </ul>
@@ -489,7 +490,31 @@ if(isset($_SESSION['logged'])){
 
                         </div>
                         <div class="tab-pane active" id="redemption">
-                            :->
+                            <?php
+                            /*
+                             *  ITEMS THAT NEED TO BE REDEEMED
+                             */
+                            $redeem = array();
+                            $events = mysql_query("SELECT event_token, event_user_token FROM fmo_locations_events WHERE event_date_start>='".mysql_real_escape_string($range[0])."' AND event_date_end<'".mysql_real_escape_string($range[1])."'");
+                            if(mysql_num_rows($events) > 0){
+                                while($event = mysql_fetch_assoc($events)){
+                                    $items = mysql_query("SELECT item_item, item_desc FROM fmo_locations_events_items WHERE item_event_token='".mysql_real_escape_string($event['event_token'])."' AND item_redeemable=1");
+                                    if(mysql_num_rows($items) > 0){
+                                        while($item = mysql_fetch_assoc($items)){
+                                            $redeem['event'][$event['event_token']]['items'][] = array(
+                                                ''.nameFromEvent($event['event_user_token']).'',
+                                                ''.$item['item_item'].'',
+                                                ''.$item['item_desc'].''
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+
+                            ?>
+                            <pre>
+                                <?php var_dump($redeem); ?>
+                            </pre>
                         </div>
                     </div>
                 </div>
