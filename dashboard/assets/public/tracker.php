@@ -243,12 +243,10 @@ $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lnam
         jQuery(document).ready(function() {
             Metronic.init(); // init metronic core components
             Layout.init(); // init current layout
-            QuickSidebar.init(); // init quick sidebar
-            Demo.init(); // init demo features
             $.ajax({
-                url: 'tracker/dashboard.php',
+                url: 'tracker/dashboard.php?ev=<?php echo $_GET['ev']; ?>',
                 success: function(data) {
-                    $('#tracker_content').html(data);
+                    $('#tracker-content').html(data);
                 },
                 error: function() {
                     toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
@@ -261,7 +259,7 @@ $user     = mysql_fetch_array(mysql_query("SELECT user_id, user_fname, user_lnam
                     $.ajax({
                         url: url,
                         success: function(data) {
-                            $('#tracker_content').html(data);
+                            $('#tracker-content').html(data);
                             document.title = tit+" - For Movers Only";
                         },
                         error: function() {

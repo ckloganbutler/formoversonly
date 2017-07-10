@@ -5,7 +5,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
 } else {
     include 'assets/app/init.php';
     $lastlocation = mysql_query("UPDATE fmo_users SET user_last_ext_location='".mysql_real_escape_string($_GET['luid'])."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_employer, user_pic, user_status, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
+    $user = mysql_fetch_array(mysql_query("SELECT user_company_name, user_employer, user_pic, user_status, user_setup, user_group, user_last_location, user_fname, user_lname, user_token, user_company_token, user_last_ext_location FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
     $location = mysql_fetch_array(mysql_query("SELECT location_name, location_state FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."' AND location_owner_company_token='".mysql_real_escape_string($_GET['cuid'])."'"));
 }
 ?>
@@ -145,6 +145,9 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         $findLocations = mysql_query("SELECT location_name, location_token, location_state FROM fmo_locations WHERE location_owner_company_token='".$_SESSION['cuid']."' ORDER BY location_name ASC");
                         if(mysql_num_rows($findLocations) > 0){
                             while($loc = mysql_fetch_assoc($findLocations)){
+                                if($user['user_last_ext_location'] != $loc['location_token'] && $user['user_group'] == 3){
+                                    continue;
+                                }
                                 ?>
                                 <li>
                                     <a class="change_location" data-new-location="<?php echo $loc['location_token']; ?>" data-new-location-name="<?php echo $loc['location_name']; ?>" data-new-location-state="<?php echo $loc['location_state']; ?>"><img alt="" src="assets/global/img/flags/us.png"> <?php echo $loc['location_name']; ?> (<?php echo $loc['location_state']; ?>) </a>
@@ -207,7 +210,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 <br/>
                 <?php
                 if(!empty($_GET['luid'])){
-                    if($user['user_group'] >= 1){
+                    if($user['user_group'] >= 1 && $user['user_group'] != 3){
                         ?>
                         <li class="start" style='margin-top: 7px'>
                             <a class="load_page nav-a" data-href="assets/pages/dashboard.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Dashboard">
@@ -290,7 +293,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                             </a>
                         </li>
                         <?php
-                        if($user['user_group'] <= 2){
+                        if($user['user_group'] <= 2 && $user['user_group'] != 3){
                             ?>
                             <li class="">
                                 <a class="load_page" data-href="assets/pages/manage_location.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Location Settings">
@@ -304,14 +307,33 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                         }
                         ?>
                         <?php
+                    } elseif($user['user_group'] == 3) {
+                        ?>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/customer_dashboard.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="Dashboard">
+                                <i class="icon-home"></i>
+                                <span class="title">Dashboard</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a class="load_page" data-href="assets/pages/customer_bookings.php?luid=<?php echo $_GET['luid']; ?>" data-page-title="My Bookings">
+                                <i class="icon-tag"></i>
+                                <span class="title">My Bookings</span>
+                                <span class="selected"></span>
+                                <span class="arrow "></span>
+                            </a>
+                        </li>
+                        <?php
                     } else {
                         ?>
-                        <center><h5 style="color: white;">You do not have <br/> permission to navigate.</h5></center>
+                            <center><h5 style="color: white;">You do not have <br/> permission to navigate.</h5></center>
                         <?php
                     }
                 } else {
                     ?>
-                    <center><h5 style="color: white;">You need to create your first location.</h5></center>
+                    <center><h5 style="color: white;">You need to create your first location. <?php echo $user['user_last_ext_location']; ?></h5></center>
                     <?php
                 }
                 ?>
@@ -660,27 +682,39 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
         <?php
         if($user['user_status'] == 102012){
             ?>
-        $.ajax({
-            url: 'assets/pages/reset_password.php',
-            success: function(data) {
-                $('#page_content').html(data);
-            },
-            error: function() {
-                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
-            }
-        });
+            $.ajax({
+                url: 'assets/pages/reset_password.php',
+                success: function(data) {
+                    $('#page_content').html(data);
+                },
+                error: function() {
+                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                }
+            });
+            <?php
+        } elseif($user['user_group'] == 3) {
+            ?>
+            $.ajax({
+                url: 'assets/pages/customer_dashboard.php',
+                success: function(data) {
+                    $('#page_content').html(data);
+                },
+                error: function() {
+                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                }
+            });
             <?php
         } else {
             ?>
-        $.ajax({
-            url: 'assets/pages/<?php $url = explode('?', $user['user_last_location']); echo $url[0]; ?>?luid=<?php echo $_GET['luid']; if($url[0] == 'profile.php'){echo "&".$url[1];};?><?php if($url[0] == 'event.php'){echo "&".$url[1];};?>',
-            success: function(data) {
-                $('#page_content').html(data);
-            },
-            error: function() {
-                toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
-            }
-        });
+            $.ajax({
+                url: 'assets/pages/<?php $url = explode('?', $user['user_last_location']); echo $url[0]; ?>?luid=<?php echo $_GET['luid']; if($url[0] == 'profile.php'){echo "&".$url[1];};?><?php if($url[0] == 'event.php'){echo "&".$url[1];};?>',
+                success: function(data) {
+                    $('#page_content').html(data);
+                },
+                error: function() {
+                    toastr.error("<strong>CkAI says</strong>:<br/>An unexpected error has occured. Please try again later.");
+                }
+            });
             <?php
         }
         ?>
