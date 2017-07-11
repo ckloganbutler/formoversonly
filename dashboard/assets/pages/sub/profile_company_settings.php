@@ -9,7 +9,7 @@ session_start();
 include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    $profile = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname, user_email, user_phone, user_company_name, user_website, user_pic, user_token, user_address, user_city, user_state, user_zip, user_broadcast FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $profile = mysql_fetch_array(mysql_query("SELECT user_fname, user_lname, user_email, user_phone, user_company_name, user_website, user_pic, user_token, user_address, user_city, user_state, user_zip, user_broadcast, user_stripe_sk, user_stripe_pk FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if($_SESSION['uuid'] == $profile['user_token']) {
         $editable = true;
         $view     = 'editOnly';
@@ -79,6 +79,26 @@ if(isset($_SESSION['logged'])){
                                 <div class="col-md-5 value">
                                     <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_broadcast" data-pk="<?php echo $profile['user_token']; ?>" data-type="textarea" data-placement="right" data-title="Enter new broadcast message.. This message will be displayed across all dashboards for your employees to see for the rest of today, and tomorrow." data-url="assets/app/update_settings.php?update=usr_prf">
                                         <?php echo $profile['user_broadcast']; ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row static-info">
+                                <div class="col-md-5 name">
+                                    Stripe Secret Key:
+                                </div>
+                                <div class="col-md-5 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_stripe_sk" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new Stripe SK.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_stripe_sk']; ?>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row static-info">
+                                <div class="col-md-5 name">
+                                    Stripe Publishable Key:
+                                </div>
+                                <div class="col-md-5 value">
+                                    <a class="cs_<?php echo $profile['user_token']; ?>" style="color:#333333" data-name="user_stripe_pk" data-pk="<?php echo $profile['user_token']; ?>" data-type="text" data-placement="right" data-title="Enter new Stripe PK.." data-url="assets/app/update_settings.php?update=usr_prf">
+                                        <?php echo $profile['user_stripe_pk']; ?>
                                     </a>
                                 </div>
                             </div>
