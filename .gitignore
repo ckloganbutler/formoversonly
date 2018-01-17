@@ -1,25 +1,8 @@
-
-<<<<<<< HEAD
 dashboard/assets/global/*
 dashboard/assets/app/obj/twilio-php-master/*
 dashboard/assets/app/obj/stripe-php-master/*
 dashboard/assets/admin/*
 dashboard/assets/frontend/*
-=======
-BAKUP/*
-dashboard/assets/app/upload/*
-dashboard/assets/frontend/*
-dashboard/assets/global/plugins/*
-dashboard/assets/app/obj/twilio-php-master/*
-assets/global/img/*
-dashboard/assets/global/img/*
-dashboard/assets/admin/layout/img/*
-dashboard/assets/admin/pages/media/*
->>>>>>> c11fff2ff66a74648865dc99b5ba851a92460f89
-.idea/*
-<<<<<<< HEAD
-<<<<<<< HEAD
-dashboard/assets/app/twilio-php-master/*
-
-dashboard/assets/public/testing.php
-dashboard/assets/public/testing.php
+chat/*
+bu.sh
+su.sh
