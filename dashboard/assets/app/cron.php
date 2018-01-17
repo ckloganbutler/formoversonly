@@ -12,6 +12,7 @@ $key = 'AIzaSyDxLua1UKdf-637NvG5NgBuhb0DYVQ77cg';
 $googer = new GoogleUrlApi($key);
 
 _sendText("3172018875", "[FMO]\r\nDaily CRON has begun.");
+_sendText("3176716774", "[FMO]\r\nDaily CRON has begun.");
 
 $storage   = mysql_query("SELECT storage_occupant, storage_contract_token, storage_location_token, storage_price, storage_unit_name FROM fmo_locations_storages WHERE storage_status='Occupied' OR storage_status='Delinquent'");
 if(mysql_num_rows($storage) > 0){
@@ -58,6 +59,7 @@ if(mysql_num_rows($storage) > 0){
                 } else {$dpm = cal_days_in_month(CAL_GREGORIAN, date('m', strtotime($contract['contract_next_due'])), date('Y', strtotime($contract['contract_next_due'])));}
                 mysql_query("UPDATE fmo_locations_storages_contracts SET contract_last_due='".$contract['contract_next_due']."', contract_next_due='".date('Y-m-d', strtotime($contract['contract_next_due']." + ".$dpm." days"))."' WHERE contract_token='".mysql_real_escape_string($str['storage_contract_token'])."'");
                 echo "[CRON] ".name($str['storage_occupant'])." was charged ".number_format($cost, 2)." just now \n";
+
             }
 
             if(date('Y-m-d', strtotime('today')) == date('Y-m-d', strtotime("+".($location['location_storage_days_late'] + 1)." days", strtotime($contract['contract_last_due'])))){
@@ -190,3 +192,4 @@ if(mysql_num_rows($storage) > 0){
 }
 
 _sendText("3172018875", "[FMO]\r\nDaily CRON has finished.");
+_sendText("3176716774", "[FMO]\r\nDaily CRON has finished.");
