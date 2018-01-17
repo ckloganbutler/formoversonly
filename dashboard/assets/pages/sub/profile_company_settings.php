@@ -419,7 +419,7 @@ if(isset($_SESSION['logged'])){
                             </div>
                             <div class="row static-info">
                                 <div class="col-md-5 name">
-                                    iFrame Link (DIY code)
+                                    iFrame Lead Generation Link (DIY code)
                                 </div>
                                 <div class="col-md-7 value">
                                     <p>Copy & paste this HTML code into your companies website to begin generating leads into <strong>FORMOVERSONLY&trade;</strong></p>
@@ -436,6 +436,30 @@ if(isset($_SESSION['logged'])){
                                     width="100%"
                                     height="315px"
                                     src="//www.formoversonly.com/dashboard/assets/public/leads.php?cuid=<?php echo $_SESSION['cuid']; ?>"
+                                    frameborder="0"
+                                    allowfullscreen></iframe>
+                                    <hr/>
+                                </div>
+                            </div>
+                            <div class="row static-info">
+                                <div class="col-md-5 name">
+                                    iFrame Customer Reviews Link (DIY Code)
+                                </div>
+                                <div class="col-md-7 value">
+                                    <p>Copy & paste this HTML code into your companies website to begin showing off your customer reviews from <strong>FORMOVERSONLY&trade;</strong></p>
+                                    <pre>
+&lt;iframe
+    width="560"
+    height="315"
+    src="//www.formoversonly.com/dashboard/assets/public/reviews.php?cuid=<?php echo $_SESSION['cuid']; ?>"
+    frameborder="0"
+    allowfullscreen&gt;&lt;/iframe&gt;
+                                    </pre>
+                                    <p>It'll look like this (you can test it here as well):</p>
+                                    <iframe
+                                    width="100%"
+                                    height="315px"
+                                    src="//www.formoversonly.com/dashboard/assets/public/reviews.php?cuid=<?php echo $_SESSION['cuid']; ?>"
                                     frameborder="0"
                                     allowfullscreen></iframe>
                                     <hr/>
