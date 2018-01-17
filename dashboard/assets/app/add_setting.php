@@ -101,10 +101,11 @@ if(isset($_GET['setting'])){
         $retail = number_format($bal2['unpaid'], 2);
         if(mysql_affected_rows() > 1){
             if($retail < 0){
-                $due = "Credit";
+                $due    = "Credit";
+                $retil  = "discounts given";
                 $new = number_format($retail * -1, 2);
-            } else {$due = "Due"; $new = number_format($retail, 2); }
-            timeline_str($user, stlc($storage), $_SESSION['uuid'], "Charge", " <strong>$".number_format($new - $bal, 2)."</strong> of retail sold on <strong>".date('m/d/Y', strtotime('today'))."</strong>. [By: <strong>".name($_SESSION['uuid'])."</strong>] <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>Charge: <strong>$".number_format($new - $bal, 2)."</strong></button> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>&nbsp;</button>");
+            } else {$due = "Due"; $new = number_format($retail, 2); $retil = "retail sold";}
+            timeline_str($user, stlc($storage), $_SESSION['uuid'], "Charge", " <strong>$".number_format($new - $bal, 2)."</strong> of ".$retil." on <strong>".date('m/d/Y', strtotime('today'))."</strong>. [By: <strong>".name($_SESSION['uuid'])."</strong>] <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>Charge: <strong>$".number_format($new - $bal, 2)."</strong></button> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>&nbsp;</button>");
         }
 
         /*

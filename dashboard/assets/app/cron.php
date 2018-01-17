@@ -62,7 +62,7 @@ if(mysql_num_rows($storage) > 0){
 
             }
 
-            if(date('Y-m-d', strtotime('today')) == date('Y-m-d', strtotime("+".($location['location_storage_days_late'] + 1)." days", strtotime($contract['contract_last_due'])))){
+            if(date('Y-m-d', strtotime('today')) == date('Y-m-d', strtotime("+".($location['location_storage_days_late'])." days", strtotime($contract['contract_last_due'])))){
                 // Today > last due + 5 days...if they have a balance due, they're late!
                 $bal = json_decode(file_get_contents('https://www.formoversonly.com/dashboard/assets/app/api/storage.php?type=inv_c&luid='.$luid.'&uuid='.$str['storage_occupant'].''), true);
                 $old = number_format($bal['unpaid'], 2);
@@ -98,7 +98,7 @@ if(mysql_num_rows($storage) > 0){
                     _sendText(phone2($str['storage_occupant']), $msg);
                     mysql_query("UPDATE fmo_locations_storages SET storage_status='Delinquent' WHERE storage_token='".mysql_real_escape_string($ct['contract_storage_token'])."'");
                     timeline_str($str['storage_occupant'], $str['storage_contract_token'], "SYSTEM", "Late Fee", "<strong>$".number_format($location['location_storage_late_fee'], 2)." late fee charge</strong> on <strong>".date('m/d/Y', strtotime('today'))."</strong> was systematically added. <strong>(Unit #".$str['storage_unit_name'].")</strong> [By: <strong>System</strong>]  <button style='width: 150px;' class='pull-right btn btn-xs default yellow-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default yellow-stripe'>Charge: <strong>$".number_format($location['location_storage_late_fee'], 2)."</strong></button> <button style='width: 150px;' class='pull-right btn btn-xs default yellow-stripe'>&nbsp;</button>");
-                    timeline_str($str['storage_occupant'], $luid,                          "SYSTEM", "Lock", "Unit <strong>#".$storage['storage_unit_name']."</strong> has gone delinquent and needs to be <strong class='text-danger'>locked</strong> by a manager. <span class='pull-right'>[Initiator: <strong>System</strong>]</span>");
+                    timeline_str($str['storage_occupant'], $luid,                          "SYSTEM", "Lock", "Unit <strong>#".$str['storage_unit_name']."</strong> has gone delinquent and needs to be <strong class='text-danger'>locked</strong> by a manager. <span class='pull-right'>[Initiator: <strong>System</strong>]</span>");
                     echo "[CRON] ".name($str['storage_occupant'])." was charged a late fee \n";
                 }
             }

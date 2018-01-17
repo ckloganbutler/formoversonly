@@ -124,7 +124,7 @@ if($_GET['setting'] == 'su_pymt'){
         $cuid   = $_GET['cuid'];
     }
     if($type = 'Credit/Debt'){
-        $card   = "Last 4 #: ".$charge[2];
+        $card   = "(Last 4 #: ".$charge[2].")";
     } else {$card = NULL;}
 
     $bal = json_decode(file_get_contents('https://www.formoversonly.com/dashboard/assets/app/api/storage.php?type=inv_c&luid='.$loc.'&uuid='.$user.''), true);
@@ -184,11 +184,12 @@ if($_GET['setting'] == 'add_str_item'){
     $new = number_format($bal['unpaid'], 2);
 
     if($bal['unpaid'] < 0){
-        $due = "Credit";
+        $due   = "Credit";
+        $retil = "discounts given";
         $new = number_format($bal['unpaid'] * -1, 2);
-    } else {$due = "Due"; $new = number_format($bal['unpaid'], 2); }
+    } else {$due = "Due"; $new = number_format($bal['unpaid'], 2); $retil = "retail sold";}
 
-    timeline_str($uuid, $ct, $_SESSION['uuid'], "Charge", " <strong>$".number_format($chr, 2)."</strong> of retail sold on <strong>".date('m/d/Y', strtotime('today'))."</strong> by <strong>".name($_SESSION['uuid'])."</strong> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>Charge: <strong>$".number_format($chr, 2)."</strong></button> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>&nbsp;</strong></button>");
+    timeline_str($uuid, $ct, $_SESSION['uuid'], "Charge", " <strong>$".number_format($chr, 2)."</strong> of ".$retil." on <strong>".date('m/d/Y', strtotime('today'))."</strong> by <strong>".name($_SESSION['uuid'])."</strong> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>Charge: <strong>$".number_format($chr, 2)."</strong></button> <button style='width: 150px;' class='pull-right btn btn-xs default red-stripe'>&nbsp;</strong></button>");
 }
 if($_GET['setting'] == 'alts'){
     $field = $_POST['name'];
