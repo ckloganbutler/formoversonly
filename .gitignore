@@ -1,11 +1,10 @@
 
 <<<<<<< HEAD
-dashboard/assets/global/plugins/*
+dashboard/assets/global/*
 dashboard/assets/app/obj/twilio-php-master/*
-dashboard/assets/admin/layout/img/*
-dashboard/assets/admin/pages/media/*
+dashboard/assets/app/obj/stripe-php-master/*
+dashboard/assets/admin/*
 dashboard/assets/frontend/*
-dashboard/assets/global/img/*
 =======
 BAKUP/*
 dashboard/assets/app/upload/*
@@ -21,6 +20,6 @@ dashboard/assets/admin/pages/media/*
 <<<<<<< HEAD
 <<<<<<< HEAD
 dashboard/assets/app/twilio-php-master/*
-dashboard/assets/app/obj/stripe-php-master/*
+
 dashboard/assets/public/testing.php
 dashboard/assets/public/testing.php
