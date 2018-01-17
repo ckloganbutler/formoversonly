@@ -1,9 +1,9 @@
-dashboard/assets/global/*
-dashboard/assets/app/obj/twilio-php-master/*
-dashboard/assets/app/obj/stripe-php-master/*
-dashboard/assets/admin/*
-dashboard/assets/frontend/*
-chat/*
+dashboard/assets/global
+dashboard/assets/app/obj/twilio-php-master
+dashboard/assets/app/obj/stripe-php-master
+dashboard/assets/admin
+dashboard/assets/frontend
+chat/
 bu.sh
 su.sh
-dashboard/assets/upload/*
+dashboard/assets/upload
