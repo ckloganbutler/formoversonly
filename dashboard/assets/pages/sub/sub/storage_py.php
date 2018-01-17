@@ -52,8 +52,8 @@ if(isset($_GET['e'])){
                 if($void[1] != 'VOIDED' && $void[0] != 'Invoice'){
                     $total['paid'] += $paid['payment_amount'];
                     if($void[0] == 'Credit/Debt' && $void[1] != 'Booking Fee'){
-                        $total['total']   += ($paid['payment_amount'] / 1.03) * .03;
-                        $total['cc_fees'] += ($paid['payment_amount'] / 1.03) * .03;
+                        $total['total']   += ($paid['payment_amount'] / 1 + $location['location_storage_creditcard_fee'] ) * $location['location_storage_creditcard_fee'] ;
+                        $total['cc_fees'] += ($paid['payment_amount'] / 1 + $location['location_storage_creditcard_fee'] ) * $location['location_storage_creditcard_fee'] ;
                     }
                 }
 
@@ -156,9 +156,9 @@ if(isset($_GET['e'])){
                                                 <div class="input-group margin-top-10 cc hidden margin-bottom-25">
                                                     <input onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" type="number" step='any' class="form-control" name="amt_b4" id="amt_pay" value="<?php echo number_format($total['unpaid'], 2); ?>">
                                                     <span class="input-group-addon" id="surcharge">
-                                                + <?php echo number_format($total['unpaid'] * .03, 2); ?> (<?php echo number_format($location['location_storage_creditcard_fee'] * 100, 0) ?>%)
+                                                + <?php echo number_format($total['unpaid'] * $location['location_storage_creditcard_fee'], 2); ?> (<?php echo number_format($location['location_storage_creditcard_fee'] * 100, 0) ?>%)
                                             </span>
-                                                    <input onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" type="number" step='any' class="form-control" name="amount" id="cc" value="<?php echo number_format($total['unpaid'] + $total['unpaid'] * .03, 2); ?>"  readonly>
+                                                    <input onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" type="number" step='any' class="form-control" name="amount" id="cc" value="<?php echo number_format($total['unpaid'] + $total['unpaid'] * $location['location_storage_creditcard_fee'] , 2); ?>"  readonly>
                                                 </div>
                                                 <div class="form-inline cc hidden margin-bottom-25 text-center">
                                                     <div class="form-group form-md-line-input">

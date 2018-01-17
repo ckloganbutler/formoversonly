@@ -38,8 +38,9 @@ if(isset($_GET['e']) && $_GET['e'] == 'LOL'){
             'currency' => 'usd'
         ));
 
-        echo $charge->id."|".$customer->id;
-        timeline_log($_GET['uuid'], $_SESSION['uuid'], "Card informer", "Last payment used card # <strong>".$last4."</strong>");
+        $last4 = $customer->sources->data[0]->last4;
+
+        echo $charge->id."|".$customer->id."|".$last4;
     } catch (\Stripe\Error\ApiConnection $e) {
         // Network problem, perhaps try again.
         echo "error-1";

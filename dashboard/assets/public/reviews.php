@@ -96,15 +96,30 @@ include '../app/init.php';
                                 </div>
                             </div>
                             <div class="portlet-body" id="page">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h3 class="text-center">Average: <span id="avg"></span><br/>
+
+                                        </h3>
+                                        <br/>
+                                        <div class="rateTheDash" style="margin: auto!important;">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br/>
+                                <hr/>
                                 <div class="todo-tasklist">
                                 <?php
                                 $ratings = 0; $rating_avg = 0; $rating_amt = 0;
-                                $reviews = mysql_query("SELECT review_rating, review_id, review_comments, review_event_token, review_status, review_timestamp FROM fmo_locations_events_reviews WHERE review_company_token='".$_GET['cuid']."' AND (review_status=1) ORDER BY review_timestamp DESC");
+                                $reviews = mysql_query("SELECT review_rating, review_id, review_comments, review_event_token, review_location_token, review_status, review_timestamp FROM fmo_locations_events_reviews WHERE review_company_token='".$_GET['cuid']."' AND (review_status=1) ORDER BY review_timestamp DESC");
                                 if(mysql_num_rows($reviews)) {
                                     while ($review = mysql_fetch_assoc($reviews)) {
+                                    $ratings += $review['review_rating'];
+                                    $rating_amt++;
                                     $event = mysql_fetch_array(mysql_query("SELECT event_user_token, event_name FROM fmo_locations_events WHERE event_token='" . mysql_real_escape_string($review['review_event_token']) . "'"));
                                     ?>
-                                    <div class="portfolio-block review_<?php echo $review['review_id']; ?> row">
+                                    <div class="review_<?php echo $review['review_id']; ?> row">
                                         <div class="col-md-4" style="padding-left: 0;">
                                             <div class="portfolio-text">
                                                 <img src="<?php echo picture($event_review['even_user_token']); ?>"
@@ -113,7 +128,7 @@ include '../app/init.php';
                                                     <div class="rateYoDash"
                                                          data-rateyo-rating="<?php echo $review['review_rating']; ?>" style="margin: auto!important;"></div>
                                                     <h6 style="margin-top: 5px;"><strong>CUSTOMER:</strong> <?php echo name($event['event_user_token']); ?><br/>
-                                                        <strong>EVENT:</strong> <?php echo $event['event_name']; ?><br/>
+                                                        <strong>LOCATION:</strong> <?php echo locationName($review['review_location_token']); ?><br/>
                                                         <strong>DATE:</strong> <?php echo date('m/d/Y', strtotime($review['review_timestamp'])); ?></h6>
                                                 </div>
                                             </div>
@@ -128,6 +143,7 @@ include '../app/init.php';
                                     </div>
                                     <?php
                                     }
+                                    $rating_avg = $ratings / $rating_amt;
                                 }
                                 ?>
                             </div>
@@ -175,6 +191,12 @@ include '../app/init.php';
                 halfStar: true,
                 readOnly: true
             });
+            $('.rateTheDash').rateYo({
+                halfStar: true,
+                readOnly: true,
+                rating: <?php echo $rating_avg; ?>
+            });
+            $('#avg').html('<?php echo number_format($rating_avg, 1); ?>');
         });
     </script>
     <!-- END JAVASCRIPTS -->

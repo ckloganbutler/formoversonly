@@ -123,6 +123,9 @@ if($_GET['setting'] == 'su_pymt'){
         $by     = $_GET['uuid'];
         $cuid   = $_GET['cuid'];
     }
+    if($type = 'Credit/Debt'){
+        $card   = "Last 4 #: ".$charge[2];
+    } else {$card = NULL;}
 
     $bal = json_decode(file_get_contents('https://www.formoversonly.com/dashboard/assets/app/api/storage.php?type=inv_c&luid='.$loc.'&uuid='.$user.''), true);
     $old = number_format($bal['unpaid'], 2);
@@ -161,7 +164,7 @@ if($_GET['setting'] == 'su_pymt'){
         }
     }
 
-    timeline_str($user, $loc, $by, "Payment", " <strong>$".number_format($amount, 2)." ".$type."</strong> payment on <strong>".date('m/d/Y', strtotime('today'))."</strong> was added by <strong>".name($_SESSION['uuid'])."</strong> <button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>&nbsp;</button> <button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>Payment: <strong>$".number_format($amount, 2)."</strong></button>");
+    timeline_str($user, $loc, $by, "Payment", " <strong>$".number_format($amount, 2)." ".$type."</strong> payment on <strong>".date('m/d/Y', strtotime('today'))."</strong> was added by <strong>".name($_SESSION['uuid'])."</strong> ".$card." <button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>".$due.": <strong>$".$new."</strong></button><button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>&nbsp;</button> <button style='width: 150px;' class='pull-right btn btn-xs default green-stripe'>Payment: <strong>$".number_format($amount, 2)."</strong></button>");
 
 }
 if($_GET['setting'] == 'add_str_item'){
