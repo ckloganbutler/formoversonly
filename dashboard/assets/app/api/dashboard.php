@@ -12,7 +12,7 @@ if(isset($_SESSION['uuid'])){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findCustomers = mysql_query("SELECT text_text, text_timestamp, text_by_user_token FROM fmo_locations_text_records WHERE text_location_token='".$_GET['luid']."' ORDER BY text_timestamp DESC");
+    $findCustomers = mysql_query("SELECT text_text, text_timestamp, text_by_user_token FROM fmo_locations_text_records WHERE text_location_token='".$_GET['luid']."' ORDER BY text_timestamp DESC LIMIT 30");
     $iTotalRecords = mysql_num_rows($findCustomers);
 
     $records = array();

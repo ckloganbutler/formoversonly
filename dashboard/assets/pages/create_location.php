@@ -9,11 +9,11 @@ session_start();
 include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
+    mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, 'new.php'))."new.php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            Location Administration <small>Create Location</small>
+            <strong><?php echo companyName($_SESSION['cuid']); ?> |</strong> <small>Create Location</small>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -184,10 +184,10 @@ if(isset($_SESSION['logged'])){
                                             url: 'assets/app/create_location.php',
                                             type: "POST",
                                             data: $('#create_location').serialize(),
-                                            success: function() {
+                                            success: function(data) {
                                                 toastr.success("<strong>Logan says</strong>:<br/>Nice! We've added your location to the system. Now, we will redirect you back to the Location Administration.");
                                                 $.ajax({
-                                                    url: 'assets/pages/location_admin.php',
+                                                    url: 'assets/pages/manage_location.php?luid=' + data,
                                                     success: function(data) {
                                                         $('#page_content').html(data);
                                                         document.title = "Location Administration - For Movers Only";

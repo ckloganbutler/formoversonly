@@ -9,7 +9,7 @@ session_start();
 include '../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
+    mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, 'new.php'))."new.php' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
     $location = mysql_fetch_array(mysql_query("SELECT location_name, location_phone, location_email, location_token, location_status, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_storage_access FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
     ?>
     <div class="page-content">

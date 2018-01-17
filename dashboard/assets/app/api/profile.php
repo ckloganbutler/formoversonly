@@ -24,12 +24,12 @@ if(isset($_GET) && $_GET['type'] == 'advance_amt'){
         $hours = array();
         $prev  = mysql_query("
                             SELECT advance_requested FROM fmo_users_employee_advances
-                            WHERE (advance_timestamp>='".mysql_real_escape_string($start)."' AND advance_timestamp<'".mysql_real_escape_string($end)."') AND advance_user_token='".mysql_real_escape_string($user)."'");
+                            WHERE (DATE(advance_timestamp)>='".mysql_real_escape_string($start)."' AND DATE(advance_timestamp)<='".mysql_real_escape_string($end)."') AND advance_user_token='".mysql_real_escape_string($user)."'");
 
         $hours = mysql_query("
         SELECT timeclock_user, timeclock_hours FROM fmo_users_employee_timeclock 
-        WHERE (timeclock_clockout>='".mysql_real_escape_string($start)."' AND timeclock_clockout<'".mysql_real_escape_string($end)."') AND timeclock_user='".mysql_real_escape_string($user)."'") or die(mysql_error());
-        $misc_hours = mysql_query("SELECT laborer_hours_worked FROM fmo_locations_events_laborers WHERE (laborer_timestamp>='".mysql_real_escape_string($start)."' AND laborer_timestamp<'".mysql_real_escape_string($end)."') AND laborer_user_token='".mysql_real_escape_string($user)."'");
+        WHERE (DATE(timeclock_clockout)>='".mysql_real_escape_string($start)."' AND DATE(timeclock_clockout)<='".mysql_real_escape_string($end)."') AND timeclock_user='".mysql_real_escape_string($user)."'") or die(mysql_error());
+        $misc_hours = mysql_query("SELECT laborer_hours_worked FROM fmo_locations_events_laborers WHERE (DATE(laborer_timestamp)>='".mysql_real_escape_string($start)."' AND DATE(laborer_timestamp)<='".mysql_real_escape_string($end)."') AND laborer_user_token='".mysql_real_escape_string($user)."'");
         $pay = array();
         if(mysql_num_rows($hours) > 0 || mysql_num_rows($misc_hours) > 0){
             while($work = mysql_fetch_assoc($hours)){
@@ -71,7 +71,7 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findDocuments = mysql_query("SELECT document_id, document_link, document_type, document_desc, document_by_user_token FROM fmo_users_employee_documents WHERE document_user_token='".mysql_real_escape_string($_GET['uuid'])."'");
+    $findDocuments = mysql_query("SELECT document_id, document_link, document_type, document_desc, document_by_user_token, document_timestamp FROM fmo_users_employee_documents WHERE document_user_token='".mysql_real_escape_string($_GET['uuid'])."' ORDER BY document_id DESC");
     $iTotalRecords = mysql_num_rows($findDocuments);
 
     $records = array();
@@ -79,9 +79,9 @@ if(isset($_GET) && $_GET['type'] == 'documents'){
 
     while($doc = mysql_fetch_assoc($findDocuments)) {
         $records["data"][] = array(
-            '<img height="150" width="100%" src="'.$doc['document_link'].'"/><br/><center>'.$doc['document_type'].'</center>',
-            'File Type: <strong>'.$doc['document_type'].'</strong><br/> File Description: <strong>'.$doc['document_desc'].'</strong>',
-            ''.name($doc['document_by_user_token']).'',
+            '<embed height="200" width="100%" src="'.$doc['document_link'].'"/><br/><center>'.$doc['document_type'].'</center>',
+            'File Type: <strong>'.$doc['document_type'].'</strong><br/> File Description: <strong>'.$doc['document_desc'].'</strong>  <br/> <a target="_blank" href="'.$doc['document_link'].'"><strong>Click here to view document</strong></a> <br/> File uploaded by: <strong>'.name($doc['document_by_user_token']).'</strong> <br/> File uploaded on: '.date('m/d/Y G:s A', strtotime($doc['document_timestamp'])),
+            '<button type="button" class="btn btn-xs red del_p_doc" data-id="'.$doc['document_id'].'"><i class="fa fa-times"></i> Delete document</button>',
         );
     }
 
@@ -189,7 +189,7 @@ if(isset($_GET) && $_GET['type'] == 'advances'){
             ''.$ad['advance_available'].'',
             ''.$ad['advance_requested'].'',
             ''.$ad['advance_reason'].'',
-            ''.name($ad['advance_by_user_token']).''
+            ''.name($ad['advance_by_user_token']).' <a class="btn btn-xs default red-stripe pull-right" href="//www.formoversonly.com/dashboard/assets/public/loan_auth.php?t=auth_tok&i='.$ad['advance_id'].'" target="_blank">Reprint Ticket</a>'
         );
     }
 
@@ -245,8 +245,44 @@ if(isset($_GET) && $_GET['type'] == 'labor'){
             ''.$lb['laborer_desc'].'',
             '$'.$lb['laborer_rate'].'/hr',
             ''.$lb['laborer_hours_worked'].'hrs',
-            ''.name($lb['laborer_by_user_token']).''
+            ''.name($lb['laborer_by_user_token']).' <br/><a class="btn red btn-xs del_labor" data-delete="'.$lb['laborer_id'].'"><i class="fa fa-times"></i> Delete</a>'
         );
+    }
+
+
+    $records["draw"] = $sEcho;
+    $records["recordsTotal"] = $iTotalRecords;
+    $records["recordsFiltered"] = $iTotalRecords;
+
+    echo json_encode($records);
+}
+
+if(isset($_GET) && $_GET['type'] == 'sendables'){
+    $iDisplayLength = intval($_REQUEST['length']);
+    $iDisplayStart = intval($_REQUEST['start']);
+    $sEcho = intval($_REQUEST['draw']);
+    $findDocuments = mysql_query("SELECT sendable_id, sendable_path, sendable_name, sendable_message, sendable_token FROM fmo_sendables WHERE sendable_company_token='".mysql_real_escape_string($_SESSION['cuid'])."'");
+    $iTotalRecords = mysql_num_rows($findDocuments);
+
+    $records = array();
+    $records["data"] = array();
+
+    while($doc = mysql_fetch_assoc($findDocuments)) {
+        if($_SESSION['group'] == 1 && !isset($_GET['std'])){
+            $records["data"][] = array(
+                '<embed height="200" width="300" src="assets/upload/sendables/'.$doc['sendable_token'].'.pdf"/><br/><center>'.$doc['sendable_name'].'</center>',
+                'Document: <br/><strong class="doc_'.$doc['sendable_token'].'" style="color:#333333; cursor: pointer;" data-inputclass="form-control" data-name="sendable_name" data-pk="'.$doc['sendable_token'].'" data-type="text" data-placement="right" data-title="Enter new name.." data-url="assets/app/update_settings.php?setting=sendable">'.$doc['sendable_name'].'</strong> <br/> <a target="_blank" href="assets/upload/sendables/'.$doc['sendable_token'].'.pdf"><strong>Click here to view document</strong></a>',
+                'Document Message: <br/><strong  class="doc_'.$doc['sendable_token'].'" style="color:#333333;  cursor: pointer;" data-inputclass="form-control" data-name="sendable_message" data-pk="'.$doc['sendable_token'].'" data-type="text" data-placement="right" data-title="Enter new message.." data-url="assets/app/update_settings.php?setting=sendable">'.$doc['sendable_message'].'</strong>',
+                '<button class="btn default red-stripe del_sendable" data-delete="'.$doc['sendable_token'].'" type="button"><i class="fa fa-times"></i> Delete</button> <br/> <br/> <button class="btn default blue-stripe edit" data-edit="doc_'.$doc['sendable_token'].'" data-pk="'.$doc['sendable_token'].'" type="button"><i class="fa fa-pencil"></i> Edit</button>'
+            );
+        } else {
+            $records["data"][] = array(
+                '<embed height="200" width="300" src="assets/upload/sendables/'.$doc['sendable_token'].'.pdf"/><br/><center>'.$doc['sendable_name'].'</center>',
+                'Document: <br/><strong class="doc_'.$doc['sendable_token'].'" style="color:#333333; cursor: pointer;" data-inputclass="form-control" data-name="sendable_name" data-pk="'.$doc['sendable_token'].'" data-type="text" data-placement="right" data-title="Enter new name.." data-url="assets/app/update_settings.php?setting=sendable">'.$doc['sendable_name'].'</strong> <br/> <a target="_blank" href="assets/upload/sendables/'.$doc['sendable_token'].'.pdf"><strong>Click here to view document</strong></a>',
+                'Document Message: <br/><strong  class="doc_'.$doc['sendable_token'].'" style="color:#333333;  cursor: pointer;" data-inputclass="form-control" data-name="sendable_message" data-pk="'.$doc['sendable_token'].'" data-type="text" data-placement="right" data-title="Enter new message.." data-url="assets/app/update_settings.php?setting=sendable">'.$doc['sendable_message'].'</strong >',
+            );
+        }
+
     }
 
 

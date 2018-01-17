@@ -30,7 +30,7 @@ if(isset($_SESSION['uuid'])){
         $checkRequest = explode("|", $_REQUEST['customActionName']);
         if($checkRequest[0] == 'copyTo'){
             foreach($_POST['id'] as $pk){
-                mysql_query("INSERT INTO fmo_locations_subtype (subtype_location_token, subtype_name) SELECT subtype_location_token, subtype_name FROM fmo_locations_subtypes WHERE subtype_id='".mysql_real_escape_string($pk)."'");
+                mysql_query("INSERT INTO fmo_locations_subtypes (subtype_location_token, subtype_name) SELECT subtype_location_token, subtype_name FROM fmo_locations_subtypes WHERE subtype_id='".mysql_real_escape_string($pk)."'");
                 mysql_query("UPDATE fmo_locations_subtypes SET subtype_location_token='".mysql_real_escape_string($checkRequest[1])."' WHERE subtype_id='".mysql_insert_id()."'");
                 $i++;
             }

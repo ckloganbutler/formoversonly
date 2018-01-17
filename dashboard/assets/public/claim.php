@@ -4,7 +4,7 @@
 <!--[if !IE]><!-->
 <?php
 require '../app/init.php';
-$event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+$event = mysql_fetch_array(mysql_query("SELECT event_name, event_company_token FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
 ?>
 <html lang="en">
 <!--<![endif]-->
@@ -38,10 +38,27 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
     <link rel="shortcut icon" href="../../favicon.ico"/>
 </head>
 <body class="login">
-<div class="logo">
-    <a href="">
-        <img src="../admin/layout/img/logo-big.png" alt=""/>
-    </a>
+<div class="logo" style="color: white; text-transform: uppercase; font-size: 23px; letter-spacing: .01em; word-spacing: 1px; width: auto; margin-top: 7px; font-weight: 300; margin-bottom: 0px;">
+    <?php
+    $name = companyName($event['event_company_token']);
+    if(!empty($name)){
+        $cool = explode(" ", $name);
+        $white = true; $red = false;
+        foreach($cool as $word){
+            if($white == true){
+                echo "<span style='color: #FFFFFF'>".$word."</span>";
+                $white = false;
+                $red   = true;
+            } elseif($red == true){
+                echo "<span style='color: #cb5a5e'>".$word."</span>";
+                $red   = false;
+                $white = true;
+            }
+        }
+    } else {
+
+    }
+    ?>
 </div>
 <div class="menu-toggler sidebar-toggler">
 </div>
@@ -67,7 +84,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                     </small>
                     <br/>
                 </center>
-                <form action="../app/add_setting.php?setting=claimImage&ev=<?php echo $_GET['ev']; ?>" method="POST" class="dropzone" id="my-dropzone">
+                <form action="../app/add_setting_bu.php?setting=claimImage&ev=<?php echo $_GET['ev']; ?>" method="POST" class="dropzone" id="my-dropzone">
                     <div class="dz-message text-center" data-dz-message><span class="badge badge-danger">Click here to upload images</span></div>
                 </form>
             </div>
@@ -105,12 +122,14 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                     <div class="form-group">
                         <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="Extra comments" name="comments"></textarea>
                     </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn red pull-right">
-                            Submit <i class="m-icon-swapright m-icon-white"></i>
-                        </button>
-                    </div>
                 </form>
+                <form action="../app/add_setting_bu.php?setting=claimImage&ev=<?php echo $_GET['ev']; ?>" method="POST" class="dropzone" id="my-dropzone">
+                    <div class="dz-message text-center" data-dz-message><span class="badge badge-danger">Click here to upload images</span></div>
+                </form>
+                <button type="button" class="btn red pull-right btn-block submit-claim hidden">
+                    Submit <i class="m-icon-swapright m-icon-white"></i>
+                </button>
+                <br/><br/>
             </div>
             <?php
         }
@@ -119,7 +138,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2017 &copy; For Movers Only | <strong>Powered by Logan</strong> <br/>  <small><strong>This project is in beta. If you make an account, expect issues.</strong></small>
+    2017 &copy; For Movers Only | <strong>Powered by Logan</strong> <br/>  <a target="_blank" href="https://www.fmcsa.dot.gov/protect-your-move"><strong>Your rights & responsibilities.</strong></a>
 </div>
 <!--[if lt IE 9]>
 <script src="../global/plugins/respond.min.js"></script>
@@ -173,66 +192,101 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
                 }
             };
             <?php
+        } else {
+            ?>
+            Dropzone.options.myDropzone = {
+                init: function() {
+                    this.on("addedfile", function(file) {
+                        // Create the remove button
+                        var removeButton = Dropzone.createElement("<button class='btn btn-sm btn-block'>Remove file</button>");
+
+                        // Reveal the submit button
+                        $('.submit-claim').removeClass('hidden');
+
+                        // Capture the Dropzone instance as closure.
+                        var _this = this;
+
+                        // Listen to the click event
+                        removeButton.addEventListener("click", function(e) {
+                            // Make sure the button click doesn't submit the form:
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            // Remove the file preview.
+                            _this.removeFile(file);
+                            // If you want to the delete the file on the server as well,
+                            // you can do the AJAX request here.
+                        });
+
+                        // Add the button to the file preview element.
+                        file.previewElement.appendChild(removeButton);
+                    });
+                }
+            };
+
+            $('.claim-form').validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                rules: {
+                    item: {
+                        required: true
+                    },
+                    padded: {
+                        required: true
+                    },
+                    weight: {
+                        required: true
+                    }
+                },
+
+                messages: {
+                    item: {
+                        required: "Please describe the item."
+                    },
+                    padded: {
+                        required: "Please select yes or no."
+                    },
+                    weight: {
+                        required: "Please enter item weight."
+                    }
+                },
+
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                        .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function(label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element.closest('.input-icon'));
+                },
+
+                submitHandler: function(form) {
+                    $.ajax({
+                        url: '../app/add_setting.php?setting=claim&ev=<?php echo $_GET['ev']; ?>',
+                        type: 'POST',
+                        data: $('.claim-form').serialize(),
+                        success: function(c){
+                            window.location.reload();
+                        },
+                        error: function(c){
+
+                        }
+                    })
+                }
+            });
+
+            $('.submit-claim').click(function(){
+                $('.claim-form').submit();
+            });
+            <?php
         }
         ?>
-
-
-        $('.claim-form').validate({
-            errorElement: 'span', //default input error message container
-            errorClass: 'help-block', // default input error message class
-            focusInvalid: false, // do not focus the last invalid input
-            rules: {
-                item: {
-                    required: true
-                },
-                padded: {
-                    required: true
-                },
-                weight: {
-                    required: true
-                }
-            },
-
-            messages: {
-                item: {
-                    required: "Please describe the item."
-                },
-                padded: {
-                    required: "Please select yes or no."
-                },
-                weight: {
-                    required: "Please enter item weight."
-                }
-            },
-
-            highlight: function(element) { // hightlight error inputs
-                $(element)
-                    .closest('.form-group').addClass('has-error'); // set error class to the control group
-            },
-
-            success: function(label) {
-                label.closest('.form-group').removeClass('has-error');
-                label.remove();
-            },
-
-            errorPlacement: function(error, element) {
-                error.insertAfter(element.closest('.input-icon'));
-            },
-
-            submitHandler: function(form) {
-                $.ajax({
-                    url: '../app/add_setting.php?setting=claim&ev=<?php echo $_GET['ev']; ?>',
-                    type: 'POST',
-                    data: $('.claim-form').serialize(),
-                    success: function(c){
-                        window.location.reload();
-                    },
-                    error: function(c){
-
-                    }
-                })
-            }
-        });
     });
 </script>
 </body>

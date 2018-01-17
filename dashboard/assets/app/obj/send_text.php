@@ -21,7 +21,7 @@ function _sendText($who, $text){
 
     try {
         $client->messages->create(
-            '+1'.$who,
+            '+1'. preg_replace('/[^A-Za-z0-9\-]/', '', $who),
             array(
                 'from' => '+1'.$chosen,
                 'body' => $text

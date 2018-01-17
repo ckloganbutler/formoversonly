@@ -40,8 +40,8 @@
 </div>
 <div class="menu-toggler sidebar-toggler">
 </div>
-<div class="content">
-    <div class="login-form" >
+<div class="content" style="width: 390px!important;">
+    <div class="login-form">
         <div id="alert-msg">
             <?php
             if(isset($_GET['err'])){
@@ -128,7 +128,7 @@
                     here </a>
                 to reset your password.
             </p>
-        </div><!--
+        </div>
         <div class="create-account">
             <p>
                 Don't have an account yet ?&nbsp;
@@ -136,25 +136,25 @@
                 <a href="javascript:;" id="register-btn">
                     Create an account </a>
             </p>
-        </div>-->
+        </div>
     </div>
     <!-- END LOGIN FORM -->
     <!-- BEGIN FORGOT PASSWORD FORM -->
-    <form class="forget-form" action="" method="post">
+    <form class="forget-form forgot-container" action="" method="post">
         <h3>Forget Password ?</h3>
         <p>
-            Enter your e-mail address below to reset your password.
+            Enter your phone number below to reset your password.
         </p>
         <div class="form-group">
             <div class="input-icon">
-                <i class="fa fa-envelope"></i>
-                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email"/>
+                <i class="fa fa-phone"></i>
+                <input class="form-control placeholder-no-fix" id="forgot_phone" type="text" autocomplete="off" placeholder="phone" name="phone"/>
             </div>
         </div>
         <div class="form-actions">
             <button type="button" id="back-btn" class="btn">
                 <i class="m-icon-swapleft"></i> Back </button>
-            <button type="submit" class="btn red pull-right">
+            <button type="button" class="btn red pull-right urs">
                 Submit <i class="m-icon-swapright m-icon-white"></i>
             </button>
         </div>
@@ -317,7 +317,7 @@
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2017 &copy; For Movers Only | Powered <a href="#">HTT 5.0</a> <br/>  <small><strong><a href="tos.php">Terms of Service</a> &nbsp; [+] &nbsp; <a href="pp.php">Privacy Policy</a></strong></small>
+    <strong>For Movers Only&trade;</strong> - Moving Management Software <br/> &copy; 2016-2017 <a target="_blank" href="//www.captialkingdom.com">CK, Inc.</a> <br/>  <small><strong><a href="tos.php">Terms of Service</a> &nbsp; [+] &nbsp; <a href="pp.php">Privacy Policy</a></strong></small>
 </div>
 <!--[if lt IE 9]>
 <script src="dashboard/assets/global/plugins/respond.min.js"></script>
@@ -339,6 +339,22 @@
         Metronic.init();
         Layout.init();
         Login.init();
+
+        $('.urs').on('click', function() {
+            $.ajax({
+                url: 'dashboard/assets/app/texting.php?txt=urs',
+                type: 'POST',
+                data: {
+                    p: $('#forgot_phone').val()
+                },
+                success: function(data) {
+                    $('.forgot-container').html(data);
+                },
+                error: function() {
+                    toastr.error("<strong>Logan says:</strong><br/>Oops..that didnt work properly. Try again?");
+                }
+            })
+        });
 
         $('.admin-form').validate({
             errorElement: 'span', //default input error message container

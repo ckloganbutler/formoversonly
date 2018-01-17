@@ -11,10 +11,11 @@ include '../app/init.php';
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
     $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $uuidperm = mysql_fetch_array(mysql_query("SELECT user_esc_permissions FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
-            <strong>Employees</strong>
+            <strong>Employees </strong>
         </h3>
         <div class="page-bar">
             <ul class="page-breadcrumb">
@@ -36,27 +37,36 @@ if(isset($_SESSION['logged'])){
                             <i class="icon-earphones-alt theme-font bold"></i>
                             <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span>  <small>Employees</small>
                         </div>
-                        <?php
-                        if($_SESSION['group'] <= 2){
+                        <div class="actions btn-set">
+                            <strong>Show: &nbsp;</strong>
+                            <?php
+                            if(isset($_GET['sort'])){
+                                $sorting = explode('_', $_GET['sort']);
+                            }
                             ?>
-                            <div class="actions btn-set">
+                            <a class="btn btn-xs green load_page" data-page-title="Employees - Active Only" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>&sort=active"><?php if($_GET['sort'] == 'active' || !isset($_GET['sort'])){echo "<i class='fa fa-check'></i>";} ?> Active</a>
+                            <a class="btn btn-xs yellow load_page" data-page-title="Employees - Inactive Only" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>&sort=inactive"><?php if($_GET['sort'] == 'inactive'){echo "<i class='fa fa-check'></i>";} ?> Inactive</a>
+                            <a class="btn btn-xs red load_page" data-page-title="Employees - Terminated Only" data-href="assets/pages/employees.php?luid=<?php echo $_GET['luid']; ?>&sort=terminated"><?php if($_GET['sort'] == 'terminated'){echo "<i class='fa fa-check'></i>";} ?> Terminated</a>
+                            <?php
+                            if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_employees_create") !== false){
+                                ?>
                                 <a class="btn default red-stripe" data-toggle="modal" href="#create_employees">
                                     <i class="fa fa-plus"></i> Add new employee
                                 </a>
-                            </div>
-                            <?php
-                        }
-                        ?>
+                                <?php
+                            }
+                            ?>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">
                             <div class="tab-pane active" id="employees_tab">
                                 <div class="table-container">
-                                    <table class="table table-striped table-bordered table-hover" id="employees">
+                                    <table class="table table-striped table-hover" id="employees">
                                         <thead>
                                         <tr role="row" class="heading">
                                             <th width="18%">
-                                                <input type="checkbox" class="group-checkable"> Employee Position
+                                                Employee Position
                                             </th>
                                             <th>
                                                 Employee Name & ID
@@ -67,24 +77,73 @@ if(isset($_SESSION['logged'])){
                                             <th>
                                                 Employee Email
                                             </th>
-                                            <th width="2.5%">
-                                                View & edit
-                                            </th>
+                                            <?php
+                                            if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_employees_view_profile") !== false){
+                                                ?>
+                                                <th width="2.5%">
+                                                    View & edit
+                                                </th>
+                                                <?php
+                                            }
+                                            ?>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <?php
-                                        $findEmployees = mysql_query("SELECT user_id, user_fname, user_setup, user_lname, user_token, user_group, user_phone, user_email, user_last_ext_location, user_employer_location, user_status FROM fmo_users WHERE user_employer_location='".mysql_real_escape_string($_GET['luid'])."' OR user_group=1 AND user_token='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY user_lname ASC");
+                                        $findEmployees = mysql_query("SELECT user_id, user_token, user_fname, user_setup, user_lname, user_token, user_group, user_phone, user_email, user_last_ext_location, user_employer_location, user_status FROM fmo_users WHERE user_employer_location='".mysql_real_escape_string($_GET['luid'])."' OR user_group=1 AND user_token='".mysql_real_escape_string($_SESSION['uuid'])."' ORDER BY user_lname ASC");
                                         while($emp = mysql_fetch_assoc($findEmployees)) {
-                                            if($emp['user_fname'] == 'Logan'){
-                                                $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
-                                            } else {$warning = NULL; $new = NULL;}
+                                            if($_SESSION['group'] == 1 || $_SESSION['group'] == 2){
+                                                $hours = 0;
+                                                $other = 0;
+                                                $gross = 0;
+                                                $laborers  = mysql_query("SELECT laborer_user_token, laborer_event_token, laborer_rate, laborer_hours_worked, laborer_tip, laborer_desc, laborer_timestamp FROM fmo_locations_events_laborers WHERE laborer_user_token='".mysql_real_escape_string($emp['user_token'])."' AND (laborer_timestamp>='".mysql_real_escape_string(date('Y-m-d', strtotime("today - 5 days")))."' AND laborer_timestamp<='".mysql_real_escape_string(date('Y-m-d', strtotime("today")))."')");
+                                                if(mysql_num_rows($laborers) > 0){
+                                                    while($labor = mysql_fetch_assoc($laborers)){
+                                                        $events = mysql_query("SELECT event_date_start, event_name, event_id FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($labor['laborer_event_token'])."' AND (event_date_start>='".mysql_real_escape_string(date('Y-m-d', strtotime("today - 5 days")))."' AND event_date_end<='".mysql_real_escape_string(date('Y-m-d', strtotime("today")))."')");
+                                                        if(mysql_num_rows($events) > 0){
+                                                            while($event = mysql_fetch_assoc($events)){
+                                                                $pay   =  $labor['laborer_rate'] * $labor['laborer_hours_worked'];
+                                                                $gross += $pay;
+                                                                $hours += $labor['laborer_hours_worked'];
+                                                                $other += $labor['laborer_tip'];
+                                                            }
+                                                        } elseif($labor['laborer_user_token'] == $labor['laborer_event_token']) {
+                                                            $pay   =  $labor['laborer_rate'] * $labor['laborer_hours_worked'];
+                                                            $gross += $pay;
+                                                            $hours += $labor['laborer_hours_worked'];
+                                                            $other += $labor['laborer_tip'];
+
+                                                        } else {
+                                                            continue;
+                                                        }
+                                                    }
+                                                }
+                                                $timeClockHours = 0;
+                                                $timeclock = mysql_query("SELECT timeclock_id, timeclock_clockin, timeclock_clockout, timeclock_hours, timeclock_timestamp FROM fmo_users_employee_timeclock WHERE timeclock_user='".mysql_real_escape_string($emp['user_token'])."' AND (timeclock_clockout>='".mysql_real_escape_string(date('Y-m-d', strtotime("today - 5 days")))."' AND timeclock_clockout<='".mysql_real_escape_string(date('Y-m-d', strtotime("today")))."') ORDER BY timeclock_timestamp DESC");
+                                                if(mysql_num_rows($timeclock) > 0){
+                                                    while($tc = mysql_fetch_assoc($timeclock)){
+                                                        $timeClockHours += $tc['timeclock_hours'];
+                                                    }
+                                                }
+                                                if($timeClockHours + $hours > 30.00){
+                                                    $warning = '<img src="assets/admin/layout/img/warning.png" alt="TOO MANY HOURS" height="16px" width="16px"/>';
+                                                }else {$warning = NULL;}
+
+                                            }
                                             if($emp['user_group'] == 1) {
                                                 $status_tag = '<span class="label label-sm label-danger">ADMINISTRATOR</span>';
                                                 $num        = '<span class="label label-sm label-danger"><strong>#'.$emp['user_id'].'</strong></span>';
+                                                if($_SESSION['group'] != 1 || $_SESSION['group'] != "DJ5RELUMTA7QPHWJK"){
+                                                    continue;
+                                                }
                                             } elseif($emp['user_group'] == 2) {
-                                                $status_tag = '<span class="label label-sm label-success"> MANAGER</span>';
-                                                $num        = '<span class="label label-sm label-success"><strong>#'.$emp['user_id'].'</strong></span>';
+                                                if($emp['user_token'] == 'DJ5RELUMTA7QPHWJK'){
+                                                    $status_tag = '<span class="label label-sm label-danger"> DEVELOPER</span>';
+                                                    $num        = '<span class="label label-sm label-danger"><strong>#'.$emp['user_id'].'</strong></span>';
+                                                } else {
+                                                    $status_tag = '<span class="label label-sm label-success"> MANAGER</span>';
+                                                    $num        = '<span class="label label-sm label-success"><strong>#'.$emp['user_id'].'</strong></span>';
+                                                }
                                             } elseif($emp['user_group'] == 4) {
                                                 $status_tag = '<span class="label label-sm label-info">CUSTOMER SERVICE</span>';
                                                 $num        = '<span class="label label-sm label-info"><strong>#'.$emp['user_id'].'</strong></span>';
@@ -92,18 +151,27 @@ if(isset($_SESSION['logged'])){
                                                 $status_tag = '<span class="label label-sm label-warning">DRIVER</span>';
                                                 $num        = '<span class="label label-sm label-warning"><strong>#'.$emp['user_id'].'</strong></span>';
                                             } elseif($emp['user_group'] == 5.2) {
-                                                $status_tag = '<span class="label label-sm label-warning2">HELPER</span>';
-                                                $num        = '<span class="label label-sm label-warning2"><strong>#'.$emp['user_id'].'</strong></span>';
+                                                $status_tag = '<span class="label label-sm badge-purple">HELPER</span>';
+                                                $num        = '<span class="label label-sm badge-purple"><strong>#'.$emp['user_id'].'</strong></span>';
                                             } elseif($emp['user_group'] == 5.3) {
                                                 $status_tag = '<span class="label label-sm label-default">CREWMAN/OTHER</span>';
                                                 $num        = '<span class="label label-sm label-default"><strong>#'.$emp['user_id'].'</strong></span>';
                                             }
                                             if($emp['user_status'] == 0){
                                                 $status     = '<span class="label label-sm label-warning">INACTIVE</span>';
+                                                if($_GET['sort'] != 'inactive'){
+                                                    continue;
+                                                }
                                             } elseif($emp['user_status'] == 1){
                                                 $status     = '<span class="label label-sm label-success">ACTIVE</span>';
+                                                if($_GET['sort'] != 'active' && isset($_GET['sort'])){
+                                                    continue;
+                                                }
                                             } elseif($emp['user_status'] == 2){
                                                 $status     = '<span class="label label-sm label-danger">TERMINATED</span>';
+                                                if($_GET['sort'] != 'terminated'){
+                                                    continue;
+                                                }
                                             }
                                             if($emp['user_setup'] == 0){
                                                 $new        = '<span class="label label-sm label-warning">NEW HIRE</span>';
@@ -111,20 +179,34 @@ if(isset($_SESSION['logged'])){
                                             ?>
                                             <tr>
                                                 <td>
-                                                    <input type="checkbox" name="pk" value="<?php echo $emp['user_token']; ?>"> <?php echo $status_tag; ?> <?php echo $status; ?>
+                                                    <?php echo $status_tag; ?> <?php echo $status; ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo $emp['user_lname']; ?>, <?php echo $emp['user_fname']; ?> <?php echo $num; ?> <?php echo $warning; ?> <?php echo $new; ?>
+                                                    <strong><?php echo $emp['user_lname']; ?>, <?php echo $emp['user_fname']; ?></strong> <?php echo $num; ?> <?php echo $new; ?>
+                                                    <?php
+                                                    if($_SESSION['group'] == 1 || $_SESSION['group'] == 2){
+                                                        if($timeClockHours + $hours > 30.00){
+                                                            echo $warning." <strong>Hours</strong>: ".number_format($timeClockHours + $hours, 2);
+                                                        }
+                                                    }
+                                                    ?>
                                                 </td>
                                                 <td>
-                                                    <?php echo clean_phone($emp['user_phone']); ?>
+                                                    <a href="tel:<?php echo clean_phone($emp['user_phone']); ?>"><?php echo clean_phone($emp['user_phone']); ?></a>
                                                 </td>
                                                 <td>
-                                                    <?php echo secret_mail($emp['user_email']); ?>
+                                                    <?php echo $emp['user_email']; ?>
                                                 </td>
-                                                <td>
-                                                    <a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid=<?php echo $emp['user_token']; ?>&luid=<?php echo $emp['user_employer_location']; ?>" data-page-title="<?php echo $emp["user_fname"].' '.$profile["user_lname"]; ?>"><i class="fa fa-edit"></i> View profile</a>
-                                                </td>
+                                                <?php
+                                                if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_employees_view_profile") !== false){
+                                                    ?>
+                                                    <td>
+                                                        <a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid=<?php echo $emp['user_token']; ?>&luid=<?php echo $emp['user_employer_location']; ?>" data-page-title="<?php echo $emp["user_fname"].' '.$emp["user_lname"]; ?>"><i class="fa fa-edit"></i> View profile</a>
+                                                    </td>
+                                                    <?php
+                                                }
+                                                ?>
+
                                             </tr>
                                             <?php
                                         }
@@ -326,9 +408,10 @@ if(isset($_SESSION['logged'])){
     <script type="text/javascript">
         $(document).ready(function() {
             $("#employees").dataTable({
-                "order": [[ 0, "asc" ]],
+                "order": [[ 1, "asc" ]],
                 "bFilter" : true,
                 "bLengthChange": true,
+                "pageLength": 50,
                 "bPaginate": true,
                 "info": true,
                 "stateSave": true
@@ -347,11 +430,11 @@ if(isset($_SESSION['logged'])){
                     },
                     phone: {
                         required: true,
-                        remote: 'assets/app/search_phone.php'
+                        remote: 'assets/app/search_phone.php?e=employee'
                     },
                     email: {
                         required: false,
-                        remote: 'assets/app/search_email.php'
+                        remote: 'assets/app/search_email.php?e=employee'
                     },
                     address: {
                         required: true

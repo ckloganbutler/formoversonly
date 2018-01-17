@@ -12,7 +12,7 @@ if(isset($_SESSION['uuid'])){
     $iDisplayLength = intval($_REQUEST['length']);
     $iDisplayStart = intval($_REQUEST['start']);
     $sEcho = intval($_REQUEST['draw']);
-    $findVendors = mysql_query("SELECT vendor_id, vendor_active, vendor_name, vendor_type, vendor_phone, vendor_contact, vendor_account_ref, vendor_extra_ref FROM fmo_locations_vendors WHERE vendor_location_token='".mysql_real_escape_string($_GET['luid'])."'");
+    $findVendors = mysql_query("SELECT vendor_id, vendor_active, vendor_name, vendor_type, vendor_phone, vendor_contact, vendor_account_ref, vendor_extra_ref FROM fmo_locations_vendors WHERE vendor_location_token='".mysql_real_escape_string($_GET['luid'])."' ORDER BY vendor_name ASC");
     $iTotalRecords = mysql_num_rows($findVendors);
 
     $records = array();

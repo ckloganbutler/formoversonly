@@ -1928,6 +1928,11 @@ Custom Bootstrap Badges
   background-image: none;
 }
 
+.badge-purple {
+  background-color: #8877a9;
+  background-image: none;
+}
+
 /* Fix badge position for navs */
 .nav.nav-pills > li > a > .badge,
 .nav.nav-stacked > li > a > .badge {
@@ -1983,10 +1988,6 @@ Customized Bootstrap Buttons
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
-}
-
-.btn + .btn {
-  margin-left: 5px;
 }
 
 .btn-default {
@@ -4674,7 +4675,6 @@ Portlets
   margin: 5px 0 0 1px;
   border: 0;
   padding: 8px 10px;
-  color: #fff;
 }
 .portlet > .portlet-title > .nav-tabs > li.active > a, .portlet > .portlet-title > .nav-tabs > li:hover > a {
   color: #333;

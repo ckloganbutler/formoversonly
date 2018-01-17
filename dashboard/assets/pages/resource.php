@@ -48,199 +48,35 @@ if(isset($_SESSION['logged'])){
                                 <div class="portlet">
                                     <div class="portlet-title">
                                         <div class="caption">
-                                            <i class="fa fa-gift"></i>General
+                                            <i class="fa fa-paperclip"></i> Company Documents
                                         </div>
                                         <div class="tools">
                                             <a href="javascript:;" class="collapse" data-original-title="" title="">
                                             </a>
-                                            <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
-                                            </a>
-                                            <a href="javascript:;" class="reload" data-original-title="" title="">
-                                            </a>
-                                            <a href="javascript:;" class="remove" data-original-title="" title="">
-                                            </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Sample text with lead body</h3>
-                                                <p class="lead">
-                                                    Lead body. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Sample text</h3>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                                <p>
-                                                    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                                </p>
-                                                <p>
-                                                    Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Texts</h3>
-                                                <p class="muted">
-                                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.
-                                                </p>
-                                                <p class="text-warning">
-                                                    Etiam porta sem malesuada magna mollis euismod.
-                                                </p>
-                                                <p class="text-error">
-                                                    Donec ullamcorper nulla non metus auctor fringilla.
-                                                </p>
-                                                <p class="text-info">
-                                                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.
-                                                </p>
-                                                <p class="text-success">
-                                                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Headings</h3>
-                                                <h1>h1. Heading 1</h1>
-                                                <h2>h2. Heading 2</h2>
-                                                <h3>h3. Heading 3</h3>
-                                                <h4>h4. Heading 4</h4>
-                                                <h5>h5. Heading 5</h5>
-                                                <h6>h6. Heading 6</h6>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Address</h3>
-                                                <div class="well">
-                                                    <address>
-                                                        <strong>Loop, Inc.</strong><br>
-                                                        795 Park Ave, Suite 120<br>
-                                                        San Francisco, CA 94107<br>
-                                                        <abbr title="Phone">P:</abbr> (234) 145-1810 </address>
-                                                    <address>
-                                                        <strong>Full Name</strong><br>
-                                                        <a href="mailto:#">
-                                                            first.last@email.com </a>
-                                                    </address>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Some more text here</h3>
-                                                <p>
-                                                    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                                </p>
-                                                <p>
-                                                    Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><div class="portlet">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="fa fa-gift"></i>General
-                                        </div>
-                                        <div class="tools">
-                                            <a href="javascript:;" class="collapse" data-original-title="" title="">
-                                            </a>
-                                            <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title="">
-                                            </a>
-                                            <a href="javascript:;" class="reload" data-original-title="" title="">
-                                            </a>
-                                            <a href="javascript:;" class="remove" data-original-title="" title="">
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Sample text with lead body</h3>
-                                                <p class="lead">
-                                                    Lead body. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Sample text</h3>
-                                                <p>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales at. Nulla tellus elit, varius non commodo eget, mattis vel eros. In sed ornare nulla.
-                                                </p>
-                                                <p>
-                                                    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                                </p>
-                                                <p>
-                                                    Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Texts</h3>
-                                                <p class="muted">
-                                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.
-                                                </p>
-                                                <p class="text-warning">
-                                                    Etiam porta sem malesuada magna mollis euismod.
-                                                </p>
-                                                <p class="text-error">
-                                                    Donec ullamcorper nulla non metus auctor fringilla.
-                                                </p>
-                                                <p class="text-info">
-                                                    Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis.
-                                                </p>
-                                                <p class="text-success">
-                                                    Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                                                </p>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Headings</h3>
-                                                <h1>h1. Heading 1</h1>
-                                                <h2>h2. Heading 2</h2>
-                                                <h3>h3. Heading 3</h3>
-                                                <h4>h4. Heading 4</h4>
-                                                <h5>h5. Heading 5</h5>
-                                                <h6>h6. Heading 6</h6>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h3>Address</h3>
-                                                <div class="well">
-                                                    <address>
-                                                        <strong>Loop, Inc.</strong><br>
-                                                        795 Park Ave, Suite 120<br>
-                                                        San Francisco, CA 94107<br>
-                                                        <abbr title="Phone">P:</abbr> (234) 145-1810 </address>
-                                                    <address>
-                                                        <strong>Full Name</strong><br>
-                                                        <a href="mailto:#">
-                                                            first.last@email.com </a>
-                                                    </address>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h3>Some more text here</h3>
-                                                <p>
-                                                    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                                </p>
-                                                <p>
-                                                    Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec sed odio dui.
-                                                </p>
-                                            </div>
+                                        <div class="table-container">
+                                            <form role="form" id="add_sendables">
+                                                <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/profile.php?type=sendables&std=true&uuid=<?php echo $_GET['uuid']; ?>">
+                                                    <thead>
+                                                    <tr role="row" class="heading">
+                                                        <th width="12%">
+                                                            Document
+                                                        </th>
+                                                        <th >
+                                                            Document Name
+                                                        </th>
+                                                        <th>
+                                                            Document Message
+                                                        </th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -251,6 +87,33 @@ if(isset($_SESSION['logged'])){
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.datatable').each(function(){
+                var url = $(this).attr('data-src');
+                $(this).DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    //"dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
+                    "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "info": false,
+                    "ajax": {
+                        "url": url, // ajax source
+                    },
+                    "lengthMenu": [
+                        [10, 20, 50, 100, 150, -1],
+                        [10, 20, 50, 100, 150, "All"] // change per page values here
+                    ],
+                    "pageLength": 10, // default record count per page
+                    "order": [
+                        [1, "asc"]
+                    ]// set first column as a default sort by asc
+                });
+            });
+        });
+    </script>
     <?php
 } else {
     header("Location: ../../../index.php?err=no_access");

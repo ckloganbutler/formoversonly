@@ -11,6 +11,7 @@ include '../app/init.php';
 if(isset($_SESSION['logged'])){
     mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
     $location = mysql_fetch_array(mysql_query("SELECT location_name FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+    $uuidperm = mysql_fetch_array(mysql_query("SELECT user_esc_permissions FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
     ?>
     <div class="page-content">
         <h3 class="page-title">
@@ -37,16 +38,22 @@ if(isset($_SESSION['logged'])){
                             <span class="caption-subject font-red bold uppercase"><?php echo $location['location_name']; ?></span> <span class="font-red">|</span>  <small>Marketing</small>
                         </div>
                         <div class="actions btn-set">
-                            <a class="btn default red-stripe" data-toggle="modal" href="#add_marketing">
-                                <i class="fa fa-plus"></i> Add new marketer
-                            </a>
+                            <?php
+                            if(strpos($uuidperm['user_esc_permissions'], "view_marketing_create") !== false){
+                                ?>
+                                <a class="btn default red-stripe" data-toggle="modal" href="#add_marketing">
+                                    <i class="fa fa-plus"></i> Add new marketer
+                                </a>
+                                <?php
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="portlet-body">
                         <div class="tab-content">
                             <div class="tab-pane active" id="employees_tab">
                                 <div class="table-container">
-                                    <table class="table table-striped table-bordered table-hover" id="marketers">
+                                    <table class="table table-striped table-hover" id="marketers">
                                         <thead>
                                         <tr role="row" class="heading">
                                             <th width="18%">

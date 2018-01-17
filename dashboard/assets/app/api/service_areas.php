@@ -94,7 +94,7 @@ if($_GET['type'] == 'zipcodes'){
         } else {
             if ($_REQUEST['customActionName'] == 'Delete') {
                 foreach ($_POST['id'] as $pk) {
-                    mysql_query("DELETE FROM fmo_loctions_zipcodes WHERE zipcode_id='" . mysql_real_escape_string($pk) . "'");
+                    mysql_query("DELETE FROM fmo_locations_zipcodes WHERE zipcode_id='" . mysql_real_escape_string($pk) . "'");
                     $i++;
                 }
                 $records["customActionMessage"] = $i . " record(s) were deleted successfully.";

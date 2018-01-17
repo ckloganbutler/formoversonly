@@ -9,7 +9,7 @@ include '../app/init.php';
 
 if(isset($_GET['t']) && $_GET['t'] == 'auth_tok'){
     $id   = $_GET['i'];
-    $loan = mysql_query("SELECT advance_user_token, advance_requested, advance_reason FROM fmo_users_employee_advances WHERE advance_id='".mysql_real_escape_string($id)."'");
+    $loan = mysql_query("SELECT advance_id, advance_user_token, advance_requested, advance_reason, advance_by_user_token FROM fmo_users_employee_advances WHERE advance_id='".mysql_real_escape_string($id)."'");
     if(mysql_num_rows($loan) > 0){
         $l = mysql_fetch_array($loan);
         $refStart                = new DateTime('2017-01-02');
@@ -36,11 +36,11 @@ if(isset($_GET['t']) && $_GET['t'] == 'auth_tok'){
         &nbsp; &nbsp; &nbsp; &nbsp;  2.) <strong>The amount requested here will be available 1 day after signing this request form.</strong> <br/>
         <br/><br/><br/>
 
-        X _________________________________ Date: ______________ Check Number Issued: <br/>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( employee signature ) <br/>
+        X _________________________________ Date: ______________ Loan Ticket Number: <strong><?php echo $l['advance_id']; ?></strong><br/>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( <?php echo name($l['advance_user_token']); ?> ) <br/>
         <br/><br/>
-        X _________________________________ Date: ______________ <br/>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( employer signature ) <br/>
+        X _________________________________ Date: ______________ Check Number Issued: <br/>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( <?php echo name($l['advance_by_user_token']); ?> ) <br/>
         </body>
         <?php
     }

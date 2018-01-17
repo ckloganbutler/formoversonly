@@ -48,7 +48,159 @@ if(isset($_SESSION['logged'])){
                     <div class="portlet-body">
                         <div class="tab-content">
                             <div class="tab-pane" id="accidents">
-                                // todo: add accidents
+                                <div class="portlet">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="fa fa-file-o"></i> Asset Accidents
+                                        </div>
+                                        <div class="actions">
+                                            <a class="btn default red-stripe show_form" data-show="#add_accident">
+                                                <i class="fa fa-plus"></i>
+                                                <span class="hidden-480">Add new accident</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div class="table-container">
+                                            <form role="form" id="add_accidents">
+                                                <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/assets.php?type=accidents&luid=<?php echo $_GET['luid']; ?>">
+                                                    <thead>
+                                                    <tr role="row" class="filter" style="display: none;" id="add_accident">
+                                                        <td>
+                                                            <input type="text" class="form-control input-sm datepick" name="datetime">
+                                                        </td>
+                                                        <td>
+                                                            <select name="asset" class="form-control input-sm">
+                                                                <option disabled selected value="">Select one..</option>
+                                                                <?php
+                                                                $assets = mysql_query("SELECT asset_id, asset_desc FROM fmo_locations_assets WHERE asset_location_token='".$_GET['luid']."' ORDER BY asset_desc ASC");
+                                                                if(mysql_num_rows($assets) > 0){
+                                                                    while($asset = mysql_fetch_assoc($assets)){
+                                                                        ?>
+                                                                        <option value="<?php echo $asset['asset_desc']; ?>"><?php echo $asset['asset_desc']; ?></option>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                            </select>
+                                                        </td>
+                                                        <td class="form-inline">
+                                                            <input type="text" class="form-control input-sm" style="width: 33%!important;" name="address" placeholder="Street">
+                                                            <input type="text" class="form-control input-sm" style="width: 33%!important;" name="city" placeholder="City">
+                                                            <select class="form-control input-sm" style="width: 33%!important;" name="state">
+                                                                <option disabled selected value="">State</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AK">Alaska</option>
+                                                                <option value="AZ">Arizona</option>
+                                                                <option value="AR">Arkansas</option>
+                                                                <option value="CA">California</option>
+                                                                <option value="CO">Colorado</option>
+                                                                <option value="CT">Connecticut</option>
+                                                                <option value="DE">Delaware</option>
+                                                                <option value="DC">District Of Columbia</option>
+                                                                <option value="FL">Florida</option>
+                                                                <option value="GA">Georgia</option>
+                                                                <option value="HI">Hawaii</option>
+                                                                <option value="ID">Idaho</option>
+                                                                <option value="IL">Illinois</option>
+                                                                <option value="IN">Indiana</option>
+                                                                <option value="IA">Iowa</option>
+                                                                <option value="KS">Kansas</option>
+                                                                <option value="KY">Kentucky</option>
+                                                                <option value="LA">Louisiana</option>
+                                                                <option value="ME">Maine</option>
+                                                                <option value="MD">Maryland</option>
+                                                                <option value="MA">Massachusetts</option>
+                                                                <option value="MI">Michigan</option>
+                                                                <option value="MN">Minnesota</option>
+                                                                <option value="MS">Mississippi</option>
+                                                                <option value="MO">Missouri</option>
+                                                                <option value="MT">Montana</option>
+                                                                <option value="NE">Nebraska</option>
+                                                                <option value="NV">Nevada</option>
+                                                                <option value="NH">New Hampshire</option>
+                                                                <option value="NJ">New Jersey</option>
+                                                                <option value="NM">New Mexico</option>
+                                                                <option value="NY">New York</option>
+                                                                <option value="NC">North Carolina</option>
+                                                                <option value="ND">North Dakota</option>
+                                                                <option value="OH">Ohio</option>
+                                                                <option value="OK">Oklahoma</option>
+                                                                <option value="OR">Oregon</option>
+                                                                <option value="PA">Pennsylvania</option>
+                                                                <option value="RI">Rhode Island</option>
+                                                                <option value="SC">South Carolina</option>
+                                                                <option value="SD">South Dakota</option>
+                                                                <option value="TN">Tennessee</option>
+                                                                <option value="TX">Texas</option>
+                                                                <option value="UT">Utah</option>
+                                                                <option value="VT">Vermont</option>
+                                                                <option value="VA">Virginia</option>
+                                                                <option value="WA">Washington</option>
+                                                                <option value="WV">West Virginia</option>
+                                                                <option value="WI">Wisconsin</option>
+                                                                <option value="WY">Wyoming</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="form-control input-sm" name="deaths" placeholder="0"></td>
+                                                        <td><input type="text" class="form-control input-sm" name="nfi" placeholder="0"></td>
+                                                        <td>
+                                                            <select name="hazmat" class="form-control input-sm">
+                                                                <option disabled selected value="">Select one..</option>
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No">No</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="text" class="form-control input-sm" name="driver" placeholder="<?php echo name($_SESSION['uuid']); ?>"></td>
+                                                        <td>
+                                                            <select name="copies" class="form-control input-sm">
+                                                                <option disabled selected value="">Select one..</option>
+                                                                <option value="Yes">Yes</option>
+                                                                <option value="No">No</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-sm red margin-bottom add_accident"><i class="fa fa-download"></i> Save</button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr role="row" class="heading">
+                                                        <th style="width: 20%">
+                                                            Date & Time
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            Asset
+                                                        </th>
+                                                        <th>
+                                                            Address (Street, City, State)
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            Deaths
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            Non-Fatal Injuries
+                                                        </th>
+                                                        <th style="width: 8%;">
+                                                            Hazmat
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            Driver in Question
+                                                        </th>
+                                                        <th style="width: 8%">
+                                                            State/Insurance Records
+                                                        </th>
+                                                        <th style="width: 8%">Actions</th>
+                                                    </tr>
+
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </form>
+                                        </div>
+                                        <p><span class="text-danger">*</span> Upload images/documents to the asset's record.</p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane active" id="assets_tab">
                                 <div class="portlet">
@@ -80,7 +232,7 @@ if(isset($_SESSION['logged'])){
                                                             </div>
                                                             <div class="caption">
                                                                 <h4 class="panel-title">
-                                                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model'].", ".$asset['asset_color']; ?></strong></a>
+                                                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#asset_h_<?php echo $pk; ?>" href="#asset_<?php echo $pk; ?>" aria-expanded="false"><?php echo $asset['asset_desc']; ?> - <strong><?php echo $asset['asset_year']." ".$asset['asset_make']." ".$asset['asset_model']; ?></strong> - <?php echo $asset['asset_vin']; ?></a>
                                                                 </h4>
                                                             </div>
                                                         </div>
@@ -246,7 +398,7 @@ if(isset($_SESSION['logged'])){
                                                                                                     <i class="fa fa-file-o"></i> <small><span class="font-red">|</span> Missing files: <span class="font-red">Registration, Plate Copy</span>.</small>
                                                                                                 </div>
                                                                                                 <div class="actions">
-                                                                                                    <a class="btn default red-stripe show_form" data-show="#add_document">
+                                                                                                    <a class="btn default red-stripe show_form" data-show="#add_document_<?php echo $asset['asset_id']; ?>">
                                                                                                         <i class="fa fa-plus"></i>
                                                                                                         <span class="hidden-480">Upload new document</span>
                                                                                                     </a>
@@ -254,17 +406,19 @@ if(isset($_SESSION['logged'])){
                                                                                             </div>
                                                                                             <div class="portlet-body">
                                                                                                 <div class="table-container">
-                                                                                                    <form role="form" id="add_documents">
-                                                                                                        <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/assets.php?type=documents&id=<?php echo $asset['asset_id']; ?>">
+                                                                                                    <form role="form" id="add_documents_<?php echo $asset['asset_id']; ?>">
+                                                                                                        <table class="table table-striped table-bordered table-hover datatable" id="a_docs_<?php echo $asset['asset_id']; ?>" data-src="assets/app/api/assets.php?type=documents&id=<?php echo $asset['asset_id']; ?>">
                                                                                                             <thead>
-                                                                                                            <tr role="row" class="filter" style="display: none;" id="add_document">
+                                                                                                            <tr role="row" class="filter" style="display: none;" id="add_document_<?php echo $asset['asset_id']; ?>">
                                                                                                                 <td><input type="file" class="form-control input-sm" name="file"></td>
                                                                                                                 <td>
                                                                                                                     <div class="form-group">
                                                                                                                         <div class="col-md-6">
                                                                                                                             <select class="form-control input-sm" name="file_type">
                                                                                                                                 <option disabled selected value="">Select one..</option>
-                                                                                                                                <option value="IDK">Dunno what goes here!</option>
+                                                                                                                                <option value="Registration">Registration</option>
+                                                                                                                                <option value="Plate Copy">Plate Copy</option>
+                                                                                                                                <option value="Other">Other</option>
                                                                                                                             </select>
                                                                                                                         </div>
                                                                                                                         <div class="col-md-6">
@@ -273,7 +427,7 @@ if(isset($_SESSION['logged'])){
                                                                                                                     </div>
                                                                                                                 </td>
                                                                                                                 <td>
-                                                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_document"><i class="fa fa-download"></i> Save</button>
+                                                                                                                    <button type="button" class="btn btn-sm red margin-bottom add_document" data-id="<?php echo $asset['asset_id']; ?>"><i class="fa fa-download"></i> Save</button>
                                                                                                                 </td>
                                                                                                             </tr>
                                                                                                             <tr role="row" class="heading">
@@ -299,7 +453,30 @@ if(isset($_SESSION['logged'])){
                                                                                         </div>
                                                                                     </div>
                                                                                     <div class="tab-pane" id="maintenance_<?php echo $asset['asset_id']; ?>">
-                                                                                        TODO: Add maintenance table
+                                                                                        <table class="table table-striped table-bordered table-hover datatable" data-src="assets/app/api/assets.php?type=maintenance&id=<?php echo $asset['asset_id']; ?>">
+                                                                                            <thead>
+                                                                                                <tr role="row" class="heading">
+                                                                                                    <th>
+                                                                                                        Date
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        Record Type, Description, By
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        Cost
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        PO Number
+                                                                                                    </th>
+                                                                                                    <th>
+                                                                                                        Record By
+                                                                                                    </th>
+                                                                                                </tr>
+                                                                                            </thead>
+                                                                                            <tbody>
+
+                                                                                            </tbody>
+                                                                                        </table>
                                                                                     </div>
                                                                                     <div class="tab-pane" id="location_<?php echo $asset['asset_id']; ?>">
                                                                                         <div id="asset_map" class="gmaps asset_map" style="height: 350px;">
@@ -507,6 +684,42 @@ if(isset($_SESSION['logged'])){
                     }
                 }
             });
+            $("#add_accidents").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'font-red', // default input error message class
+                rules: {
+                    datetime: {
+                        required: true
+                    },
+                    asset: {
+                        required: true
+                    },
+                    address: {
+                        required: true
+                    },
+                    city: {
+                        required: true
+                    },
+                    state: {
+                        required: true
+                    },
+                    deaths: {
+                        required: true
+                    },
+                    nfi: {
+                        required: true
+                    },
+                    hazmat: {
+                        required: true
+                    },
+                    driver: {
+                        required: true
+                    },
+                    copies: {
+                        required: true
+                    }
+                }
+            });
             $('#new_assets').validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'help-block', // default input error message class
@@ -559,7 +772,7 @@ if(isset($_SESSION['logged'])){
 
                 submitHandler: function(form) {
                     $.ajax({
-                        url: 'assets/app/add_setting.php?setting=asset&luid=<?php echo $_GET['luid']; ?>',
+                        url: 'assets/app/add_setting.php?setting=asset&luid=<?php echo $_GET['luid']; ?>&cuid=<?php echo $_SESSION['cuid']; ?>',
                         type: "POST",
                         data: $('#new_assets').serialize(),
                         success: function(data) {
@@ -583,15 +796,19 @@ if(isset($_SESSION['logged'])){
                 }
             });
             $('.add_document').on('click', function(){
-                if($("#add_documents").valid()){
+                var id = $(this).attr('data-id');
+                if($("#add_documents_"+id).valid()){
                     $.ajax({
-                        url: "assets/app/add_setting.php?setting=asset_doc&id=<?php echo $asset['asset_id']; ?>",
+                        url: "assets/app/add_setting.php?setting=asset_doc&id="+id,
                         type: "POST",
-                        data: new FormData($('#add_documents')[0]),
+                        data: new FormData($('#add_documents_'+id)[0]),
+                        dataType: 'json',
                         processData: false,
                         contentType: false,
+                        encode: true,
                         success: function(data) {
                             toastr.info('<strong>Logan says</strong>:<br/>Document has been added to assets document table.');
+                            $('#a_docs_'+id).DataTable().ajax.reload();
                         },
                         error: function() {
                             toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
@@ -599,6 +816,26 @@ if(isset($_SESSION['logged'])){
                     });
                 }
             });
+            $('.add_accident').on('click', function(){
+                if($("#add_accidents").valid()){
+                    $.ajax({
+                        url: "assets/app/add_setting.php?setting=accident&luid=<?php echo $_GET['luid']; ?>",
+                        type: "POST",
+                        data: new FormData($('#add_accidents')[0]),
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            toastr.info('<strong>Logan says</strong>:<br/>Accident has been added to this locations accident table.');
+                            $('#add_accidents')[0].reset();
+                            $('#add_accident').hide();
+                        },
+                        error: function() {
+                            toastr.error('<strong>Logan says</strong>:<br/>That page didnt respond correctly. Try again, or create a support ticket for help.');
+                        }
+                    });
+                }
+            });
+            $('.datepick').datetimepicker();
         });
     </script>
     <?php

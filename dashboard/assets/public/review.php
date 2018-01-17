@@ -4,7 +4,7 @@
 <!--[if !IE]><!-->
 <?php
 require '../app/init.php';
-$event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
+$event = mysql_fetch_array(mysql_query("SELECT event_name, event_company_token, event_location_token, event_user_token FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
 ?>
 <html lang="en">
 <!--<![endif]-->
@@ -39,10 +39,27 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
     <link rel="shortcut icon" href="../../favicon.ico"/>
 </head>
 <body class="login">
-<div class="logo">
-    <a href="">
-        <img src="../admin/layout/img/logo-big.png" alt=""/>
-    </a>
+<div class="logo" style="color: white; text-transform: uppercase; font-size: 23px; letter-spacing: .01em; word-spacing: 1px; width: auto; margin-top: 7px; font-weight: 300; margin-bottom: 0px;">
+    <?php
+    $name = companyName($event['event_company_token']);
+    if(!empty($name)){
+        $cool = explode(" ", $name);
+        $white = true; $red = false;
+        foreach($cool as $word){
+            if($white == true){
+                echo "<span style='color: #FFFFFF'>".$word."</span>";
+                $white = false;
+                $red   = true;
+            } elseif($red == true){
+                echo "<span style='color: #cb5a5e'>".$word."</span>";
+                $red   = false;
+                $white = true;
+            }
+        }
+    } else {
+
+    }
+    ?>
 </div>
 <div class="menu-toggler sidebar-toggler">
 </div>
@@ -70,19 +87,20 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
         ?>
         <div class="login-form">
             <h3 class="form-title"><strong>Review</strong> form <span class="badge badge-danger"><?php echo $event['event_name']; ?></span></h3>
-            <form class="review-form" action="../app/login.php?t=aXn" method="POST">
+            <form class="review-form">
                 <div class="form-group text-center">
                     <div id="rateYo" style="margin: auto !important;"> </div>
-                    <input class="hidden" name="rating" id="rating">
+                    <input class="hidden" id="rating" name="rating">
+                    <span class="help-block text-danger" style="margin-top: 15px; margin-bottom: 20px;" id="error"></span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="margin-top: 10px;">
                     <textarea class="form-control placeholder-no-fix" style="height: 150px;border-left: 2px solid #c23f44!important" placeholder="your review" name="comments"></textarea>
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">Your Name</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
-                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="your name" name="name"/>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="<?php echo name($event['event_user_token']); ?>?" value="Anonymous" name="name"/>
                     </div>
                 </div>
 
@@ -110,7 +128,7 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
 <!-- END LOGIN -->
 <!-- BEGIN COPYRIGHT -->
 <div class="copyright">
-    2017 &copy; For Movers Only | <strong>Powered by Logan</strong> <br/>  <small><strong>This project is in beta. If you make an account, expect issues.</strong></small>
+    2017 &copy; For Movers Only | <strong>Powered by Logan</strong> <br/>  <a target="_blank" href="https://www.fmcsa.dot.gov/protect-your-move"><strong>Your rights & responsibilities.</strong></a>
 </div>
 <!--[if lt IE 9]>
 <script src="../global/plugins/respond.min.js"></script>
@@ -144,25 +162,23 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
             <?php
         } else {
             ?>
-        $("#rateYo").rateYo({
-            halfStar: true,
-            onChange: function(rating, rateYoInstance){
-                $('#rating').attr('value', rating);
-            }
-        });
+            $("#rateYo").rateYo({
+                halfStar: true,
+                onChange: function(rating, rateYoInstance){
+                    $('#rating').attr('value', rating);
+                }
+            });
             <?php
         }
         ?>
 
 
         $('.review-form').validate({
+            ignore: '',
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             rules: {
-                rating: {
-                    required: true
-                },
                 comments: {
                     required: true
                 },
@@ -172,9 +188,6 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
             },
 
             messages: {
-                rating: {
-                    required: "Please select your rating."
-                },
                 comments: {
                     required: "Please enter a small explaination."
                 },
@@ -198,17 +211,23 @@ $event = mysql_fetch_array(mysql_query("SELECT event_name FROM fmo_locations_eve
             },
 
             submitHandler: function(form) {
-                $.ajax({
-                    url: '../app/add_setting.php?setting=review&ev=<?php echo $_GET['ev']; ?>',
-                    type: 'POST',
-                    data: $('.review-form').serialize(),
-                    success: function(c){
-                        window.location.reload();
-                    },
-                    error: function(c){
+                var rating = $('input[name="rating"]').val();
+                if(rating > 0 && rating != ""){
+                    $.ajax({
+                        url: '../app/add_setting.php?setting=review&ev=<?php echo $_GET['ev']; ?>&cuid=<?php echo $event['event_company_token']; ?>&luid=<?php echo $event['event_location_token']; ?>',
+                        type: 'POST',
+                        data: $('.review-form').serialize(),
+                        success: function(c){
+                            window.location.reload();
+                        },
+                        error: function(c){
 
-                    }
-                })
+                        }
+                    });
+                } else {
+                    $('#error').show();
+                    $('#error').html("Please enter your rating.");
+                }
             }
         });
     });

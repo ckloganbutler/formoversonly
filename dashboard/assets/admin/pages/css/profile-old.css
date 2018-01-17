@@ -283,8 +283,11 @@ Profile Page
   background: #ddd !important;
 }
 
-.portfolio-btn a:hover {
+.portfolio-btn-a a:hover {
   background: #1d943b !important;
+}
+.portfolio-btn-b a:hover {
+  background: #b83a3e !important;
 }
 
 .portfolio-btn span {

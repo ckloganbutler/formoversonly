@@ -16,23 +16,23 @@ TODO Page
 }
 
 .todo-tasklist-item-border-green {
-  border-left: #3faba4 2px solid;
+  border-left: #3faba4 9px solid;
 }
 
 .todo-tasklist-item-border-blue {
-  border-left: #4c87b9 2px solid;
+  border-left: #89C4F4 9px solid;
 }
 
 .todo-tasklist-item-border-purple {
-  border-left: #8877a9 2px solid;
+  border-left: #8877a9 9px solid;
 }
 
 .todo-tasklist-item-border-red {
-  border-left: #d05454 2px solid;
+  border-left: #c23f44 9px solid;
 }
 
 .todo-tasklist-item-border-yellow {
-  border-left: #d4ad38 2px solid;
+  border-left: #d4ad38 9px solid;
 }
 
 .padding-top-10px {
@@ -118,6 +118,8 @@ TODO Page
 .todo-tasklist-item {
   background: #f6fbfc;
   padding: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
   margin-bottom: 10px;
   margin-bottom: 15px;
   overflow: hidden;
@@ -140,13 +142,13 @@ div .todo-tasklist-item:hover {
   color: #2b4a5c;
   font-weight: 600;
   padding-top: 3px;
-  padding-bottom: 13px;
+  padding-bottom: 0px;
 }
 
 .todo-tasklist-item-text {
   font-size: 13px;
   color: #577688;
-  padding-bottom: 5px;
+  padding-bottom: 0px;
 }
 
 .todo-tasklist-item ul {
@@ -167,7 +169,7 @@ div .todo-tasklist-item:hover {
 }
 
 .todo-tasklist-controls {
-  margin-top: 5px;
+  margin-top: 0px;
 }
 
 .todo-tasklist-date {

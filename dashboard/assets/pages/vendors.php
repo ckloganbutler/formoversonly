@@ -66,10 +66,10 @@ if(isset($_SESSION['logged'])){
                                 <button class="btn btn-sm red table-group-action-submit"><i class="fa fa-check"></i> Submit</button>
                             </div>
                             <form role="form" id="add_vendor_contact">
-                                <table class="table table-striped table-bordered table-hover" id="vendors">
+                                <table class="table table-striped table-hover" id="vendors">
                                     <thead>
                                     <tr role="row" class="heading">
-                                        <th width="4.7%">
+                                        <th>
                                             <input type="checkbox" class="group-checkable"> Active
                                         </th>
                                         <th>
@@ -78,7 +78,7 @@ if(isset($_SESSION['logged'])){
                                         <th>
                                             Type
                                         </th>
-                                        <th >
+                                        <th width="10%">
                                             Phone
                                         </th>
                                         <th >
@@ -90,7 +90,7 @@ if(isset($_SESSION['logged'])){
                                         <th>
                                             Extra Information
                                         </th>
-                                        <th width="5%">
+                                        <th>
                                             In-line Edit
                                         </th>
                                     </tr>

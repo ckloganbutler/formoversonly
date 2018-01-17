@@ -56,7 +56,7 @@ if(isset($_SESSION['uuid'])){
             '<input type="checkbox" name="pk" value="'.$cus['user_token'].'"> '.$num.'',
             ''.$cus['user_lname'].', '.$cus['user_fname'].'',
             ''.clean_phone($cus['user_phone']).'',
-            ''.secret_mail($cus['user_email']).'',
+            ''.$cus['user_email'].'',
             '<a class="btn default btn-xs red-stripe load_page" data-href="assets/pages/profile.php?uuid='.$cus['user_token'].'&luid='.$cus['user_last_ext_location'].'" data-page-title="'.$cus["user_fname"].' '.$cus["user_lname"].'"><i class="fa fa-edit"></i> View profile</a>'
         );
     }
