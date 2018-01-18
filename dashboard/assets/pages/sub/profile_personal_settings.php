@@ -9,7 +9,7 @@ session_start();
 include '../../app/init.php';
 
 if(isset($_SESSION['logged'])){
-    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_military, user_autopay, user_group, user_id, user_pin, user_last_login, user_creator_user, user_creation, user_company_name, user_company_token, user_employer_commission, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2, user_repeatclient, user_repeatclient_terms, user_repeatclient_notes, user_last_ext_location, user_permissions, user_esc_permissions FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $profile = mysql_fetch_array(mysql_query("SELECT user_status, user_setup, user_military, user_autopay, user_autopay_token, user_autopay_last4, user_group, user_id, user_pin, user_last_login, user_creator_user, user_creation, user_company_name, user_company_token, user_employer_commission, user_pic, user_fname, user_lname, user_phone, user_ems_phone, user_email, user_website, user_token, user_group, user_employer, user_employer_location, user_employer_rate, user_dob, user_employer_salary, user_employer_hired, user_employer_dln, user_employer_dle, user_employer_dls, user_employer_dot_exp, user_address, user_state, user_zip, user_city, user_address2, user_state2, user_city2, user_zip2, user_repeatclient, user_repeatclient_terms, user_repeatclient_notes, user_last_ext_location, user_permissions, user_esc_permissions FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     if(!empty($profile['user_employer']) && !empty($profile['user_employer_location'])) {
         $employee = true;
         $location = mysql_fetch_array(mysql_query("SELECT location_name, location_nickname, location_state, location_token FROM fmo_locations WHERE location_token='".mysql_real_escape_string($profile['user_employer_location'])."'"));
@@ -291,6 +291,8 @@ if(isset($_SESSION['logged'])){
                                             ?>
                                         </a>
                                         <br/>
+                                        Customer Token: <strong><?php echo $profile['user_autopay_token']; ?></strong> <br/>
+                                        Customer Credit/Debt Last 4 #: <strong><?php echo $profile['user_autopay_last4']; ?></strong> <br/>
                                         <strong><span class="text-danger">*</span> if Auto Pay&trade; is set to yes, the next/last card used will be the card automatically charged when permitted.</strong>
                                     </div>
                                 </div>

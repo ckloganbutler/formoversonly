@@ -197,6 +197,7 @@ if(isset($_GET['e'])){
                                                             <i class="fa fa-sort-numeric-asc"></i>
                                                         </div>
                                                     </div>
+                                                    <br/><br/>
                                                     <div class="row">
 
                                                         <div class="col-md-12">

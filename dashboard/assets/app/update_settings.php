@@ -145,7 +145,7 @@ if($_GET['setting'] == 'su_pymt'){
     $new = number_format($bal['unpaid'], 2);
 
     if(isset($_POST['auto']) && $_POST['auto'] == 1){
-        mysql_query("UPDATE fmo_users SET user_autopay=1, user_autopay_token='".mysql_real_escape_string($charge[1])."' WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'");
+        mysql_query("UPDATE fmo_users SET user_autopay=1, user_autopay_token='".mysql_real_escape_string($charge[1])."', user_autopay_last4='".mysql_real_escape_string($charge[2])."' WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'");
     }
 
     if($bal['unpaid'] < 0){
