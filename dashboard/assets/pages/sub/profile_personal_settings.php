@@ -1271,6 +1271,18 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row form-group" style="margin-top: 20px;">
+                                    <label class="col-md-4 control-label">Event - <strong>Location Adjustment</strong></label>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <div class="icheck-inline">
+                                                <label>
+                                                    <input type="checkbox" class="icheck" <?php if(strpos($perms, "view_event_location_change") !== false){echo "checked";} ?> data-perm="view_event_location_change"> Can change location
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="edit_perms" id="edit_perms_timeclock">
                                 <h4><strong class="text-success">Available</strong> permissions</h4>

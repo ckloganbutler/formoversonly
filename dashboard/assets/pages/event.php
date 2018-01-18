@@ -37,7 +37,7 @@ if(isset($_SESSION['logged'])){
             <strong><?php echo $event['event_name']; ?></strong> | <small class="hidden-xs">EVENT ID <strong>#<?php echo $event['event_id']; ?></strong> BY <strong><?php echo strtoupper(name($event['event_by_user_token'])); ?></strong></small>
 
             <?php
-            if($_SESSION['group'] == 1){
+            if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_event_location_change") !== false){
                 ?>
                 <div class="btn-group pull-right">
                     <a class="btn red dropdown-toggle" href="javascript:;" data-toggle="dropdown">

@@ -951,7 +951,8 @@ if(isset($_SESSION['logged'])){
         <?php
     } else {
         mysql_query("UPDATE fmo_users SET user_last_location='".mysql_real_escape_string(basename(__FILE__, '.php')).".php?".$_SERVER['QUERY_STRING']."' WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'");
-        $location = mysql_fetch_array(mysql_query("SELECT location_name, location_manager, location_morning_restrict, location_afternoon_restrict FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+        $location = mysql_fetch_array(mysql_query("SELECT location_manager, location_morning_restrict, location_afternoon_restrict, location_owner_company_token, location_storage_stripe_secret, location_storage_stripe_public, location_storage_tax, location_storage_creditcard_fee, location_nickname, location_storage_deposit, location_storage_late_fee, location_storage_auction_fee, location_storage_days_late, location_storage_days_auction, location_quote, location_pic, location_name, location_phone, location_email, location_token, location_status, location_booking_fee_disclaimer, location_address, location_address2, location_city, location_state, location_zip, location_county, location_minimum_hours, location_assumed_loadtime, location_assumed_unloadtime, location_sales_tax, location_service_tax, location_creditcard_fee, location_max_trucks, location_max_men, location_max_counties, location_storage_access, location_disclaimers, location_callcatcher_osb, location_quote_extra, location_quote_cancel, location_quote_overtime_time, location_quote_overtime_rate, location_quote_oversized_safe, location_quote_oversized_playset, location_quote_oversized_pooltable, location_quote_oversized_piano, location_quote_oversized_hottub, location_quote_packing_small, location_quote_packing_medium, location_quote_packing_large, location_quote_packing_dishpack,  location_quote_packing_wardrobe, location_quote_packing_paper, location_quote_packing_tape,  location_quote_packing_shrinkwrap FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
+
         $uuidperm = mysql_fetch_array(mysql_query("SELECT user_esc_permissions, user_permissions, user_last_ext_date FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
 
         $perms = explode(',', $user['user_permissions']);
@@ -1586,11 +1587,157 @@ if(isset($_SESSION['logged'])){
                                         <?php
                                     }
                                     ?>
+
+                                    <li class="">
+                                        <a href="#l_i" data-toggle="tab" aria-expanded="false">
+                                            Location Information </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="portlet-body">
                                 <!--BEGIN TABS-->
                                 <div class="tab-content">
+                                    <div class="tab-pane " id="l_i">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="portlet">
+                                                    <div class="portlet-body">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group text-center" >
+                                                                    <form id="ll_upload" action="" method="POST" role="form">
+                                                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                            <div class="fileinput-new thumbnail">
+                                                                                <?php
+                                                                                if(!empty($location['location_pic'])){
+                                                                                    ?>
+                                                                                    <img id="pp" src="<?php echo $location['location_pic']; ?>" alt="1" style="width: 100%; height: 200px; display: block;"/>
+                                                                                    <?php
+                                                                                } else {
+                                                                                    ?>
+                                                                                    <img id="pp" src="assets/admin/layout/img/default-location.jpg" alt="2" style="width: 100%; height: 200px; display: block;"/>
+                                                                                    <?php
+                                                                                }
+                                                                                ?>
+                                                                            </div>
+                                                                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Manager:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <?php
+                                                                        $managers = mysql_query("SELECT user_token, user_lname, user_fname FROM fmo_users WHERE  (user_group=".mysql_real_escape_string(1)." AND user_company_token='".mysql_real_escape_string($_SESSION['cuid'])."') OR (user_group=".mysql_real_escape_string(2.0)." AND user_employer='".mysql_real_escape_string($_SESSION['cuid'])."')");
+                                                                        if(mysql_num_rows($managers) > 0){
+                                                                            while($manager = mysql_fetch_assoc($managers)){
+                                                                                $source .= "{value: '".$manager['user_token']."', text: '".$manager['user_fname']." ".$manager['user_lname']."'},";
+                                                                            }
+                                                                        } else {
+                                                                            $source = "{value: '', text: 'No managers have been added in this location'}";
+                                                                        }
+                                                                        ?>
+                                                                        <a class="loc" style="color:#333333" data-name="location_manager" data-pk="<?php echo $location['location_token']; ?>" data-type="select" data-source="[<?php echo $source; ?>]" data-placement="right" data-title="Enter new location name.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php
+                                                                            if(!empty($location['location_manager'])){
+                                                                                echo name($location['location_manager']);
+                                                                            } else {
+                                                                                echo "Nobody selected";
+                                                                            }
+                                                                            ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Name:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_name" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location name.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_name']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Location Nickname:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_nickname" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location name.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_nickname']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Phone:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_phone" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location phone.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo clean_phone($location['location_phone']); ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Email:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_email" data-pk="<?php echo $location['location_token']; ?>" data-type="email" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_email']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Address Line 1:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333">
+                                                                            <?php echo $location['location_address']; ?>
+                                                                        </a>,
+                                                                        <a class="loc" style="color:#333333">
+                                                                            <?php echo $location['location_city']; ?>
+                                                                        </a>,
+                                                                        <a class="loc" style="color:#333333" data-name="location_state" data-pk="<?php echo $location['location_token']; ?>" data-type="select" data-source="[{value: 'AL', text: 'Alabama'},{value: 'AK', text: 'Alaska'},{value: 'AZ', text: 'Arizona'},{value: 'AR', text: 'Arkansas'},{value: 'CA', text: 'California'},{value: 'CO', text: 'Colorado'},{value: 'CT', text: 'Connecticut'},{value: 'DE', text: 'Delaware'},{value: 'DC', text: 'District Of Columbia'},{value: 'FL', text: 'Florida'},{value: 'GA', text: 'Georgia'},{value: 'HI', text: 'Hawaii'},{value: 'ID', text: 'Idaho'},{value: 'IL', text: 'Illinois'},{value: 'IN', text: 'Indiana'},{value: 'IA', text: 'Iowa'},{value: 'KS', text: 'Kansas'},{value: 'KY', text: 'Kentucky'},{value: 'LA', text: 'Louisiana'},{value: 'ME', text: 'Maine'},{value: 'MD', text: 'Maryland'},{value: 'MA', text: 'Massachusetts'},{value: 'MI', text: 'Michigan'},{value: 'MN', text: 'Minnesota'},{value: 'MS', text: 'Mississippi'},{value: 'MO', text: 'Missouri'},{value: 'MT', text: 'Montana'},{value: 'NE', text: 'Nebraska'},{value: 'NV', text: 'Nevada'},{value: 'NH', text: 'New Hampshire'},{value: 'NJ', text: 'New Jersey'},{value: 'NM', text: 'New Mexico'},{value: 'NY', text: 'New York'},{value: 'NC', text: 'North Carolina'},{value: 'ND', text: 'North Dakota'},{value: 'OH', text: 'Ohio'},{value: 'OK', text: 'Oklahoma'},{value: 'OR', text: 'Oregon'},{value: 'PW', text: 'Palau'},{value: 'PA', text: 'Pennsylvania'},{value: 'RI', text: 'Rhode Island'},{value: 'SC', text: 'South Carolina'},{value: 'SD', text: 'South Dakota'},{value: 'TN', text: 'Tennessee'},{value: 'TX', text: 'Texas'},{value: 'UT', text: 'Utah'},{value: 'VT', text: 'Vermont'},{value: 'VA', text: 'Virginia'},{value: 'WA', text: 'Washington'},{value: 'WV', text: 'West Virginia'},{value: 'WI', text: 'Wisconsin'},{value: 'WY', text: 'Wyoming'}]" data-inputclass="form-control" data-placement="right" data-title="Select new state.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_state']; ?>
+                                                                        </a>,
+                                                                        <a class="loc" style="color:#333333" data-name="location_zip" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_zip']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        Address Line 2:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_address2" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_address2']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row static-info">
+                                                                    <div class="col-md-5 name">
+                                                                        County:
+                                                                    </div>
+                                                                    <div class="col-md-7 value">
+                                                                        <a class="loc" style="color:#333333" data-name="location_county" data-pk="<?php echo $location['location_token']; ?>" data-type="text" data-placement="right" data-title="Enter new location email.." data-url="assets/app/update_settings.php?update=location">
+                                                                            <?php echo $location['location_county']; ?>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="tab-pane active" id="l_a">
                                         <div class="scroller" style="height: 339px;" data-always-visible="1" data-rail-visible="0">
                                             <ul class="feeds">

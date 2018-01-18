@@ -814,10 +814,26 @@ if(isset($_GET['e'])){
                         $(document).find('#owe_sub_total').html(parseFloat(owe.sub_total).toFixed(2));
                         $(document).find('#owe_tax').html(parseFloat(owe.tax).toFixed(2));
                         $(document).find('#owe_total').html(parseFloat(owe.total).toFixed(2));
-                        $(document).find('#owe_total_unpaid').html(due + " $" + parseFloat(unpaid).toFixed(2));
-                        if (parseFloat(owe.taxable).toFixed(2) > 0) {
+                        $(document).find('#PLPAP_SUBTOTAL').html(parseFloat(owe.sub_total).toFixed(2));
+                        $(document).find('#PLPAP_TAXES').html(parseFloat(owe.tax).toFixed(2));
+                        $(document).find('#PLPAP_TOTAL').html(parseFloat(owe.total).toFixed(2));
+                        $(document).find('#owe_total_unpaid').html(parseFloat(owe.unpaid).toFixed(2));
+                        $(document).find('#owe_paid').html(parseFloat(owe.paid).toFixed(2));
+                        $(document).find('#owe_rent').html(parseFloat(owe.total).toFixed(2));
+                        $(document).find('.amt').val(parseFloat(owe.total).toFixed(2));
+                        $(document).find('#amt_pay').trigger('change');
+                        if(parseFloat(owe.cc_fees).toFixed(2) > 0){
+                            $(document).find("#cc_fees").show();
+                            $(document).find("#owe_cc_fees").html(parseFloat(owe.cc_fees).toFixed(2));
+                            $(document).find(".load_payments").removeClass("margin-top-15");
+                        } else {
+                            $(document).find("#cc_fees").hide();
+                            $(document).find("#owe_cc_fees").html("");
+                            $(document).find(".load_payments").addClass("margin-top-15");
+                        }
+                        if(parseFloat(owe.taxable).toFixed(2) > 0){
                             $(document).find("#taxable_fees").show();
-                            $(document).find("#taxable_fees").html("($" + parseFloat(owe.taxable).toFixed(2) + " taxable)");
+                            $(document).find("#taxable_fees").html("($"+ parseFloat(owe.taxable).toFixed(2) +" taxable)");
                         } else {
                             $(document).find("#taxable_fees").hide();
                         }
