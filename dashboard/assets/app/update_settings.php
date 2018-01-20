@@ -123,7 +123,7 @@ if($_GET['setting'] == 'su_pymt'){
         $by     = $_GET['uuid'];
         $cuid   = $_GET['cuid'];
     }
-    if($type = 'Credit/Debt'){
+    if($type == 'Credit/Debt'){
         $card   = "(Last 4 #: ".$charge[2].")";
     } else {$card = NULL;}
 

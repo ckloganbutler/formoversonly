@@ -1276,7 +1276,7 @@ if(!isset($_SESSION['logged']) && $_SESSION['logged'] != true){
                 url: 'assets/app/api/storage.php?type=inv&luid=<?php echo $_GET['luid']; ?>&no_calc=true&rt=true',
                 type: 'POST',
                 data: {
-                    ct: '' + ct + ''
+                    contract: '' + ct + ''
                 },
                 success: function(m){
                     var owe = JSON.parse(m);

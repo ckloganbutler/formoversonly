@@ -11,7 +11,7 @@ if(isset($_GET['e'])){
     if($_GET['e'] == 'pYt'){
         $ct = struuid(true);
         $location = mysql_fetch_array(mysql_query("SELECT location_storage_stripe_public, location_storage_days_late, location_storage_days_auction, location_storage_tax, location_storage_deposit, location_storage_creditcard_fee, location_nickname, location_storage_late_fee, location_storage_auction_fee FROM fmo_locations WHERE location_token='".mysql_real_escape_string($_GET['luid'])."'"));
-        $uuidperm = mysql_fetch_array(mysql_query("SELECT user_esc_permissions FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
+        $uuidperm = mysql_fetch_array(mysql_query("SELECT user_esc_permissions, user_email FROM fmo_users WHERE user_token='".mysql_real_escape_string($_SESSION['uuid'])."'"));
 
         $total = array();
         $total['sub_total'] = 0.00;
@@ -541,7 +541,7 @@ if(isset($_GET['e'])){
                             data: {
                                 token: token,
                                 amount: $('#cc').val().replace('.', ''),
-                                email: "employee@fmo.com"
+                                email: '<?php echo $uuidperm['user_email']; ?>',
                             },
                             success: function(data) {
                                 if (data.length > 8) {
@@ -797,7 +797,7 @@ if(isset($_GET['e'])){
 
             function updateIn() {
                 $.ajax({
-                    url: 'assets/app/api/storage.php?type=inv&luid=<?php echo $_GET['luid']; ?>&no_calc=true&rt=true',
+                    url: 'assets/app/api/storage.php?type=inv&luid=<?php echo $_GET['luid']; ?>&no_calc=true',
                     type: 'POST',
                     data: {
                         contract: '<?php echo $ct; ?>'

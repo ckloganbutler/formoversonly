@@ -225,22 +225,22 @@ if($_GET['px'] == 'lp'){
                         },
                         success: function(data) {
                             if (data.length > 8) {
-                                toastr.info("<strong>Logan says:</strong><br/>Card was charged successfully, here's the confirmation token: " + data);
+                                toastr.info("<strong>Logan says:</strong><br/>Card was charged successfully!");
                                 $('.error-handler').html("");
                                 $('#cc_notes').removeAttr('disabled');
                                 $('#cc_notes').attr('value', "Approval: "+data);
                                 $('#charge').removeAttr('disabled');
                                 $('#charge').attr('value', data);
                                 $.ajax({
-                                    url: 'assets/app/update_settings.php?setting=pymt&ev=<?php echo $event['event_token']; ?>&uuid=<?php echo $event['event_user_token']; ?>&ckpay=true&luid=<?php echo $event['event_location_token']; ?>',
+                                    url: '../app/update_settings.php?setting=pymt&ev=<?php echo $event['event_token']; ?>&uuid=<?php echo $event['event_user_token']; ?>&ckpay=true&luid=<?php echo $event['event_location_token']; ?>',
                                     type: 'POST',
                                     data: $('#submit_form').serialize(),
                                     success: function(p){
-                                        toastr.success("Nice, we took your payment!");
+                                        toastr.success("<strong>Logan says:</strong><br/>Nice, we took your payment!");
                                         location.reload();
                                     },
                                     error: function(p){
-                                        toastr.error("Ooops. Something went wrong.");
+                                        toastr.error("<strong>Logan says:</strong><br/>Ooops. Something went wrong.");
                                     }
                                 });
                             }

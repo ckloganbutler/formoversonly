@@ -11,9 +11,11 @@ if(isset($_GET['ev'])){
     $event      = mysql_fetch_array(mysql_query("SELECT event_id, event_company_token, event_name, event_status, event_phone, event_truckfee, event_laborrate, event_countyfee, event_comments, event_date_start, event_date_end, event_company_token, event_token, event_laborrate_rate, event_weekend_upcharge_rate, event_user_token FROM fmo_locations_events WHERE event_token='".mysql_real_escape_string($_GET['ev'])."'"));
     $user       = mysql_fetch_assoc(mysql_query("SELECT user_fname, user_lname, user_email, user_token, user_creator FROM fmo_users WHERE user_token='".mysql_real_escape_string($event['event_user_token'])."'"));
     $namer       = $event['event_name'];
+    $name = companyName($user['user_creator']);
 } elseif(isset($_GET['su'])){
-    $user       = mysql_fetch_assoc(mysql_query("SELECT user_fname, user_lname, user_email, user_token, user_creator FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
+    $user       = mysql_fetch_assoc(mysql_query("SELECT user_fname, user_lname, user_email, user_token, user_creator, user_last_ext_location FROM fmo_users WHERE user_token='".mysql_real_escape_string($_GET['uuid'])."'"));
     $namer       = name($user['user_token'])."'s rentals";
+    $name = locationNickName($user['user_last_ext_location']);
 }
 
 
@@ -46,6 +48,7 @@ if(isset($_GET['ev'])){
     <link href="../../assets/global/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
     <link href="../../assets/admin/layout/css/layout.css" rel="stylesheet" type="text/css"/>
     <link href="../../assets/admin/pages/css/error.css" rel="stylesheet" type="text/css"/>
+    <link href="../../assets/global/plugins/card-master/dist/card.css" rel="stylesheet" type="text/css"/>
     <link id="style_color" href="../../assets/admin/layout/css/themes/default.css" rel="stylesheet" type="text/css"/>
     <link href="../../assets/admin/layout/css/custom.css" rel="stylesheet" type="text/css"/>
     <link rel="shortcut icon" href="favicon.ico"/>
@@ -66,7 +69,6 @@ if(isset($_GET['ev'])){
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="color: white; text-transform: uppercase; font-size: 23px; letter-spacing: .01em; word-spacing: 1px; width: auto; margin-top: 7px; font-weight: 300;">
             <?php
-            $name = companyName($user['user_creator']);
             if(!empty($name)){
                 $cool = explode(" ", $name);
                 $white = true; $red = false;
@@ -118,7 +120,6 @@ if(isset($_GET['ev'])){
                     <strong><?php echo $namer ?></strong>
                     <span class="hidden-xs">
                         <button class="pull-right btn default red-stripe print"><i class="fa fa-print"></i>&nbsp; Print this</button>
-                        <small class="pull-right" style="margin-top:12px; margin-right: 20px;">(EVENT ID <strong>#<?php echo $event['event_id']; ?></strong>)</small>
                     </span>
                 </h3>
                 <div class="row" id="page-content">
@@ -156,6 +157,7 @@ if(isset($_GET['ev'])){
     <script src="../../assets/global/plugins/datatables/media/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="../../assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js" type="text/javascript"></script>
     <script src="../../assets/global/plugins/printThis/printThis.js" type="text/javascript"></script>
+    <script src="../../assets/global/plugins/card-master/dist/jquery.card.js"></script>
     <script src="../../assets/global/plugins/xeditable/bootstrap3-editable/js/bootstrap-editable.js"></script>
     <script src="../../assets/global/plugins/gmaps/gmaps.min.js" type="text/javascript"></script>
     <script src="../../assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
@@ -220,10 +222,14 @@ if(isset($_GET['ev'])){
             } elseif(isset($_GET['t']) && $_GET['t'] == 'sTr'){
                 ?>
                 $.ajax({
-                    url: 'a/su.php?px=lp&uuid=<?php echo $_GET['uuid']; ?>',
+                    url: 'a/su.php?px=lp&luid=<?php echo $user['user_last_ext_location']; ?>',
+                    type: 'POST',
+                    data: {
+                        uuid: '<?php echo $_GET['uuid']; ?>'
+                    },
                     success: function(data) {
                         $('#page-content').html(data);
-                        document.title = "Viewing your quote.";
+                        document.title = "Viewing your rentals.";
                     },
                     error: function() {
                         toastr.error("<strong>Logan says</strong>:<br/>An unexpected error has occurred. Please try again later.");
