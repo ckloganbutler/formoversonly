@@ -1637,6 +1637,18 @@ if(isset($_SESSION['logged'])){
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row form-group">
+                                    <label class="col-md-6 control-label">Reports - <strong>Storage Report</strong> - Auction Summary</label>
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <div class="icheck-inline">
+                                                <label>
+                                                    <input type="checkbox" class="icheck" <?php if(strpos($perms, "view_reports_storage_auction") !== false){echo "checked";} ?> data-perm="view_reports_storage_auction"> Can view
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <hr/>
                                 <div class="row form-group">
                                     <label class="col-md-6 control-label">Reports - <strong>Other Reports</strong></label>

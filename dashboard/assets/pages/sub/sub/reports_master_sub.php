@@ -3814,5 +3814,155 @@ if(isset($_GET['ty'])) {
         /*
          *  End Storage Rent Roll Report
          */
+    } elseif($_GET['ty'] == 'str_a'){
+        /*
+         *  Start Storage Auction Report
+         */
+
+        $auction = array();
+        $storage = mysql_query("SELECT storage_id, storage_token, storage_available, storage_unit_name, storage_unit_lwh, storage_unit_desc, storage_price, storage_period, storage_occupant, storage_contract_token, storage_last_occupied, storage_status, storage_type_id FROM fmo_locations_storages WHERE storage_location_token='".mysql_real_escape_string($_GET['luid'])."' AND storage_status='Auction' ORDER BY storage_id, storage_occupant DESC");
+        if(mysql_num_rows($storage) > 0){
+            while($str = mysql_fetch_assoc($storage)) {
+                if(!in_array($str['storage_occupant'], $auction['users'])){
+                    $auction['users'][$str['storage_occupant']] = array();
+                    $auction['users'][$str['storage_occupant']]['who'][] = array($str['storage_occupant'], ''.name($str['storage_occupant']).'', ''.clean_phone(phone($str['storage_occupant'])).'');
+                    $auction['users'][$str['storage_occupant']]['units'][] = array(
+                        ''.$str['storage_unit_name'].'',
+                        ''.$str['storage_price'].'/'.$str['storage_period'],
+                    );
+                } else {
+                    $auction['users'][$str['storage_occupant']]['units'][] = array(
+                        ''.$str['storage_unit_name'].'',
+                        ''.$str['storage_price'].'/'.$str['storage_period'],
+                    );
+                }
+            }
+        }
+        ?>
+        <style>
+            @media print {
+                .hide {display: none;}
+            }
+            #marketing_print_wrapper {
+                margin-top: -42px;
+            }
+        </style>
+        <div class="portlet">
+            <div class="portlet-title" style="margin-bottom: 0px;">
+                <h3>
+                    <strong>Auction Summary</strong> <small class="text-muted"></small>
+                    <button class="btn default blue-stripe pull-right btn-xs print printer" data-print="#rent_roll"><i class="fa fa-print" style="font-size: 16px;"></i> Print pretty report</button>
+                </h3>
+            </div>
+            <div class="portlet-body">
+                <div class="row margin-top-25">
+                    <div class="col-md-12 col-sm-12">
+                        <h3>Table o' details</h3>
+                        <table class="table table-striped table-hover datatable" id="rent_roll">
+                            <thead>
+                            <tr>
+                                <th class="bold">Unit</th>
+                                <th class="bold">Customer</th>
+                                <th>Phone</th>
+                                <th>Rate</th>
+                                <th>Due</th>
+                                <th class="bold">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach($auction['users'] as $u){
+                                $total = 0; $runs  = 0;
+                                foreach($u['units'] as $unit){
+                                    if($runs = 0){$blah = ', ';}
+                                    $total += $unit[1];
+                                    $units .= $unit[0].$blah;
+                                }
+                                $bal  = json_decode(file_get_contents('https://www.formoversonly.com/dashboard/assets/app/api/storage.php?type=inv_c&luid='.$_GET['luid'].'&uuid='.$u['who'][0].''), true);
+                                ?>
+                                <tr>
+                                    <td><?php echo $units; ?></td>
+                                    <td class="bold"><?php echo $u['who'][1]; ?></td>
+                                    <td><?php echo $u['who'][2]; ?></td>
+                                    <td><?php ?></td>
+                                    <td>$<?php echo number_format($bal['unpaid'], 2); ?></td>
+                                    <td></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            <?php
+                            /*
+                            $findStorage = mysql_query("SELECT storage_id, storage_token, storage_available, storage_unit_name, storage_unit_lwh, storage_unit_desc, storage_price, storage_period, storage_occupant, storage_contract_token, storage_last_occupied, storage_status, storage_type_id FROM fmo_locations_storages WHERE storage_location_token='".mysql_real_escape_string($_GET['luid'])."' AND storage_status='Auction' ORDER BY storage_id DESC") or die(mysql_error());
+                            if(mysql_num_rows($findStorage)){
+                                while($storage = mysql_fetch_assoc($findStorage)) {
+                                    switch($storage['storage_status']){
+                                        case "Auction": $badge = 'badge badge-danger badge-roundless'; $msg = $storage['storage_status']; $link = 'assets/pages/profile.php?uuid='.$storage['storage_occupant'].'&s=true'; break;
+                                    }
+                                    $type = mysql_fetch_array(mysql_query("SELECT type_floor, type_desc, type_climate FROM fmo_locations_storages_types WHERE type_id='".mysql_real_escape_string($storage['storage_type_id'])."'"));
+
+                                    if(!empty($storage['storage_occupant'])){
+                                        $name  = name($storage['storage_occupant']);
+                                        $phone = clean_phone(phone($storage['storage_occupant']));
+                                        $ts1  = strtotime($storage['storage_last_occupied']);
+                                        $ts2  = strtotime('today');
+                                        $dif  = $ts2 - $ts1;
+                                        $bal  = json_decode(file_get_contents('https://www.formoversonly.com/dashboard/assets/app/api/storage.php?type=inv_c&luid='.$_GET['luid'].'&uuid='.$storage['storage_occupant'].''), true);
+                                        $days = secondsToTime($dif);
+                                        if($days > 0){
+                                            $d = $days;
+                                        } else { $d = 0; }
+                                    } else {
+                                        $name = "N/A";
+                                        $phone = "N/A";
+                                        $bal['unpaid'] = 0.00;
+                                        $d = 0;
+                                    }
+
+
+                                    ?>
+                                    <tr style="cursor: pointer!important;" class="load_page"  data-href="<?php echo $link; ?>" data-page-title=" ">
+                                        <td>Unit <strong>#<?php echo $storage['storage_unit_name']; ?></strong></td>
+                                        <td class="text-muted"><?php echo $name; ?></td>
+                                        <td class="text-muted"><?php echo $phone; ?></td>
+                                        <td class="text-success">$<strong><?php echo $storage['storage_price']."</strong>/".$storage['storage_period']; ?></td>
+                                        <td class="text-danger bold">$<?php echo number_format($bal['unpaid'], 2);; ?></td>
+                                        <td class="text-muted bold"> <span class="<?php echo $badge; ?>"><?php echo $msg; ?></span></td>
+                                    </tr>
+                                    <?php
+                                }
+                            }*/
+                            ?>
+                            </tbody>
+
+                        </table>
+                        <pre>
+<?php echo json_encode($auction['users']); ?>
+                        </pre>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            var bk = $('.datatable').dataTable({
+                "order": [[ 5, "asc" ]],
+                "bFilter" : true,
+                "bLengthChange": false,
+                "bPaginate": false,
+                "info": true,
+                "saveState": true
+            });
+            $('.printer').unbind().on('click', function () {
+                var settings = bk.fnSettings();
+                settings._iDisplayLength = 50;
+                bk.fnDraw();
+            });
+        </script>
+        <?php
+
+        /*
+         *  End Storage Auction Report
+         */
     }
 }
