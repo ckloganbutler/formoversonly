@@ -1243,6 +1243,16 @@ if(isset($_SESSION['logged'])){
                             }
                             ?>
                             <?php
+                            if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_reports_storage_auction") !== false){
+                                ?>
+                                <li>
+                                    <a class="sub_pl tab_print" data-href="assets/pages/sub/sub/reports_master_sub.php?ty=str_a&luid=<?php echo $_GET['luid']; ?>" data-page-title="Sales Summary" data-toggle="tab" data-print="#sales_summary" style="color: #888" data-ext="<?php echo $range[0]; ?> - <?php echo $range[1]; ?>" >
+                                        Auction</a>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                            <?php
                             if($_SESSION['group'] == 1 || strpos($uuidperm['user_esc_permissions'], "view_reports_sales_sales") !== false){
                                 ?>
                                 <li>
